@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{582FCF55-2048-4188-AE67-15DAF3FE8EF5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUD", "CRUD\CRUD.csproj", "{FB3ECB39-4D5E-45D3-A71D-6131C3F9CF45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "CRUD\Authorization\Authentication.csproj", "{858AB400-BF51-4671-B807-009AFC78C021}"
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBUsersHandler", "CRUD\DBUs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordHandler", "CRUD\Password.Handler\PasswordHandler.csproj", "{8536CC5B-8068-4F3C-AC7C-4D782C728E91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "MainForm\MainForm.csproj", "{00D4185A-B0CC-45E7-96A3-574A04F8ED5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{582FCF55-2048-4188-AE67-15DAF3FE8EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{582FCF55-2048-4188-AE67-15DAF3FE8EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{582FCF55-2048-4188-AE67-15DAF3FE8EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{582FCF55-2048-4188-AE67-15DAF3FE8EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB3ECB39-4D5E-45D3-A71D-6131C3F9CF45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB3ECB39-4D5E-45D3-A71D-6131C3F9CF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB3ECB39-4D5E-45D3-A71D-6131C3F9CF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{8536CC5B-8068-4F3C-AC7C-4D782C728E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8536CC5B-8068-4F3C-AC7C-4D782C728E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8536CC5B-8068-4F3C-AC7C-4D782C728E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D4185A-B0CC-45E7-96A3-574A04F8ED5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D4185A-B0CC-45E7-96A3-574A04F8ED5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D4185A-B0CC-45E7-96A3-574A04F8ED5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D4185A-B0CC-45E7-96A3-574A04F8ED5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
