@@ -11,7 +11,7 @@ namespace MainForm.DGV
 {
     class DGVBuildingsResourcesProduceHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumn _cbcResorces = new DataGridViewComboBoxColumn()
+        public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
         {
             Name = "resources_id",
             HeaderText = "Ресурс",
@@ -20,7 +20,7 @@ namespace MainForm.DGV
             DataPropertyName = "resources_id",
             FlatStyle = FlatStyle.Flat
         };
-        private DataGridViewComboBoxColumn _cbcBuldings = new DataGridViewComboBoxColumn()
+        public DataGridViewComboBoxColumn cbcBuldings = new DataGridViewComboBoxColumn()
         {
             Name = "building_id",
             HeaderText = "Здание",
@@ -36,8 +36,8 @@ namespace MainForm.DGV
             {
                 ctx.buildings_resources_produce.Load();
 
-                _cbcResorces.DataSource = dtResources;
-                _cbcBuldings.DataSource = dtBuildings;
+                cbcResorces.DataSource = dtResources;
+                cbcBuldings.DataSource = dtBuildings;
 
                 dataTable.Columns.Add("building_id", typeof(int));
                 dataTable.Columns.Add("resources_id", typeof(int));
@@ -45,8 +45,8 @@ namespace MainForm.DGV
                 dataTable.Columns.Add("Source", typeof(buildings_resources_produce));
                 ctx.buildings_resources_produce.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.resources_id, x.produce_speed, x));
 
-                _dgv.Columns.Add(_cbcBuldings);
-                _dgv.Columns.Add(_cbcResorces);
+                _dgv.Columns.Add(cbcBuldings);
+                _dgv.Columns.Add(cbcResorces);
                 _dgv.DataSource = dataTable;
             }
             MakeThisColumnVisible(new string[] {

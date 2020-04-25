@@ -31,8 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.загрузитьЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.перезагрузитьВсеТаблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отменитьРедактированиеЯчейкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tbBR = new System.Windows.Forms.TabPage();
             this.dgvBR = new System.Windows.Forms.DataGridView();
@@ -70,8 +70,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правкаToolStripMenuItem,
-            this.инструментыToolStripMenuItem,
-            this.отменитьРедактированиеЯчейкиToolStripMenuItem});
+            this.инструментыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -81,7 +80,8 @@
             // правкаToolStripMenuItem
             // 
             this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.загрузитьЗановоToolStripMenuItem});
+            this.загрузитьЗановоToolStripMenuItem,
+            this.перезагрузитьВсеТаблицыToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.правкаToolStripMenuItem.Text = "Правка";
@@ -89,21 +89,22 @@
             // загрузитьЗановоToolStripMenuItem
             // 
             this.загрузитьЗановоToolStripMenuItem.Name = "загрузитьЗановоToolStripMenuItem";
-            this.загрузитьЗановоToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.загрузитьЗановоToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.загрузитьЗановоToolStripMenuItem.Text = "Загрузить заново";
             this.загрузитьЗановоToolStripMenuItem.Click += new System.EventHandler(this.Reload);
+            // 
+            // перезагрузитьВсеТаблицыToolStripMenuItem
+            // 
+            this.перезагрузитьВсеТаблицыToolStripMenuItem.Name = "перезагрузитьВсеТаблицыToolStripMenuItem";
+            this.перезагрузитьВсеТаблицыToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.перезагрузитьВсеТаблицыToolStripMenuItem.Text = "Перезагрузить все таблицы";
+            this.перезагрузитьВсеТаблицыToolStripMenuItem.Click += new System.EventHandler(this.FullReload);
             // 
             // инструментыToolStripMenuItem
             // 
             this.инструментыToolStripMenuItem.Name = "инструментыToolStripMenuItem";
             this.инструментыToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.инструментыToolStripMenuItem.Text = "Инструменты";
-            // 
-            // отменитьРедактированиеЯчейкиToolStripMenuItem
-            // 
-            this.отменитьРедактированиеЯчейкиToolStripMenuItem.Name = "отменитьРедактированиеЯчейкиToolStripMenuItem";
-            this.отменитьРедактированиеЯчейкиToolStripMenuItem.Size = new System.Drawing.Size(206, 20);
-            this.отменитьРедактированиеЯчейкиToolStripMenuItem.Text = "Сбросить редактирование ячейки";
             // 
             // tabControl
             // 
@@ -272,7 +273,7 @@
             this.dgvS.Name = "dgvS";
             this.dgvS.Size = new System.Drawing.Size(792, 400);
             this.dgvS.TabIndex = 1;
-           // 
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,7 +312,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem инструментыToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem отменитьРедактированиеЯчейкиToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tbBR;
         private System.Windows.Forms.DataGridView dgvBR;
@@ -328,6 +328,7 @@
         private System.Windows.Forms.ToolStripMenuItem загрузитьЗановоToolStripMenuItem;
         private System.Windows.Forms.TabPage tpS;
         private System.Windows.Forms.DataGridView dgvS;
+        private System.Windows.Forms.ToolStripMenuItem перезагрузитьВсеТаблицыToolStripMenuItem;
     }
 }
 

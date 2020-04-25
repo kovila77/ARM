@@ -11,7 +11,7 @@ namespace MainForm.DGV
 {
     class DGVStorageResourcesHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumn _cbcOutpost = new DataGridViewComboBoxColumn()
+        public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
         {
             Name = "outpost_id",
             HeaderText = "Форпост",
@@ -20,7 +20,7 @@ namespace MainForm.DGV
             DataPropertyName = "outpost_id",
             FlatStyle = FlatStyle.Flat
         };
-        private DataGridViewComboBoxColumn _cbcResorces = new DataGridViewComboBoxColumn()
+        public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
         {
             Name = "resources_id",
             HeaderText = "Ресурс",
@@ -36,8 +36,8 @@ namespace MainForm.DGV
             {
                 ctx.storage_resources.Load();
 
-                _cbcResorces.DataSource = dtResources;
-                _cbcOutpost.DataSource = dtOutpost;
+                cbcResorces.DataSource = dtResources;
+                cbcOutpost.DataSource = dtOutpost;
 
                 dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("resources_id", typeof(int));
@@ -46,8 +46,8 @@ namespace MainForm.DGV
                 dataTable.Columns.Add("Source", typeof(storage_resources));
                 ctx.storage_resources.ToList().ForEach(x => dataTable.Rows.Add(x.outpost_id, x.resources_id, x.count, x.accumulation_speed, x));
 
-                _dgv.Columns.Add(_cbcResorces);
-                _dgv.Columns.Add(_cbcOutpost);
+                _dgv.Columns.Add(cbcResorces);
+                _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
                 _dgv.Columns["count"].HeaderText = "Количество";
                 _dgv.Columns["accumulation_speed"].HeaderText = "Скорость накопления";

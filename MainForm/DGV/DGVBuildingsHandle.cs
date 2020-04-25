@@ -12,7 +12,7 @@ namespace MainForm.DGV
     class DGVBuildingsHandle : DGVHandle
     {
 
-        private DataGridViewComboBoxColumn _cbcOutpost = new DataGridViewComboBoxColumn()
+        public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
         {
             Name = "outpost_id",
             HeaderText = "Форпост",
@@ -28,14 +28,14 @@ namespace MainForm.DGV
             {
                 ctx.buildings.Load();
 
-                _cbcOutpost.DataSource = dtOutpost;
+                cbcOutpost.DataSource = dtOutpost;
                 dataTable.Columns.Add("building_id", typeof(int));
                 dataTable.Columns.Add("building_name", typeof(string));
                 dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(building));
                 ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.building_name, x.outpost_id, x));
 
-                _dgv.Columns.Add(_cbcOutpost);
+                _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
             }
             MakeThisColumnVisible(new string[] {

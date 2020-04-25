@@ -32,6 +32,11 @@ namespace MainForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            InitializeDGV();
+        }
+
+        private void InitializeDGV()
+        {
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
             _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
@@ -47,31 +52,61 @@ namespace MainForm
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvS,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
-
         }
 
-        private void Reload(object sender, EventArgs e)
+        public void ReloadO()
+        {
+            _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
+            _dGVBuildingsHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
+            _dGVStorageResourcesHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
+        }
+        public void ReloadR()
+        {
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvO);
+            _dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+            _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+            _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+            _dGVStorageResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+        }
+        public void ReloadB()
+        {
+            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
+            _dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
+            _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
+            _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
+        }
+        public void ReloadBR()
+        {
+            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+        }
+        public void ReloadBRC()
+        {
+            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+        }
+        public void ReloadBRP()
+        {
+            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+        }
+        public void ReloadSR()
+        {
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvS,
+                                                                    _dGVOutpostHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+        }
+        public void Reload(object sender, EventArgs e)
         {
 
         }
 
-        //private void dgvR_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        //{
-        //    if (isC)
-        //        return;
-        //    using (var ctx = new OutpostDataContext())
-        //    {
-        //        var r = (resource)dgvR.Rows[e.Row.Index].DataBoundItem;
-        //        if (e.Row.IsNewRow)
-        //        {
-        //            ctx.resources.Add(r);
-        //        }
-        //        else
-        //        {
-        //            ctx.Entry(r).State = EntityState.Modified;
-        //        }
-        //        ctx.SaveChanges();
-        //    }
-        //}
+        private void FullReload(object sender, EventArgs e)
+        {
+            InitializeComponent();
+        }
     }
 }
