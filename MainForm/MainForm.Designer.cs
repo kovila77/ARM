@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.components = new System.ComponentModel.Container();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.загрузитьЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.перезагрузитьВсеТаблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +50,8 @@
             this.tpSR = new System.Windows.Forms.TabPage();
             this.dgvSR = new System.Windows.Forms.DataGridView();
             this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.epMain = new System.Windows.Forms.ErrorProvider(this.components);
+            this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tbBR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBR)).BeginInit();
@@ -65,18 +67,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).BeginInit();
             this.tpSR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epMain)).BeginInit();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правкаToolStripMenuItem,
             this.инструментыToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip.TabIndex = 0;
+            this.menuStrip.Text = "menuStrip1";
             // 
             // правкаToolStripMenuItem
             // 
@@ -284,19 +287,23 @@
             this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
             this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
             // 
+            // epMain
+            // 
+            this.epMain.ContainerControl = this;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tabControl);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.menuStrip);
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "Управление ресурсами";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tbBR.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBR)).EndInit();
@@ -312,6 +319,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).EndInit();
             this.tpSR.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,7 +327,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem инструментыToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl;
@@ -340,6 +348,7 @@
         private System.Windows.Forms.DataGridView dgvSR;
         private System.Windows.Forms.ToolStripMenuItem перезагрузитьВсеТаблицыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem управлениеПользователямиToolStripMenuItem;
+        private System.Windows.Forms.ErrorProvider epMain;
     }
 }
 

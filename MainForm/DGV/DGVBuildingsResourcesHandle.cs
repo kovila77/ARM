@@ -43,8 +43,17 @@ namespace MainForm.DGV
                 var comm = new NpgsqlCommand()
                 {
                     Connection = c,
-                    CommandText = @"SELECT building_id, resources_id, consume_speed, produce_speed
-                                                                                FROM public.buildings_resources"
+                    CommandText = @"
+    SELECT  buildings.building_id,
+            resources.resources_id,
+            COALESCE(buildings_resources_consume.consume_speed, 0) AS consume_speed,
+            COALESCE(buildings_resources_produce.produce_speed, 0) AS produce_speed
+    FROM buildings
+                CROSS JOIN resources
+                FULL JOIN buildings_resources_produce ON buildings.building_id = buildings_resources_produce.building_id AND
+                                                        resources.resources_id = buildings_resources_produce.resources_id
+                FULL JOIN buildings_resources_consume ON buildings.building_id = buildings_resources_consume.building_id AND
+                                                                            resources.resources_id = buildings_resources_consume.resources_id;"
                 };
                 var r = comm.ExecuteReader();
 
