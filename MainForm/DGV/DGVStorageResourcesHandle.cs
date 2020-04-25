@@ -49,8 +49,6 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(cbcResorces);
                 _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
-                _dgv.Columns["count"].HeaderText = "Количество";
-                _dgv.Columns["accumulation_speed"].HeaderText = "Скорость накопления";
             }
             MakeThisColumnVisible(new string[] {
                     "outpost_id",
@@ -62,18 +60,14 @@ namespace MainForm.DGV
             //_dgv.UserAddedRow += UserAddedRow;
         }
 
-        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        protected override bool RowReady(DataGridViewRow row)
         {
-            var row = e.Row;
-            if (row.Cells["Source"].Value == DBNull.Value) return;
-            storage_resources sr = (storage_resources)row.Cells["Source"].Value;
-            using (var ctx = new OutpostDataContext())
-            {
-                ctx.storage_resources.Attach(sr);
-
-                ctx.storage_resources.Remove(sr);
-                ctx.SaveChanges();
-            }
+            return base.RowReady(row)
+                && row.Cells["outpost_id"].Value != DBNull.Value
+                && row.Cells["resources_id"].Value != DBNull.Value
+                && row.Cells["count"].Value != DBNull.Value
+                && row.Cells["accumulation_speed"].Value != DBNull.Value
+                ;
         }
 
         protected override void Insert(DataGridViewRow row)
@@ -92,24 +86,15 @@ namespace MainForm.DGV
                     MessageBox.Show($"Для форпоста {row.Cells["outpost_id"].FormattedValue} " +
                         $"ресурс {row.Cells["resources_id"].FormattedValue} " +
                         $"уже существует! Измените или удалите текущую строку!");
-                    ctx.Dispose();
+                    row.ErrorText = "Ошибка!";
                     return;
                 }
+                row.ErrorText = "";
                 ctx.storage_resources.Add(sr);
                 ctx.SaveChanges();
 
                 row.Cells["Source"].Value = sr;
             }
-        }
-
-        protected override bool RowReady(DataGridViewRow row)
-        {
-            return base.RowReady(row)
-                && row.Cells["outpost_id"].Value != DBNull.Value
-                && row.Cells["resources_id"].Value != DBNull.Value
-                && row.Cells["count"].Value != DBNull.Value
-                && row.Cells["accumulation_speed"].Value != DBNull.Value
-                ;
         }
 
         protected override void Update(DataGridViewRow row)
@@ -124,10 +109,26 @@ namespace MainForm.DGV
                 sr.count = (int)row.Cells["count"].Value;
                 sr.accumulation_speed = (int)row.Cells["accumulation_speed"].Value;
 
+                row.ErrorText = "";
                 ctx.Entry(sr).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
         }
+
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            var row = e.Row;
+            if (row.Cells["Source"].Value == DBNull.Value) return;
+            storage_resources sr = (storage_resources)row.Cells["Source"].Value;
+            using (var ctx = new OutpostDataContext())
+            {
+                ctx.storage_resources.Attach(sr);
+
+                ctx.storage_resources.Remove(sr);
+                ctx.SaveChanges();
+            }
+        }
+
         private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))

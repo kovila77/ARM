@@ -60,6 +60,8 @@ namespace MainForm.DGV
                         column.HeaderText = "Координата y"; break;
                     case "outpost_coordinate_z":    
                         column.HeaderText = "Координата z"; break;
+                    case "accumulation_speed":
+                        column.HeaderText = "Скорость накопления"; break;
                 }
             }
         }

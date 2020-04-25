@@ -43,7 +43,7 @@ namespace MainForm.DGV
                 dataTable.Columns.Add("consume_speed", typeof(int));
                 dataTable.Columns.Add("Source", typeof(buildings_resources_consume));
                 ctx.buildings_resources_consume.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.resources_id, x.consume_speed, x));
-                
+
                 _dgv.Columns.Add(cbcBuldings);
                 _dgv.Columns.Add(cbcResorces);
                 _dgv.DataSource = dataTable;
@@ -53,38 +53,80 @@ namespace MainForm.DGV
                     "resources_id",
                     "consume_speed"
                 });
+            _dgv.CellBeginEdit += CellBeginEdit;
             //_dgv.UserAddedRow += UserAddedRow;
         }
-
-        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    if (_dgv.Rows[e.RowIndex].IsNewRow) return;
-        //    using (var ctx = new OutpostDataContext())
-        //    {
-        //        var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
-        //        ctx.outposts.Attach(o);
-        //        ctx.Entry(o).State = EntityState.Modified;
-        //        ctx.SaveChanges();
-        //    }
-        //}
-        protected override void Insert(DataGridViewRow row)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override bool RowReady(DataGridViewRow row)
         {
-            throw new NotImplementedException();
+            return base.RowReady(row)
+                 && row.Cells["building_id"].Value != DBNull.Value
+                 && row.Cells["resources_id"].Value != DBNull.Value
+                 && row.Cells["consume_speed"].Value != DBNull.Value
+                 ;
+        }
+
+        protected override void Insert(DataGridViewRow row)
+        {
+            using (var ctx = new OutpostDataContext())
+            {
+                buildings_resources_consume brc = new buildings_resources_consume
+                {
+                    building_id = (int)row.Cells["building_id"].Value,
+                    resources_id = (int)row.Cells["resources_id"].Value,
+                    consume_speed = (int)row.Cells["consume_speed"].Value,
+                };
+                if (ctx.buildings_resources_consume.Find(brc.building_id, brc.resources_id) != null)
+                {
+                    MessageBox.Show($"Для здания {row.Cells["building_id"].FormattedValue} " +
+                        $"потребляемый ресурс {row.Cells["resources_id"].FormattedValue} " +
+                        $"уже существует! Измените или удалите текущую строку!");
+                    row.ErrorText = "Ошибка!";
+                    return;
+                }
+                row.ErrorText = "";
+                ctx.buildings_resources_consume.Add(brc);
+                ctx.SaveChanges();
+
+                row.Cells["Source"].Value = brc;
+            }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            throw new NotImplementedException();
+            using (var ctx = new OutpostDataContext())
+            {
+                buildings_resources_consume brc = (buildings_resources_consume)row.Cells["Source"].Value;
+                ctx.buildings_resources_consume.Attach(brc);
+
+                brc.building_id = (int)row.Cells["building_id"].Value;
+                brc.resources_id = (int)row.Cells["resources_id"].Value;
+                brc.consume_speed = (int)row.Cells["consume_speed"].Value;
+
+                row.ErrorText = "";
+                ctx.Entry(brc).State = EntityState.Modified;
+                ctx.SaveChanges();
+            }
+        }
+
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            var row = e.Row;
+            if (row.Cells["Source"].Value == DBNull.Value) return;
+            buildings_resources_produce brc = (buildings_resources_produce)row.Cells["Source"].Value;
+            using (var ctx = new OutpostDataContext())
+            {
+                ctx.buildings_resources_produce.Attach(brc);
+                ctx.buildings_resources_produce.Remove(brc);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

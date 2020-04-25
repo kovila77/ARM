@@ -44,32 +44,52 @@ namespace MainForm.DGV
                 });
         }
 
-        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        protected override bool RowReady(DataGridViewRow row)
         {
-            throw new NotImplementedException();
+            return base.RowReady(row)
+                && row.Cells["building_name"].Value != DBNull.Value
+                ;
         }
 
         protected override void Insert(DataGridViewRow row)
         {
-            throw new NotImplementedException();
+            using (var ctx = new OutpostDataContext())
+            {
+                building b = new building
+                {
+                    building_name = row.Cells["building_name"].Value.ToString(),
+                };
+                if (row.Cells["outpost_id"].Value != DBNull.Value)
+                    b.outpost_id = (int)row.Cells["outpost_id"].Value;
 
-        }
+                ctx.buildings.Add(b);
+                ctx.SaveChanges();
 
-        protected override bool RowReady(DataGridViewRow row)
-        {
-            throw new NotImplementedException();
+                row.Cells["building_id"].Value = b.building_id;
+                row.Cells["Source"].Value = b;
+            }
         }
 
         protected override void Update(DataGridViewRow row)
         {
             using (var ctx = new OutpostDataContext())
             {
-                building b = ctx.buildings.Find((int)row.Cells["building_id"].Value);
-                b.outpost_id = (int?)row.Cells["outpost_id"].Value;
-                b.building_name = (string)row.Cells["building_name"].FormattedValue;
-                //ctx.Entry(b).State = EntityState.Modified;
+                //building b = ctx.buildings.Find((int)row.Cells["building_id"].Value);
+                //b.outpost_id = (int?)row.Cells["outpost_id"].Value;
+                //b.building_name = (string)row.Cells["building_name"].FormattedValue;
+                ////ctx.Entry(b).State = EntityState.Modified;
+                //ctx.SaveChanges();
+                building b = (building)row.Cells["Source"].Value;
+                if (row.Cells["outpost_id"].Value != DBNull.Value)
+                    b.outpost_id = (int)row.Cells["outpost_id"].Value;
+                b.building_name = row.Cells["building_name"].Value.ToString();
+                ctx.Entry(b).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
+        }
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

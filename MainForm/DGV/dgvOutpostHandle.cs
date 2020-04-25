@@ -16,12 +16,6 @@ namespace MainForm
         {
             using (var ctx = new OutpostDataContext())
             {
-                //ctx.Configuration.ProxyCreationEnabled = false;
-                ctx.outposts.Load();
-                _dgv.DataSource = ctx.outposts.Local.ToBindingList();
-            }
-            using (var ctx = new OutpostDataContext())
-            {
                 ctx.outposts.Load();
 
                 dataTable.Columns.Add("outpost_id", typeof(int));
@@ -50,21 +44,15 @@ namespace MainForm
                 });
         }
 
-        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        protected override bool RowReady(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
-            {
-                var row = e.Row;
-                outpost o = (outpost)row.Cells["Source"].Value;
-
-
-                if (MessageBox.Show($"Вы уверены, что хотите удалить ВСЮ информацию о {o.outpost_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
-                    ctx.outposts.Attach(o);
-                    ctx.outposts.Remove(o);
-                    ctx.SaveChanges();
-                }
-            }
+            return base.RowReady(row)
+                && row.Cells["outpost_name"].Value != DBNull.Value
+                && row.Cells["outpost_economic_value"].Value != DBNull.Value
+                && row.Cells["outpost_coordinate_x"].Value != DBNull.Value
+                && row.Cells["outpost_coordinate_y"].Value != DBNull.Value
+                && row.Cells["outpost_coordinate_z"].Value != DBNull.Value
+                ;
         }
 
         protected override void Insert(DataGridViewRow row)
@@ -104,17 +92,6 @@ namespace MainForm
             }
         }
 
-        protected override bool RowReady(DataGridViewRow row)
-        {
-            return base.RowReady(row)
-                && row.Cells["outpost_name"].Value != DBNull.Value
-                && row.Cells["outpost_economic_value"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_x"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_y"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_z"].Value != DBNull.Value
-                ;
-        }
-
         protected override void Update(DataGridViewRow row)
         {
             using (var ctx = new OutpostDataContext())
@@ -145,9 +122,25 @@ namespace MainForm
                 o.outpost_coordinate_y = (int)row.Cells["outpost_coordinate_y"].Value;
                 o.outpost_coordinate_z = (int)row.Cells["outpost_coordinate_z"].Value;
 
-                //ctx.outposts.Attach(o);
                 ctx.Entry(o).State = EntityState.Modified;
                 ctx.SaveChanges();
+            }
+        }
+
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            using (var ctx = new OutpostDataContext())
+            {
+                var row = e.Row;
+                outpost o = (outpost)row.Cells["Source"].Value;
+
+
+                if (MessageBox.Show($"Вы уверены, что хотите удалить ВСЮ информацию о {o.outpost_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    ctx.outposts.Attach(o);
+                    ctx.outposts.Remove(o);
+                    ctx.SaveChanges();
+                }
             }
         }
     }
