@@ -49,7 +49,7 @@ namespace MainForm
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
-            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvS,
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
         }
@@ -95,18 +95,25 @@ namespace MainForm
         }
         public void ReloadSR()
         {
-            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvS,
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
         }
         public void Reload(object sender, EventArgs e)
         {
-
+            var dgv = tabControl.SelectedTab.Controls[0];
+            if (dgv == dgvB) ReloadB();
+            if (dgv == dgvR) ReloadR();
+            if (dgv == dgvBRC) ReloadBRC();
+            if (dgv == dgvBRP) ReloadBRP();
+            if (dgv == dgvO) ReloadO();
+            if (dgv == dgvBR) ReloadBR();
+            if (dgv == dgvSR) ReloadSR();
         }
 
         private void FullReload(object sender, EventArgs e)
         {
-            InitializeComponent();
+            InitializeDGV();
         }
     }
 }
