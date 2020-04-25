@@ -13,6 +13,7 @@ namespace MainForm
         public outpost()
         {
             buildings = new HashSet<building>();
+            outpost_missions = new HashSet<outpost_missions>();
             storage_resources = new HashSet<storage_resources>();
         }
 
@@ -33,6 +34,9 @@ namespace MainForm
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<building> buildings { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<outpost_missions> outpost_missions { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<storage_resources> storage_resources { get; set; }

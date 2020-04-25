@@ -102,7 +102,8 @@
             // 
             this.dgvBR.AllowUserToAddRows = false;
             this.dgvBR.AllowUserToDeleteRows = false;
-            this.dgvBR.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvBR.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBR.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvBR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvBR.Location = new System.Drawing.Point(3, 3);
@@ -148,6 +149,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Управление ресурсами";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl.ResumeLayout(false);

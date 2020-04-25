@@ -17,8 +17,13 @@ namespace MainForm
         public virtual DbSet<buildings_resources_produce> buildings_resources_produce { get; set; }
         public virtual DbSet<machine> machines { get; set; }
         public virtual DbSet<machines_resources_consume> machines_resources_consume { get; set; }
+        public virtual DbSet<outpost_missions> outpost_missions { get; set; }
         public virtual DbSet<outpost> outposts { get; set; }
+        public virtual DbSet<resource> resources { get; set; }
         public virtual DbSet<storage_resources> storage_resources { get; set; }
+
+        //my line
+        //public virtual DbSet<buildings_resources> buildings_resources { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -38,9 +43,21 @@ namespace MainForm
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<outpost>()
+                .HasMany(e => e.outpost_missions)
+                .WithRequired(e => e.outpost)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<outpost>()
                 .HasMany(e => e.storage_resources)
                 .WithRequired(e => e.outpost)
                 .WillCascadeOnDelete(false);
+
+            //my line
+            //modelBuilder.Entity<building>()
+            //    .HasMany(e => e.buildings_resources)
+            //    .WithRequired(e => e.building)
+            //    .WillCascadeOnDelete(false);
+
         }
     }
 }

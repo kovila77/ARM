@@ -22,5 +22,7 @@ namespace MainForm
         public int consume_speed { get; set; }
 
         public virtual building building { get; set; }
+
+        public virtual resource resource { get; set; }
     }
 }

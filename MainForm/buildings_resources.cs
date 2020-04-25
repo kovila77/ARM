@@ -1,4 +1,4 @@
-namespace MainForm
+﻿namespace MainForm
 {
     using System;
     using System.Collections.Generic;
@@ -6,24 +6,25 @@ namespace MainForm
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("public.storage_resources")]
-    public partial class storage_resources
+    [Table("public.buildings_resources")]
+    public partial class buildings_resources
     {
         [Key]
         [Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int outpost_id { get; set; }
+        public int building_id { get; set; }
 
         [Key]
         [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int resources_id { get; set; }
 
-        public int count { get; set; }
+        public int consume_speed { get; set; }
 
-        public int accumulation_speed { get; set; }
+        public int produce_speed { get; set; }
 
-        public virtual outpost outpost { get; set; }
+        public virtual building building { get; set; }
+
 
         public virtual resource resource { get; set; }
     }
