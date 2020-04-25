@@ -32,9 +32,5 @@ namespace MainForm
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<buildings_resources_produce> buildings_resources_produce { get; set; }
-
-        //my line
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        //public virtual ICollection<buildings_resources> buildings_resources { get; set; }
     }
 }

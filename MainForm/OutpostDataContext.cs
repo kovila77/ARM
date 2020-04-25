@@ -22,8 +22,6 @@ namespace MainForm
         public virtual DbSet<resource> resources { get; set; }
         public virtual DbSet<storage_resources> storage_resources { get; set; }
 
-        //my line
-        //public virtual DbSet<buildings_resources> buildings_resources { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -51,12 +49,6 @@ namespace MainForm
                 .HasMany(e => e.storage_resources)
                 .WithRequired(e => e.outpost)
                 .WillCascadeOnDelete(true);
-
-            //my line
-            //modelBuilder.Entity<building>()
-            //    .HasMany(e => e.buildings_resources)
-            //    .WithRequired(e => e.building)
-            //    .WillCascadeOnDelete(false);
 
         }
     }
