@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.Entity;
+using System.Data;
 
 namespace MainForm.DGV
 {
@@ -18,20 +19,34 @@ namespace MainForm.DGV
             DisplayMember = "outpost_name",
             ValueMember = "outpost_id",
             DataPropertyName = "outpost_id",
+            FlatStyle = FlatStyle.Flat
         };
 
-        public DGVBuildingsHandle(DataGridView dgv) : base(dgv)
+        public DGVBuildingsHandle(DataGridView dgv, DataTable dtOutpost) : base(dgv)
         {
+            //using (var ctx = new OutpostDataContext())
+            //{
+            //_cbcOutpost.DataSource = dtOutpost;
+            //    //ctx.Configuration.ProxyCreationEnabled = false;
+            //    ctx.buildings.Load();
+
+            //    _cbcOutpost.DataSource = ctx.outposts.Local.ToBindingList();
+            //    _dgv.Columns.Add(_cbcOutpost);
+
+            //    _dgv.DataSource = ctx.buildings.Local.ToBindingList();
+            //}
             using (var ctx = new OutpostDataContext())
             {
-                //ctx.Configuration.ProxyCreationEnabled = false;
                 ctx.buildings.Load();
-                ctx.outposts.Load();
 
-                _cbcOutpost.DataSource = ctx.outposts.Local.ToBindingList();
+                _cbcOutpost.DataSource = dtOutpost;
+                dataTable.Columns.Add("building_id", typeof(int));
+                dataTable.Columns.Add("building_name", typeof(string));
+                dataTable.Columns.Add("outpost_id", typeof(int));
+                dataTable.Columns.Add("Source", typeof(building));
+                ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.building_name, x.outpost_id, x));
                 _dgv.Columns.Add(_cbcOutpost);
-
-                _dgv.DataSource = ctx.buildings.Local.ToBindingList();
+                _dgv.DataSource = dataTable;
             }
             MakeThisColumnVisible(new string[] {
                     "building_name",

@@ -13,22 +13,18 @@ namespace MainForm.DGV
 {
     class DGVResourcesHandle : DGVHandle
     {
-        //BindingList<resource> bl = new BindingList<resource>();
 
-        DataTable dt;
-
-        public DGVResourcesHandle(DataGridView dgv, DataTable dt) : base(dgv)
+        public DGVResourcesHandle(DataGridView dgv) : base(dgv)
         {
-            this.dt = dt;
             using (var ctx = new OutpostDataContext())
             {
                 ctx.resources.Load();
 
-                dt.Columns.Add("resources_id", typeof(int));
-                dt.Columns.Add("resources_name", typeof(string));
-                dt.Columns.Add("Source", typeof(resource));
-                ctx.resources.ToList().ForEach(x => dt.Rows.Add(x.resources_id, x.resources_name, x));
-                _dgv.DataSource = dt;
+                dataTable.Columns.Add("resources_id", typeof(int));
+                dataTable.Columns.Add("resources_name", typeof(string));
+                dataTable.Columns.Add("Source", typeof(resource));
+                ctx.resources.ToList().ForEach(x => dataTable.Rows.Add(x.resources_id, x.resources_name, x));
+                _dgv.DataSource = dataTable;
             }
             MakeThisColumnVisible(new string[] {
                     "resources_name"

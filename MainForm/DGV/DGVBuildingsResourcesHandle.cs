@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms;
 using System.Data.Entity;
+using System.Data;
 
 namespace MainForm.DGV
 {
@@ -16,46 +17,59 @@ namespace MainForm.DGV
     {
         private DataGridViewComboBoxColumn _cbcResorces = new DataGridViewComboBoxColumn()
         {
-            Name = "rId",
+            Name = "resources_id",
             HeaderText = "Ресурс",
-            DisplayMember = "name",
-            ValueMember = "id"
+            DisplayMember = "resources_name",
+            ValueMember = "resources_id",
+            DataPropertyName = "resources_id",
+            FlatStyle = FlatStyle.Flat
         };
         private DataGridViewComboBoxColumn _cbcBuldings = new DataGridViewComboBoxColumn()
         {
-            Name = "bId",
+            Name = "building_id",
             HeaderText = "Здание",
-            DisplayMember = "name",
-            ValueMember = "id"
+            DisplayMember = "building_name",
+            ValueMember = "building_id",
+            DataPropertyName = "building_id",
+            FlatStyle = FlatStyle.Flat
         };
 
-        public DGVBuildingsResourcesHandle(DataGridView dgv, BindingSource bsBuild, BindingSource bsResources) : base(dgv)
+        public DGVBuildingsResourcesHandle(DataGridView dgv, DataTable dtBuildings, DataTable dtResources) : base(dgv)
         {
-            //_bsB = bsBuild;
-            //_bsR = bsResources; 
-            _cbcResorces.DataSource = bsBuild;
-            _cbcBuldings.DataSource = bsResources;
             var connectionString = ConfigurationManager.ConnectionStrings["OutpostDataContext"].ConnectionString;
             using (var c = new NpgsqlConnection(connectionString))
             {
                 c.Open();
-                var comm = new NpgsqlCommand() { Connection = c, CommandText = @"SELECT building_id, resources_id, consume_speed, produce_speed
-                                                                                FROM public.buildings_resources" };
+                var comm = new NpgsqlCommand()
+                {
+                    Connection = c,
+                    CommandText = @"SELECT building_id, resources_id, consume_speed, produce_speed
+                                                                                FROM public.buildings_resources"
+                };
                 var r = comm.ExecuteReader();
-                _dgv.Columns.Add(_cbcBuldings);
-                //_dgv.Columns.Add("building_id", "Здание");
-                _dgv.Columns.Add(_cbcResorces);
-                //_dgv.Columns.Add("resources_id", "Ресурс");
-                _dgv.Columns.Add("consume_speed", "Скорость потребления");
-                _dgv.Columns.Add("produce_speed", "Скорость произовдства");
+
+                _cbcResorces.DataSource = dtResources;
+                _cbcBuldings.DataSource = dtBuildings;
+
+                dataTable.Columns.Add("building_id", typeof(int));
+                dataTable.Columns.Add("resources_id", typeof(int));
+                dataTable.Columns.Add("consume_speed", typeof(int));
+                dataTable.Columns.Add("produce_speed", typeof(int));
+                dataTable.Columns.Add("Source");
                 while (r.Read())
-                    _dgv.Rows.Add(r["building_id"], r["resources_id"], r["consume_speed"], r["produce_speed"]);
+                    dataTable.Rows.Add(r["building_id"], r["resources_id"], r["consume_speed"], r["produce_speed"], 1);
+
+                _dgv.Columns.Add(_cbcBuldings);
+                _dgv.Columns.Add(_cbcResorces);
+                _cbcResorces.ReadOnly = _cbcBuldings.ReadOnly = true;
+                _dgv.DataSource = dataTable;
             }
+            MakeThisColumnVisible(new string[] { "building_id", "resources_id", "consume_speed", "produce_speed" });
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            throw new NotImplementedException();
+            e.Cancel = true;
         }
 
         protected override void Insert(DataGridViewRow row)

@@ -29,12 +29,12 @@ namespace MainForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _dtR = new DataTable();
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
-            _dGVResourcesHandle = new DGVResourcesHandle(dgvR, _dtR);
-            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB);
-            //_dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, new BindingSource())
-            //_dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR);
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
+            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
+            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
+                                                                  _dGVBuildingsHandle.dataTable,
+                                                                   _dGVResourcesHandle.dataTable);
 
         }
 

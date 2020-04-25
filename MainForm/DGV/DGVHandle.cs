@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,8 @@ namespace MainForm.DGV
     {
         protected DataGridView _dgv;
         protected bool isCurrentRowDirty;
-        protected bool isNewRow;
+        //protected bool isNewRow;
+        public DataTable dataTable = new DataTable();
 
         protected int NewRowIndex { get { return _dgv.AllowUserToAddRows ? _dgv.Rows.Count - 1 : _dgv.Rows.Count; } }
 
