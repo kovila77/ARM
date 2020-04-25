@@ -1,17 +1,16 @@
-﻿using MainForm.DGV;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.Entity;
 
-namespace MainForm
+namespace MainForm.DGV
 {
-    class DGVOutpostHandle : DGVHandle
+    class DGVResourcesHandle : DGVHandle
     {
-        public DGVOutpostHandle(DataGridView dgv) : base(dgv)
+        public DGVResourcesHandle(DataGridView dgv) : base(dgv)
         {
             //_dgv = dgvO;
             using (var ctx = new OutpostDataContext())

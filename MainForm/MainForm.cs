@@ -27,31 +27,9 @@ namespace MainForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var _sConnStr = new NpgsqlConnectionStringBuilder
-            {
-                Host = "192.168.88.101",
-                Port = 5432,
-                Database = "outpost",
-                Username = "postgres",
-                Password = "kovila77",
-                AutoPrepareMinUsages = 2,
-                MaxAutoPrepare = 10,
-            }.ConnectionString;
+            _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
+            //_dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR);
 
-
-            //using (var c = new NpgsqlConnection (_sConnStr))
-            //{
-            //    c.Open();
-            //    var comm = new NpgsqlCommand() { Connection = c, CommandText = @"select building_id as bi from public.buildings_resources" };
-            //    var r = comm.ExecuteReader();
-            //    dgvBR.Columns.Add("bi","bi");
-            //    while (r.Read())
-            //    {
-            //        dgvBR.Rows.Add(r["bi"]);
-            //    }
-            //}
-            //_dGVOutpostHandle = new DGVOutpostHandle(dgvBR);
-            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR);
-        }
+        }   
     }
 }

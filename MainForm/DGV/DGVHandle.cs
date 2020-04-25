@@ -18,6 +18,15 @@ namespace MainForm.DGV
             _dgv.CellEndEdit += CellEndEdit;
         }
 
+        public void MakeThisColumnVisible(string[]columnNames)
+        {
+            List<DataGridViewColumn> columnsToSee = new List<DataGridViewColumn>();
+            foreach (var cn in columnNames)
+                columnsToSee.Add(_dgv.Columns[cn]);
+            foreach (DataGridViewColumn c in _dgv.Columns) 
+                c.Visible = columnsToSee.Contains(c);
+        }
+
         public void CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             // if (e.RowIndex == _dgv.Rows.Count - 1) return;
