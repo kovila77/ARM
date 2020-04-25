@@ -10,6 +10,10 @@ namespace MainForm.DGV
     abstract class DGVHandle
     {
         protected DataGridView _dgv;
+        protected bool isCurrentRowDirty;
+        protected bool isNewRow;
+
+        protected int NewRowIndex { get { return _dgv.AllowUserToAddRows ? _dgv.Rows.Count - 1 : _dgv.Rows.Count; } }
 
         public DGVHandle(DataGridView dgv)
         {
@@ -18,12 +22,12 @@ namespace MainForm.DGV
             _dgv.CellEndEdit += CellEndEdit;
         }
 
-        public void MakeThisColumnVisible(string[]columnNames)
+        public void MakeThisColumnVisible(string[] columnNames)
         {
             List<DataGridViewColumn> columnsToSee = new List<DataGridViewColumn>();
             foreach (var cn in columnNames)
                 columnsToSee.Add(_dgv.Columns[cn]);
-            foreach (DataGridViewColumn c in _dgv.Columns) 
+            foreach (DataGridViewColumn c in _dgv.Columns)
                 c.Visible = columnsToSee.Contains(c);
         }
 
@@ -42,6 +46,7 @@ namespace MainForm.DGV
                     }
                 }
             }
+            isCurrentRowDirty = _dgv.IsCurrentRowDirty;
         }
 
         abstract public void CellEndEdit(object sender, DataGridViewCellEventArgs e);
@@ -49,6 +54,11 @@ namespace MainForm.DGV
         public void CancelEdit()
         {
             _dgv.CancelEdit();
+        }
+
+        public bool RowHaveSource(DataGridViewRow row)
+        {
+            return !(row.Cells["Source"].Value == null || row.Cells["Source"].Value == DBNull.Value);
         }
     }
 }

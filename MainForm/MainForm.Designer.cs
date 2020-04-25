@@ -30,35 +30,36 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузитьЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.отменитьРедактированиеЯчейкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tbBR = new System.Windows.Forms.TabPage();
             this.dgvBR = new System.Windows.Forms.DataGridView();
             this.tpR = new System.Windows.Forms.TabPage();
+            this.dgvR = new System.Windows.Forms.DataGridView();
             this.tpB = new System.Windows.Forms.TabPage();
+            this.dgvB = new System.Windows.Forms.DataGridView();
             this.tpBRC = new System.Windows.Forms.TabPage();
+            this.dgvBRC = new System.Windows.Forms.DataGridView();
             this.tpBRP = new System.Windows.Forms.TabPage();
+            this.dgvBRP = new System.Windows.Forms.DataGridView();
             this.tpO = new System.Windows.Forms.TabPage();
             this.dgvO = new System.Windows.Forms.DataGridView();
-            this.dgvR = new System.Windows.Forms.DataGridView();
-            this.dgvB = new System.Windows.Forms.DataGridView();
-            this.dgvBRC = new System.Windows.Forms.DataGridView();
-            this.dgvBRP = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tbBR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBR)).BeginInit();
             this.tpR.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvR)).BeginInit();
             this.tpB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvB)).BeginInit();
             this.tpBRC.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBRC)).BeginInit();
             this.tpBRP.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBRP)).BeginInit();
             this.tpO.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvR)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBRC)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBRP)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -75,9 +76,18 @@
             // 
             // правкаToolStripMenuItem
             // 
+            this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.загрузитьЗановоToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.правкаToolStripMenuItem.Text = "Правка";
+            // 
+            // загрузитьЗановоToolStripMenuItem
+            // 
+            this.загрузитьЗановоToolStripMenuItem.Name = "загрузитьЗановоToolStripMenuItem";
+            this.загрузитьЗановоToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.загрузитьЗановоToolStripMenuItem.Text = "Загрузить заново";
+            this.загрузитьЗановоToolStripMenuItem.Click += new System.EventHandler(this.Reload);
             // 
             // инструментыToolStripMenuItem
             // 
@@ -141,6 +151,17 @@
             this.tpR.Text = "Ресурсы";
             this.tpR.UseVisualStyleBackColor = true;
             // 
+            // dgvR
+            // 
+            this.dgvR.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvR.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvR.Location = new System.Drawing.Point(3, 3);
+            this.dgvR.Name = "dgvR";
+            this.dgvR.Size = new System.Drawing.Size(786, 394);
+            this.dgvR.TabIndex = 1;
+            // 
             // tpB
             // 
             this.tpB.Controls.Add(this.dgvB);
@@ -150,6 +171,17 @@
             this.tpB.TabIndex = 2;
             this.tpB.Text = "Здания";
             this.tpB.UseVisualStyleBackColor = true;
+            // 
+            // dgvB
+            // 
+            this.dgvB.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvB.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvB.Location = new System.Drawing.Point(0, 0);
+            this.dgvB.Name = "dgvB";
+            this.dgvB.Size = new System.Drawing.Size(792, 400);
+            this.dgvB.TabIndex = 1;
             // 
             // tpBRC
             // 
@@ -161,6 +193,17 @@
             this.tpBRC.Text = "Потребление ресурсов зданиями";
             this.tpBRC.UseVisualStyleBackColor = true;
             // 
+            // dgvBRC
+            // 
+            this.dgvBRC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBRC.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvBRC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBRC.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBRC.Location = new System.Drawing.Point(0, 0);
+            this.dgvBRC.Name = "dgvBRC";
+            this.dgvBRC.Size = new System.Drawing.Size(792, 400);
+            this.dgvBRC.TabIndex = 1;
+            // 
             // tpBRP
             // 
             this.tpBRP.Controls.Add(this.dgvBRP);
@@ -170,6 +213,17 @@
             this.tpBRP.TabIndex = 4;
             this.tpBRP.Text = "Производство зданиями ресурсов";
             this.tpBRP.UseVisualStyleBackColor = true;
+            // 
+            // dgvBRP
+            // 
+            this.dgvBRP.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBRP.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvBRP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBRP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBRP.Location = new System.Drawing.Point(0, 0);
+            this.dgvBRP.Name = "dgvBRP";
+            this.dgvBRP.Size = new System.Drawing.Size(792, 400);
+            this.dgvBRP.TabIndex = 1;
             // 
             // tpO
             // 
@@ -192,50 +246,6 @@
             this.dgvO.Size = new System.Drawing.Size(792, 400);
             this.dgvO.TabIndex = 0;
             // 
-            // dgvR
-            // 
-            this.dgvR.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvR.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgvR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvR.Location = new System.Drawing.Point(3, 3);
-            this.dgvR.Name = "dgvR";
-            this.dgvR.Size = new System.Drawing.Size(786, 394);
-            this.dgvR.TabIndex = 1;
-            // 
-            // dgvB
-            // 
-            this.dgvB.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvB.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgvB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvB.Location = new System.Drawing.Point(0, 0);
-            this.dgvB.Name = "dgvB";
-            this.dgvB.Size = new System.Drawing.Size(792, 400);
-            this.dgvB.TabIndex = 1;
-            // 
-            // dgvBRC
-            // 
-            this.dgvBRC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvBRC.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgvBRC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBRC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBRC.Location = new System.Drawing.Point(0, 0);
-            this.dgvBRC.Name = "dgvBRC";
-            this.dgvBRC.Size = new System.Drawing.Size(792, 400);
-            this.dgvBRC.TabIndex = 1;
-            // 
-            // dgvBRP
-            // 
-            this.dgvBRP.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvBRP.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgvBRP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBRP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBRP.Location = new System.Drawing.Point(0, 0);
-            this.dgvBRP.Name = "dgvBRP";
-            this.dgvBRP.Size = new System.Drawing.Size(792, 400);
-            this.dgvBRP.TabIndex = 1;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,15 +263,15 @@
             this.tbBR.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBR)).EndInit();
             this.tpR.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvR)).EndInit();
             this.tpB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvB)).EndInit();
             this.tpBRC.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBRC)).EndInit();
             this.tpBRP.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBRP)).EndInit();
             this.tpO.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvR)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBRC)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBRP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,6 +296,7 @@
         private System.Windows.Forms.DataGridView dgvB;
         private System.Windows.Forms.DataGridView dgvBRC;
         private System.Windows.Forms.DataGridView dgvBRP;
+        private System.Windows.Forms.ToolStripMenuItem загрузитьЗановоToolStripMenuItem;
     }
 }
 

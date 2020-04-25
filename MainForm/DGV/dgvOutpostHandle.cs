@@ -31,7 +31,7 @@ namespace MainForm
 
         public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (_dgv.Rows[e.RowIndex].IsNewRow) return;
+            if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
             using (var ctx = new OutpostDataContext())
             {
                 var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;

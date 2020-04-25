@@ -10,32 +10,44 @@ namespace MainForm.DGV
 {
     class DGVBuildingsHandle : DGVHandle
     {
+
+        private DataGridViewComboBoxColumn _cbcOutpost = new DataGridViewComboBoxColumn()
+        {
+            Name = "outpost_id",
+            HeaderText = "Форпост",
+            DisplayMember = "outpost_name",
+            ValueMember = "outpost_id",
+            DataPropertyName = "outpost_id",
+        };
+
         public DGVBuildingsHandle(DataGridView dgv) : base(dgv)
         {
-            //_dgv = dgvO;
             using (var ctx = new OutpostDataContext())
             {
                 //ctx.Configuration.ProxyCreationEnabled = false;
+                ctx.buildings.Load();
                 ctx.outposts.Load();
-                _dgv.DataSource = ctx.outposts.Local.ToBindingList();
+
+                _cbcOutpost.DataSource = ctx.outposts.Local.ToBindingList();
+                _dgv.Columns.Add(_cbcOutpost);
+
+                _dgv.DataSource = ctx.buildings.Local.ToBindingList();
             }
             MakeThisColumnVisible(new string[] {
-                    "outpost_name",
-                    "outpost_economic_value",
-                    "outpost_coordinate_x",
-                    "outpost_coordinate_y",
-                    "outpost_coordinate_z"
+                    "building_name",
+                    "outpost_id",
                 });
         }
 
         public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (_dgv.Rows[e.RowIndex].IsNewRow) return;
+            if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
             using (var ctx = new OutpostDataContext())
             {
-                var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
-                ctx.outposts.Attach(o);
-                ctx.Entry(o).State = EntityState.Modified;
+                var b = ctx.buildings.Find((int)_dgv.Rows[e.RowIndex].Cells["building_id"].Value);
+                b.outpost_id = (int?)_dgv.Rows[e.RowIndex].Cells["outpost_id"].Value;
+                b.building_name = (string)_dgv.Rows[e.RowIndex].Cells["building_name"].FormattedValue;
+                //ctx.Entry(b).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
         }

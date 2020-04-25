@@ -14,14 +14,14 @@ namespace MainForm.DGV
 {
     class DGVBuildingsResourcesHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
+        private DataGridViewComboBoxColumn _cbcResorces = new DataGridViewComboBoxColumn()
         {
             Name = "rId",
             HeaderText = "Ресурс",
             DisplayMember = "name",
             ValueMember = "id"
         };
-        private DataGridViewComboBoxColumn cbcBuldings = new DataGridViewComboBoxColumn()
+        private DataGridViewComboBoxColumn _cbcBuldings = new DataGridViewComboBoxColumn()
         {
             Name = "bId",
             HeaderText = "Здание",
@@ -33,8 +33,8 @@ namespace MainForm.DGV
         {
             //_bsB = bsBuild;
             //_bsR = bsResources; 
-            cbcResorces.DataSource = bsBuild;
-            cbcBuldings.DataSource = bsResources;
+            _cbcResorces.DataSource = bsBuild;
+            _cbcBuldings.DataSource = bsResources;
             var connectionString = ConfigurationManager.ConnectionStrings["OutpostDataContext"].ConnectionString;
             using (var c = new NpgsqlConnection(connectionString))
             {
@@ -42,9 +42,9 @@ namespace MainForm.DGV
                 var comm = new NpgsqlCommand() { Connection = c, CommandText = @"SELECT building_id, resources_id, consume_speed, produce_speed
                                                                                 FROM public.buildings_resources" };
                 var r = comm.ExecuteReader();
-                _dgv.Columns.Add(cbcBuldings);
+                _dgv.Columns.Add(_cbcBuldings);
                 //_dgv.Columns.Add("building_id", "Здание");
-                _dgv.Columns.Add(cbcResorces);
+                _dgv.Columns.Add(_cbcResorces);
                 //_dgv.Columns.Add("resources_id", "Ресурс");
                 _dgv.Columns.Add("consume_speed", "Скорость потребления");
                 _dgv.Columns.Add("produce_speed", "Скорость произовдства");
@@ -55,14 +55,14 @@ namespace MainForm.DGV
 
         public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == _dgv.Rows.Count - 1) return;
-            using (var ctx = new OutpostDataContext())
-            {
-                var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
-                ctx.outposts.Attach(o);
-                ctx.Entry(o).State = EntityState.Modified;
-                ctx.SaveChanges();
-            }
+            //if (e.RowIndex == _dgv.Rows.Count - 1) return;
+            //using (var ctx = new OutpostDataContext())
+            //{
+            //    var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
+            //    ctx.outposts.Attach(o);
+            //    ctx.Entry(o).State = EntityState.Modified;
+            //    ctx.SaveChanges();
+            //}
         }
     }
 }
