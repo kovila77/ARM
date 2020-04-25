@@ -20,6 +20,9 @@ namespace MainForm
         private DGVResourcesHandle _dGVResourcesHandle;
         private DGVBuildingsHandle _dGVBuildingsHandle;
         private DGVBuildingsResourcesHandle _dGVBuildingsResourcesHandle;
+        private DGVBuildingsResourcesConsumeHandle _dGVBuildingsResourcesConsumeHandle;
+        private DGVBuildingsResourcesProduceHandle _dGVBuildingsResourcesProduceHandle;
+        private DGVStorageResourcesHandle _dGVStorageResourcesHandle;
         private DataTable _dtR;
 
         public MainForm()
@@ -33,8 +36,17 @@ namespace MainForm
             _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
-                                                                  _dGVBuildingsHandle.dataTable,
-                                                                   _dGVResourcesHandle.dataTable);
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
+                                                                    _dGVBuildingsHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvS,
+                                                                    _dGVOutpostHandle.dataTable,
+                                                                    _dGVResourcesHandle.dataTable);
 
         }
 

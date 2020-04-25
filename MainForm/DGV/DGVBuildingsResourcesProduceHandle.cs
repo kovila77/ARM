@@ -5,27 +5,56 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.Entity;
+using System.Data;
 
 namespace MainForm.DGV
 {
     class DGVBuildingsResourcesProduceHandle : DGVHandle
     {
-        public DGVBuildingsResourcesProduceHandle(DataGridView dgv) : base(dgv)
+        private DataGridViewComboBoxColumn _cbcResorces = new DataGridViewComboBoxColumn()
         {
-            //_dgv = dgvO;
+            Name = "resources_id",
+            HeaderText = "Ресурс",
+            DisplayMember = "resources_name",
+            ValueMember = "resources_id",
+            DataPropertyName = "resources_id",
+            FlatStyle = FlatStyle.Flat
+        };
+        private DataGridViewComboBoxColumn _cbcBuldings = new DataGridViewComboBoxColumn()
+        {
+            Name = "building_id",
+            HeaderText = "Здание",
+            DisplayMember = "building_name",
+            ValueMember = "building_id",
+            DataPropertyName = "building_id",
+            FlatStyle = FlatStyle.Flat
+        };
+
+        public DGVBuildingsResourcesProduceHandle(DataGridView dgv, DataTable dtBuildings, DataTable dtResources) : base(dgv)
+        {
             using (var ctx = new OutpostDataContext())
             {
-                //ctx.Configuration.ProxyCreationEnabled = false;
-                ctx.outposts.Load();
-                _dgv.DataSource = ctx.outposts.Local.ToBindingList();
+                ctx.buildings_resources_produce.Load();
+
+                _cbcResorces.DataSource = dtResources;
+                _cbcBuldings.DataSource = dtBuildings;
+
+                dataTable.Columns.Add("building_id", typeof(int));
+                dataTable.Columns.Add("resources_id", typeof(int));
+                dataTable.Columns.Add("produce_speed", typeof(int));
+                dataTable.Columns.Add("Source");
+                ctx.buildings_resources_produce.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.resources_id, x.produce_speed, x));
+
+                _dgv.Columns.Add(_cbcBuldings);
+                _dgv.Columns.Add(_cbcResorces);
+                _dgv.DataSource = dataTable;
             }
             MakeThisColumnVisible(new string[] {
-                    "outpost_name",
-                    "outpost_economic_value",
-                    "outpost_coordinate_x",
-                    "outpost_coordinate_y",
-                    "outpost_coordinate_z"
+                    "building_id",
+                    "resources_id",
+                    "produce_speed"
                 });
+            //_dgv.UserAddedRow += UserAddedRow;
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)

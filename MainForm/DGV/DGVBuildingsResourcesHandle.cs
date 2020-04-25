@@ -79,18 +79,30 @@ namespace MainForm.DGV
 
         protected override void Update(DataGridViewRow row)
         {
-            throw new NotImplementedException();
+            //var cs = (int)row.Cells["consume_speed"].Value;
+            //var ps = (int)row.Cells["produce_speed"].Value;
+            //if (cs != 0 || ps != 0)
+            //{
+            //    var building_id = (int)row.Cells["building_id"].Value;
+            //    var resources_id = (int)row.Cells["resources_id"].Value;
+            //    using (var ctx = new OutpostDataContext())
+            //    {
+            //        if (cs == 0) { 
+
+            //            ctx.buildings_resources_consume.Add(
+            //                new buildings_resources_consume
+            //                {
+            //                    building_id = building_id,
+            //                    resources_id = resources_id,
+            //                    consume_speed = cs
+            //                });
+            //            ctx.SaveChanges();
+            //        }
+            //        //if (cs != 0) { 
+            //        //    ctx.buildings_resources_consume.Find(building_id, resources_id);
+            //        //}
+            //    }
+            //}
         }
-        //public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    //if (e.RowIndex == _dgv.Rows.Count - 1) return;
-        //    //using (var ctx = new OutpostDataContext())
-        //    //{
-        //    //    var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
-        //    //    ctx.outposts.Attach(o);
-        //    //    ctx.Entry(o).State = EntityState.Modified;
-        //    //    ctx.SaveChanges();
-        //    //}
-        //}
     }
 }

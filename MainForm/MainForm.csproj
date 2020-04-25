@@ -105,6 +105,7 @@
     <Compile Include="DGV\DGVHandle.cs" />
     <Compile Include="DGV\DGVOutpostHandle.cs" />
     <Compile Include="DGV\DGVResourcesHandle.cs" />
+    <Compile Include="DGV\DGVStorageResourcesHandle.cs" />
     <Compile Include="machine.cs" />
     <Compile Include="machines_resources_consume.cs" />
     <Compile Include="MainForm.cs">

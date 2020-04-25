@@ -24,17 +24,6 @@ namespace MainForm.DGV
 
         public DGVBuildingsHandle(DataGridView dgv, DataTable dtOutpost) : base(dgv)
         {
-            //using (var ctx = new OutpostDataContext())
-            //{
-            //_cbcOutpost.DataSource = dtOutpost;
-            //    //ctx.Configuration.ProxyCreationEnabled = false;
-            //    ctx.buildings.Load();
-
-            //    _cbcOutpost.DataSource = ctx.outposts.Local.ToBindingList();
-            //    _dgv.Columns.Add(_cbcOutpost);
-
-            //    _dgv.DataSource = ctx.buildings.Local.ToBindingList();
-            //}
             using (var ctx = new OutpostDataContext())
             {
                 ctx.buildings.Load();
@@ -45,6 +34,7 @@ namespace MainForm.DGV
                 dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(building));
                 ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.building_name, x.outpost_id, x));
+
                 _dgv.Columns.Add(_cbcOutpost);
                 _dgv.DataSource = dataTable;
             }
