@@ -39,14 +39,24 @@ namespace MainForm.DGV
                 });
         }
 
-        public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
+            throw new NotImplementedException();
+        }
+
+        protected override void Insert(DataGridViewRow row)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        protected override void Update(DataGridViewRow row)
+        {
             using (var ctx = new OutpostDataContext())
             {
-                var b = ctx.buildings.Find((int)_dgv.Rows[e.RowIndex].Cells["building_id"].Value);
-                b.outpost_id = (int?)_dgv.Rows[e.RowIndex].Cells["outpost_id"].Value;
-                b.building_name = (string)_dgv.Rows[e.RowIndex].Cells["building_name"].FormattedValue;
+                building b = ctx.buildings.Find((int)row.Cells["building_id"].Value);
+                b.outpost_id = (int?)row.Cells["outpost_id"].Value;
+                b.building_name = (string)row.Cells["building_name"].FormattedValue;
                 //ctx.Entry(b).State = EntityState.Modified;
                 ctx.SaveChanges();
             }

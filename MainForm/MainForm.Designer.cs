@@ -161,7 +161,7 @@
             this.dgvR.Name = "dgvR";
             this.dgvR.Size = new System.Drawing.Size(786, 394);
             this.dgvR.TabIndex = 1;
-            // 
+             // 
             // tpB
             // 
             this.tpB.Controls.Add(this.dgvB);

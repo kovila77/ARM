@@ -20,17 +20,18 @@ namespace MainForm
         private DGVResourcesHandle _dGVResourcesHandle;
         private DGVBuildingsHandle _dGVBuildingsHandle;
         private DGVBuildingsResourcesHandle _dGVBuildingsResourcesHandle;
+        private DataTable _dtR;
 
         public MainForm()
         {
             InitializeComponent();
-            DataTable dt = new DataTable();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            _dtR = new DataTable();
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
-            _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvR, _dtR);
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB);
             //_dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, new BindingSource())
             //_dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR);
@@ -42,7 +43,6 @@ namespace MainForm
 
         }
 
-        
 
         //private void dgvR_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         //{

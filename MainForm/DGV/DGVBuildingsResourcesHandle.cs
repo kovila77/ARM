@@ -53,16 +53,30 @@ namespace MainForm.DGV
             }
         }
 
-        public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            //if (e.RowIndex == _dgv.Rows.Count - 1) return;
-            //using (var ctx = new OutpostDataContext())
-            //{
-            //    var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
-            //    ctx.outposts.Attach(o);
-            //    ctx.Entry(o).State = EntityState.Modified;
-            //    ctx.SaveChanges();
-            //}
+            throw new NotImplementedException();
         }
+
+        protected override void Insert(DataGridViewRow row)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void Update(DataGridViewRow row)
+        {
+            throw new NotImplementedException();
+        }
+        //public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    //if (e.RowIndex == _dgv.Rows.Count - 1) return;
+        //    //using (var ctx = new OutpostDataContext())
+        //    //{
+        //    //    var o = (outpost)_dgv.Rows[e.RowIndex].DataBoundItem;
+        //    //    ctx.outposts.Attach(o);
+        //    //    ctx.Entry(o).State = EntityState.Modified;
+        //    //    ctx.SaveChanges();
+        //    //}
+        //}
     }
 }

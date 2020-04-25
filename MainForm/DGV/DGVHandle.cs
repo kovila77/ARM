@@ -20,6 +20,7 @@ namespace MainForm.DGV
             _dgv = dgv;
             _dgv.CellValidating += CellValidating;
             _dgv.CellEndEdit += CellEndEdit;
+            _dgv.UserDeletingRow += UserDeletingRow;
         }
 
         public void MakeThisColumnVisible(string[] columnNames)
@@ -49,7 +50,27 @@ namespace MainForm.DGV
             isCurrentRowDirty = _dgv.IsCurrentRowDirty;
         }
 
-        abstract public void CellEndEdit(object sender, DataGridViewCellEventArgs e);
+        protected abstract void Insert(DataGridViewRow row);
+
+        protected abstract void Update(DataGridViewRow row);
+
+        public void CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
+
+
+            if (RowHaveSource(_dgv.Rows[e.RowIndex]))
+            {
+                Update(_dgv.Rows[e.RowIndex]);
+            }
+            else
+            {
+                Insert(_dgv.Rows[e.RowIndex]);
+            }
+        }
+
+
+        public abstract void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e);
 
         public void CancelEdit()
         {

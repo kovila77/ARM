@@ -15,27 +15,19 @@ namespace MainForm.DGV
     {
         //BindingList<resource> bl = new BindingList<resource>();
 
-        DataTable dt = new DataTable();
+        DataTable dt;
 
-        public DGVResourcesHandle(DataGridView dgv) : base(dgv)
+        public DGVResourcesHandle(DataGridView dgv, DataTable dt) : base(dgv)
         {
+            this.dt = dt;
             using (var ctx = new OutpostDataContext())
             {
-                //ctx.Configuration.ProxyCreationEnabled = false;
                 ctx.resources.Load();
 
                 dt.Columns.Add("resources_id", typeof(int));
                 dt.Columns.Add("resources_name", typeof(string));
                 dt.Columns.Add("Source", typeof(resource));
-
-                //var bs = new BindingSource();
-                //bs.DataSource = ctx.resources.Local.ToList();
-                //ctx.resources.ToList().ForEach(x => bl.Add(x));
                 ctx.resources.ToList().ForEach(x => dt.Rows.Add(x.resources_id, x.resources_name, x));
-                //foreach (var r in ctx.resources)
-                //{
-                //    dt.Rows.Add(r.resources_id,r.resources_name);
-                //}
                 _dgv.DataSource = dt;
             }
             MakeThisColumnVisible(new string[] {
@@ -44,8 +36,7 @@ namespace MainForm.DGV
             //_dgv.UserAddedRow += UserAddedRow;
         }
 
-
-        private void Insert(DataGridViewRow row)
+        protected override void Insert(DataGridViewRow row)
         {
             using (var ctx = new OutpostDataContext())
             {
@@ -58,7 +49,7 @@ namespace MainForm.DGV
             }
         }
 
-        private void Update(DataGridViewRow row)
+        protected override void Update(DataGridViewRow row)
         {
             using (var ctx = new OutpostDataContext())
             {
@@ -68,19 +59,26 @@ namespace MainForm.DGV
             }
         }
 
-        public override void CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
+            using (var ctx = new OutpostDataContext())
+            {
+                var row = e.Row;
+                resource r = (resource)row.Cells["Source"].Value;
 
+                ctx.resources.Attach(r);
 
-            //if (RowHaveSource(_dgv.Rows[e.RowIndex]))
-            //{
-            //    Update(_dgv.Rows[e.RowIndex]);
-            //}
-            //else
-            //{
-            //    Insert(_dgv.Rows[e.RowIndex]);
-            //}
+                if (r.buildings_resources_consume.Count > 0
+                    || r.buildings_resources_produce.Count > 0
+                    || r.storage_resources.Count > 0
+                    || r.machines_resources_consume.Count > 0)
+                {
+                    MessageBox.Show("Вы не можете удалить данный ресурс, так как он используется");
+                    return; 
+                }
+                ctx.resources.Remove(r);
+                ctx.SaveChanges();
+            }
         }
     }
 }
