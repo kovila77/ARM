@@ -88,6 +88,10 @@
       <Project>{8536CC5B-8068-4F3C-AC7C-4D782C728E91}</Project>
       <Name>PasswordHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Registration\Registration.csproj">
+      <Project>{1428bebf-64bc-4c3b-b285-a9c6c24d9d4f}</Project>
+      <Name>Registration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

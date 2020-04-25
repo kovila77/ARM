@@ -16,7 +16,7 @@ namespace Registration
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fReg(fReg.FormType.SelfMade));
+            Application.Run(new fReg(fReg.FormType.Registration));
         }
     }
 }

@@ -35,6 +35,8 @@
             this.pnPassword = new System.Windows.Forms.Panel();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.lPassword = new System.Windows.Forms.Label();
+            this.btBeginReg = new System.Windows.Forms.Button();
+            this.checkBox = new System.Windows.Forms.CheckBox();
             this.pnLogin.SuspendLayout();
             this.pnPassword.SuspendLayout();
             this.SuspendLayout();
@@ -73,7 +75,7 @@
             // 
             this.btAuthentication.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btAuthentication.Enabled = false;
-            this.btAuthentication.Location = new System.Drawing.Point(0, 92);
+            this.btAuthentication.Location = new System.Drawing.Point(0, 132);
             this.btAuthentication.Name = "btAuthentication";
             this.btAuthentication.Size = new System.Drawing.Size(284, 23);
             this.btAuthentication.TabIndex = 1;
@@ -83,13 +85,15 @@
             // 
             // pnPassword
             // 
+            this.pnPassword.Controls.Add(this.checkBox);
+            this.pnPassword.Controls.Add(this.btBeginReg);
             this.pnPassword.Controls.Add(this.tbPassword);
             this.pnPassword.Controls.Add(this.lPassword);
             this.pnPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnPassword.Location = new System.Drawing.Point(0, 47);
             this.pnPassword.Name = "pnPassword";
             this.pnPassword.Padding = new System.Windows.Forms.Padding(10, 10, 30, 10);
-            this.pnPassword.Size = new System.Drawing.Size(284, 68);
+            this.pnPassword.Size = new System.Drawing.Size(284, 108);
             this.pnPassword.TabIndex = 2;
             // 
             // tbPassword
@@ -108,19 +112,40 @@
             this.lPassword.Location = new System.Drawing.Point(10, 10);
             this.lPassword.Name = "lPassword";
             this.lPassword.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lPassword.Size = new System.Drawing.Size(48, 48);
+            this.lPassword.Size = new System.Drawing.Size(48, 88);
             this.lPassword.TabIndex = 1;
             this.lPassword.Text = "Пароль:";
+            // 
+            // btBeginReg
+            // 
+            this.btBeginReg.Location = new System.Drawing.Point(154, 46);
+            this.btBeginReg.Name = "btBeginReg";
+            this.btBeginReg.Size = new System.Drawing.Size(118, 23);
+            this.btBeginReg.TabIndex = 3;
+            this.btBeginReg.Text = "Регистрация";
+            this.btBeginReg.UseVisualStyleBackColor = true;
+            this.btBeginReg.Click += new System.EventHandler(this.btBeginReg_Click);
+            // 
+            // checkBox
+            // 
+            this.checkBox.AutoSize = true;
+            this.checkBox.Location = new System.Drawing.Point(39, 50);
+            this.checkBox.Name = "checkBox";
+            this.checkBox.Size = new System.Drawing.Size(99, 17);
+            this.checkBox.TabIndex = 4;
+            this.checkBox.Text = "Гостевой вход";
+            this.checkBox.UseVisualStyleBackColor = true;
+            this.checkBox.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // fAuth
             // 
             this.AcceptButton = this.btAuthentication;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 115);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(284, 155);
             this.Controls.Add(this.btAuthentication);
             this.Controls.Add(this.pnPassword);
             this.Controls.Add(this.pnLogin);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(300, 150);
             this.Name = "fAuth";
             this.Text = "Authentication";
@@ -141,6 +166,8 @@
         private System.Windows.Forms.Panel pnPassword;
         private System.Windows.Forms.TextBox tbPassword;
         private System.Windows.Forms.Label lPassword;
+        private System.Windows.Forms.Button btBeginReg;
+        private System.Windows.Forms.CheckBox checkBox;
     }
 }
 

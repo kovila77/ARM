@@ -25,7 +25,7 @@ namespace DBUsers.Handler {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.88.101")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.88.102")]
         public string Host {
             get {
                 return ((string)(this["Host"]));
@@ -49,7 +49,7 @@ namespace DBUsers.Handler {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("lesson_25_01_2020")]
+        [global::System.Configuration.DefaultSettingValueAttribute("outpost")]
         public string Name {
             get {
                 return ((string)(this["Name"]));

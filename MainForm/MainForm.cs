@@ -11,6 +11,8 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Authentication;
+using CRUD;
 
 namespace MainForm
 {
@@ -23,16 +25,27 @@ namespace MainForm
         private DGVBuildingsResourcesConsumeHandle _dGVBuildingsResourcesConsumeHandle;
         private DGVBuildingsResourcesProduceHandle _dGVBuildingsResourcesProduceHandle;
         private DGVStorageResourcesHandle _dGVStorageResourcesHandle;
-        private DataTable _dtR;
 
-        public MainForm()
+        private string _userRole = null;
+
+        private fUsersView _userControl = null;
+
+        public MainForm(string userRole)
         {
+            _userRole = userRole;
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             InitializeDGV();
+            if (_userRole.ToLower() == "guest")
+            {
+                foreach (TabPage tp in tabControl.TabPages)
+                {
+                    ((DataGridView)tp.Controls[0]).ReadOnly = true;
+                }
+            }
         }
 
         private void InitializeDGV()
@@ -114,6 +127,20 @@ namespace MainForm
         private void FullReload(object sender, EventArgs e)
         {
             InitializeDGV();
+        }
+
+        private void управлениеПользователямиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_userRole.ToLower() != "admin")
+            {
+                MessageBox.Show("У вас недостаточно прав!");
+                return;
+            }
+            if (_userControl == null)
+            {
+                _userControl = new fUsersView();
+                _userControl.ShowDialog();
+            }
         }
     }
 }

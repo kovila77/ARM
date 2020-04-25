@@ -28,6 +28,7 @@ namespace CRUD
             lvUsers.Columns.Add("Логин");
             lvUsers.Columns.Add("Соль");
             lvUsers.Columns.Add("Пароль");
+            lvUsers.Columns.Add("Роль");
             lvUsers.Columns.Add("Дата регистрации");
             using (var extractor = _dbConrol.CreateDataExtractor())
             {
@@ -35,16 +36,18 @@ namespace CRUD
                 byte[] salt;
                 byte[] password;
                 DateTime createDate;
+                string role;
                 int id;
                 while (extractor.Read())
                 {
-                    extractor.TakeRow(out id, out login, out salt, out password, out createDate);
+                    extractor.TakeRow(out id, out login, out salt, out password, out role, out createDate);
                     var lvi = new ListViewItem(new[]
                     {
                         login,
                         Convert.ToBase64String(salt),
                         Convert.ToBase64String(password),
-                        createDate.ToLongDateString()
+                        role,
+                        createDate.ToLongDateString(),
                     })
                     {
                         Tag = Tuple.Create(id, createDate)
@@ -67,6 +70,7 @@ namespace CRUD
                         formRegistration.UserLogin,
                         Convert.ToBase64String(formRegistration.UserSalt),
                         Convert.ToBase64String(formRegistration.UserPassword),
+                        formRegistration.Role,
                         formRegistration.DateReg.ToLongDateString()
                     })
                 {
@@ -91,13 +95,15 @@ namespace CRUD
                     UserId = selectedItemTagAsTuple.Item1,
                     DateReg = selectedItemTagAsTuple.Item2,
                     UserLogin = selectedItem.SubItems[0].Text,
+                    Role = selectedItem.SubItems[3].Text,
                 };
                 if (formUpdating.ShowDialog() == DialogResult.OK)
                 {
                     selectedItem.SubItems[0].Text = formUpdating.UserLogin;
                     if (formUpdating.UserSalt != null) selectedItem.SubItems[1].Text = Convert.ToBase64String(formUpdating.UserSalt);
                     if (formUpdating.UserPassword != null) selectedItem.SubItems[2].Text = Convert.ToBase64String(formUpdating.UserPassword);
-                    selectedItem.SubItems[3].Text = formUpdating.DateReg.ToLongDateString();
+                    selectedItem.SubItems[3].Text = formUpdating.Role;
+                    selectedItem.SubItems[4].Text = formUpdating.DateReg.ToLongDateString();
                     selectedItem.Tag = Tuple.Create(formUpdating.UserId, formUpdating.DateReg);
                 }
             }
@@ -105,9 +111,22 @@ namespace CRUD
 
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _dbConrol.DeleteUsers((from item
-                                   in lvUsers.SelectedItems.Cast<ListViewItem>()
-                                   select ((Tuple<int, DateTime>)item.Tag).Item1).ToArray());
+            var usersForDel = new List<int>();
+            foreach (ListViewItem item in lvUsers.SelectedItems)
+            {
+                if (item.SubItems[3].Text.ToLower() != "admin")
+                {
+                    usersForDel.Add(((Tuple<int, DateTime>)item.Tag).Item1);
+                }
+                else
+                {
+                    MessageBox.Show("Нельзя удалить Администратора из списка пользователей!");
+                }
+            }
+
+            if (usersForDel.Count < 1)
+                return;
+            _dbConrol.DeleteUsers(usersForDel.ToArray());
 
             foreach (ListViewItem selectedItem in lvUsers.SelectedItems)
             {

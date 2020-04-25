@@ -14,12 +14,13 @@ namespace Registration
         private string userLogin = null;
         private byte[] userSalt = null;
         private byte[] userPassword = null;
+        private string role = "user";
         private DateTime dateReg;
 
         private FormType frmType;
         public enum FormType
         {
-            SelfMade,
+            Registration,
             Insert,
             Update
         }
@@ -69,6 +70,17 @@ namespace Registration
                 }
             }
         }
+        public string Role
+        {
+            get { return role; }
+            set
+            {
+                if (frmType == FormType.Update)
+                {
+                    role = value;
+                }
+            }
+        }
         public DateTime DateReg
         {
             get { return dateReg; }
@@ -102,7 +114,7 @@ namespace Registration
 
             switch (frmType)
             {
-                case FormType.SelfMade:
+                case FormType.Registration:
                     btRegister.Text = "Зарегистрировать";
                     this.Text = "Регистрация";
                     dtpDate.Value = DateTime.Today;
@@ -139,7 +151,7 @@ namespace Registration
 
         private void tbLogin_TextChanged(object sender, EventArgs e)
         {
-            if (!loginCheckRegex.IsMatch(tbLogin.Text))
+            if (!loginCheckRegex.IsMatch(tbLogin.Text.Trim()))
             {
                 epMain.SetError(tbLogin, "Некорректный логин: В логине могут быть использованы символы, изображённые на классической русско-английской раскладке клавиатуре. Длина логина от 6 до 50 символов");
                 tbLogin.Tag = false;
@@ -181,17 +193,18 @@ namespace Registration
             btRegister.Enabled = false;
             switch (frmType)
             {
-                case FormType.SelfMade:
+                case FormType.Registration:
 
-                    _dbConrol.AddNewUser(tbLogin.Text, tbPassword.Text);
+                    _dbConrol.AddNewUser(tbLogin.Text, tbPassword.Text, role);
                     MessageBox.Show("Регистрация прошла успешно");
+                    this.DialogResult = DialogResult.OK;
                     epMain.SetError(tbLogin, "Логин уже занят");
                     RefreshBtReg();
                     break;
 
                 case FormType.Insert:
                     userLogin = _dbConrol.RemoveExtraSpaces(tbLogin.Text);
-                    _dbConrol.AddNewUser(tbLogin.Text, tbPassword.Text, out userId, out userSalt, out userPassword, out dateReg);
+                    _dbConrol.AddNewUser(tbLogin.Text, tbPassword.Text, role, out userId, out userSalt, out userPassword, out dateReg);
                     this.DialogResult = DialogResult.OK;
                     break;
                 case FormType.Update:
@@ -211,7 +224,7 @@ namespace Registration
                     {
                         dateReg = newDate;
                     }
-                    _dbConrol.SetNewData(userId, newLogin, userSalt, userPassword, newDate);
+                    _dbConrol.SetNewData(userId, newLogin, userSalt, userPassword, role, newDate);
                     this.DialogResult = DialogResult.OK;
                     break;
                 default:

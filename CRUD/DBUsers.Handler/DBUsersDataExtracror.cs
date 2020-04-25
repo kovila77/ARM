@@ -22,7 +22,7 @@ namespace DBUsersHandler
             {
                 Connection = _sConn,
                 CommandText = @"
-                        SELECT uid, ulogin, usalt, upassword, udateregistration
+                        SELECT uid, ulogin, usalt, upassword, role, udateregistration
                         FROM users;"
             };
             reader = sCOmmand.ExecuteReader();
@@ -33,10 +33,11 @@ namespace DBUsersHandler
             return reader.Read();
         }
 
-        public void TakeRow(out int id, out string login, out byte[] salt, out byte[] password, out DateTime createDate)
+        public void TakeRow(out int id, out string login, out byte[] salt, out byte[] password, out string role, out DateTime createDate)
         {
             id = (int)reader["uid"];
             login = (string)reader["ulogin"];
+            role = (string)reader["role"];
             salt = (byte[])reader["usalt"];
             password = (byte[])reader["upassword"];
             createDate = (DateTime)reader["udateregistration"];

@@ -180,12 +180,44 @@ namespace DBUsersHandler
             return false;
         }
 
+        public string Authentication(string uLogin, string uPassword)
+        {
+            uPassword = uPassword.Trim();
+
+            uLogin = RemoveExtraSpaces(uLogin);
+
+            if (!_loginRegex.IsMatch(uLogin)) return null;
+
+            byte[] uSalt;
+
+            if (!IsExistsInDBLogin(uLogin, out uSalt)) return null;
+
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = @"
+                        SELECT role
+                        FROM users
+                        WHERE lower(ulogin) = lower(@uLogin)
+                          AND upassword = @uPassword;"
+                };
+
+                sCommand.Parameters.AddWithValue("@uLogin", uLogin);
+                sCommand.Parameters.AddWithValue("@uPassword", PasswordHandler.PasswordHandler.HashPassword(uPassword, uSalt));
+
+                return sCommand.ExecuteScalar() as string;
+            }
+        }
+
         /// <summary>
         /// add new user to databse
         /// </summary>
         /// <param name="newLogin"></param>
         /// <param name="newPassword"></param>
-        public void AddNewUser(string newLogin, string newPassword)
+        public void AddNewUser(string newLogin, string newPassword, string role)
         {
             newPassword = newPassword.Trim();
 
@@ -203,17 +235,18 @@ namespace DBUsersHandler
                 {
                     Connection = sConn,
                     CommandText = @"
-                        INSERT INTO users(ulogin, usalt, upassword)
-                        VALUES (@newLogin, @salt, @passwordHash)"
+                        INSERT INTO users(ulogin, usalt, upassword, role)
+                        VALUES (@newLogin, @salt, @passwordHash, @role)"
                 };
                 sCommand.Parameters.AddWithValue("@newLogin", newLogin);
                 sCommand.Parameters.AddWithValue("@salt", salt);
                 sCommand.Parameters.AddWithValue("@passwordHash", PasswordHandler.PasswordHandler.HashPassword(newPassword, salt));
+                sCommand.Parameters.AddWithValue("@role", role);
                 sCommand.ExecuteNonQuery();
             }
         }
 
-        public void AddNewUser(string newLogin, string newPassword, out int id, out byte[] salt, out byte[] hash, out DateTime dateReg)
+        public void AddNewUser(string newLogin, string newPassword, string role, out int id, out byte[] salt, out byte[] hash, out DateTime dateReg)
         {
             string passwordCorrected = newPassword.Trim();
 
@@ -225,6 +258,7 @@ namespace DBUsersHandler
             }
             salt = PasswordHandler.PasswordHandler.CreateSalt();
             hash = PasswordHandler.PasswordHandler.HashPassword(passwordCorrected, salt);
+
             using (var sConn = new NpgsqlConnection(_sConnStr))
             {
                 sConn.Open();
@@ -232,13 +266,14 @@ namespace DBUsersHandler
                 {
                     Connection = sConn,
                     CommandText = @"
-                        INSERT INTO users(ulogin, usalt, upassword)
-                        VALUES (@newLogin, @salt, @passwordHash)
+                        INSERT INTO users(ulogin, usalt, upassword, role)
+                        VALUES (@newLogin, @salt, @passwordHash, @role)
                         RETURNING uid, udateregistration"
                 };
                 sCommand.Parameters.AddWithValue("@newLogin", newLogin);
                 sCommand.Parameters.AddWithValue("@salt", salt);
                 sCommand.Parameters.AddWithValue("@passwordHash", hash);
+                sCommand.Parameters.AddWithValue("@role", role);
                 var reader = sCommand.ExecuteReader();
                 if (reader.Read())
                 {
@@ -249,7 +284,7 @@ namespace DBUsersHandler
             }
         }
 
-        public void SetNewData(int id, string login, byte[] salt, byte[] hash, DateTime date)
+        public void SetNewData(int id, string login, byte[] salt, byte[] hash, string role, DateTime date)
         {
             login = RemoveExtraSpaces(login);
             if (!_loginRegex.IsMatch(RemoveExtraSpaces(login)))
@@ -269,18 +304,19 @@ namespace DBUsersHandler
                     sCommand.Parameters.AddWithValue("@salt", salt);
                     sCommand.Parameters.AddWithValue("@passwordHash", hash);
                     sCommand.CommandText = @"UPDATE users
-                                    SET ulogin = @login, usalt = @salt, upassword = @passwordHash, udateregistration = @date
+                                    SET ulogin = @login, usalt = @salt, upassword = @passwordHash, role = @role, udateregistration = @date
                                     WHERE uid IN(SELECT uid FROM users WHERE uid = @id)";
                 }
                 else
                 {
                     sCommand.CommandText = @"UPDATE users
-                                    SET ulogin = @login, udateregistration = @date
+                                    SET ulogin = @login, udateregistration = @date, role = @role
                                     WHERE uid IN(SELECT uid FROM users WHERE uid = @id)";
                 }
                 sCommand.Parameters.AddWithValue("@id", id);
                 sCommand.Parameters.AddWithValue("@login", login);
                 sCommand.Parameters.AddWithValue("@date", date);
+                sCommand.Parameters.AddWithValue("@role", role);
                 sCommand.ExecuteNonQuery();
             }
         }

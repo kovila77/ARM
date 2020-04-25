@@ -48,6 +48,7 @@
             this.dgvO = new System.Windows.Forms.DataGridView();
             this.tpSR = new System.Windows.Forms.TabPage();
             this.dgvSR = new System.Windows.Forms.DataGridView();
+            this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tbBR.SuspendLayout();
@@ -96,12 +97,14 @@
             // перезагрузитьВсеТаблицыToolStripMenuItem
             // 
             this.перезагрузитьВсеТаблицыToolStripMenuItem.Name = "перезагрузитьВсеТаблицыToolStripMenuItem";
-            this.перезагрузитьВсеТаблицыToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.перезагрузитьВсеТаблицыToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
             this.перезагрузитьВсеТаблицыToolStripMenuItem.Text = "Перезагрузить все таблицы";
             this.перезагрузитьВсеТаблицыToolStripMenuItem.Click += new System.EventHandler(this.FullReload);
             // 
             // инструментыToolStripMenuItem
             // 
+            this.инструментыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.управлениеПользователямиToolStripMenuItem});
             this.инструментыToolStripMenuItem.Name = "инструментыToolStripMenuItem";
             this.инструментыToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.инструментыToolStripMenuItem.Text = "Инструменты";
@@ -274,6 +277,13 @@
             this.dgvSR.Size = new System.Drawing.Size(792, 400);
             this.dgvSR.TabIndex = 1;
             // 
+            // управлениеПользователямиToolStripMenuItem
+            // 
+            this.управлениеПользователямиToolStripMenuItem.Name = "управлениеПользователямиToolStripMenuItem";
+            this.управлениеПользователямиToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
+            this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -329,6 +339,7 @@
         private System.Windows.Forms.TabPage tpSR;
         private System.Windows.Forms.DataGridView dgvSR;
         private System.Windows.Forms.ToolStripMenuItem перезагрузитьВсеТаблицыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem управлениеПользователямиToolStripMenuItem;
     }
 }
 

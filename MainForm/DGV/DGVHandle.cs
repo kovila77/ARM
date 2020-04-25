@@ -50,6 +50,8 @@ namespace MainForm.DGV
                         column.HeaderText = "Количество"; break;
                     case "resources_name":          
                         column.HeaderText = "Ресурс"; break;
+                    case "building_name":
+                        column.HeaderText = "Здание"; break;
                     case "outpost_name":            
                         column.HeaderText = "Форпост"; break;
                     case "outpost_economic_value": 

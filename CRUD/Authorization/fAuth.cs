@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Registration;
 
 namespace Authentication
 {
@@ -8,9 +10,20 @@ namespace Authentication
     {
         private readonly Regex _loginRegex = new Regex(DBUsersHandler.DBUsersHandler.regularOfCorrectLogin);
         private DBUsersHandler.DBUsersHandler _dbConrol;
+        private string _role = null;
 
-        public fAuth()
+        public enum TypeLoad
         {
+            Test,
+            Authentication
+        }
+        private TypeLoad _typeLoad;
+
+        public string UserRole { get { return _role; } }
+
+        public fAuth(TypeLoad tl)
+        {
+            _typeLoad = tl;
             InitializeComponent();
             InitializeDBUserClass();
         }
@@ -37,9 +50,19 @@ namespace Authentication
         private void btAuthentication_Click(object sender, EventArgs e)
         {
             btAuthentication.Enabled = false;
-            if (_dbConrol.IsExistsInDBUser(tbLogin.Text, tbPassword.Text))
+            if (!checkBox.Checked)
+                _role = _dbConrol.Authentication(tbLogin.Text, tbPassword.Text);
+            else
+                _role = "Guest";
+            if (_role != null)
             {
-                MessageBox.Show("Вы успешно аутентифицированны");
+                if (_typeLoad == TypeLoad.Test)
+                    MessageBox.Show($@"Вы успешно аутентифицированны как {(_role == "Guest" ? "Гость" : _role)}");
+                else
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
             }
             else
             {
@@ -55,7 +78,7 @@ namespace Authentication
 
         private void RefreshBtAuth()
         {
-            if (tbPassword.Text != "" && tbLogin.Text != "")
+            if (tbPassword.Text != "" && tbLogin.Text != "" || checkBox.Checked)
             {
                 btAuthentication.Enabled = true;
             }
@@ -63,6 +86,17 @@ namespace Authentication
             {
                 btAuthentication.Enabled = false;
             }
+        }
+
+        private void btBeginReg_Click(object sender, EventArgs e)
+        {
+            fReg reg = new fReg(fReg.FormType.Registration);
+            reg.ShowDialog();
+        }
+
+        private void checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshBtAuth();
         }
     }
 }

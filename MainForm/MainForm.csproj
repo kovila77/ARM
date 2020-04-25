@@ -150,6 +150,16 @@
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CRUD\Authorization\Authentication.csproj">
+      <Project>{858ab400-bf51-4671-b807-009afc78c021}</Project>
+      <Name>Authentication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CRUD\CRUD.csproj">
+      <Project>{fb3ecb39-4d5e-45d3-a71d-6131c3f9cf45}</Project>
+      <Name>CRUD</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

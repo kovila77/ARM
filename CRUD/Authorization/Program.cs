@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+// Authentication 2
+
 namespace Authentication
 {
     static class Program
@@ -17,7 +19,7 @@ namespace Authentication
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fAuth());
+            Application.Run(new fAuth(fAuth.TypeLoad.Test));
         }
     }
 }

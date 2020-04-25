@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Authentication;
 
 namespace MainForm
 {
@@ -16,7 +17,12 @@ namespace MainForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            fAuth fAuth = new fAuth(fAuth.TypeLoad.Authentication);
+            if (fAuth.ShowDialog() == DialogResult.OK)
+            {
+                if (fAuth.UserRole == null) return;                
+                Application.Run(new MainForm(fAuth.UserRole));
+            }            
         }
     }
 }
