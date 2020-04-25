@@ -30,27 +30,27 @@ namespace MainForm
             modelBuilder.Entity<building>()
                 .HasMany(e => e.buildings_resources_consume)
                 .WithRequired(e => e.building)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<building>()
                 .HasMany(e => e.buildings_resources_produce)
                 .WithRequired(e => e.building)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<machine>()
                 .HasMany(e => e.machines_resources_consume)
                 .WithRequired(e => e.machine)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<outpost>()
                 .HasMany(e => e.outpost_missions)
                 .WithRequired(e => e.outpost)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<outpost>()
                 .HasMany(e => e.storage_resources)
                 .WithRequired(e => e.outpost)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             //my line
             //modelBuilder.Entity<building>()

@@ -41,7 +41,7 @@ namespace MainForm.DGV
                 dataTable.Columns.Add("building_id", typeof(int));
                 dataTable.Columns.Add("resources_id", typeof(int));
                 dataTable.Columns.Add("consume_speed", typeof(int));
-                dataTable.Columns.Add("Source");
+                dataTable.Columns.Add("Source", typeof(buildings_resources_consume));
                 ctx.buildings_resources_consume.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.resources_id, x.consume_speed, x));
                 
                 _dgv.Columns.Add(_cbcBuldings);
@@ -73,6 +73,11 @@ namespace MainForm.DGV
         //    }
         //}
         protected override void Insert(DataGridViewRow row)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool RowReady(DataGridViewRow row)
         {
             throw new NotImplementedException();
         }

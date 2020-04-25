@@ -142,6 +142,7 @@
             this.dgvBR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvBR.Location = new System.Drawing.Point(3, 3);
             this.dgvBR.Name = "dgvBR";
+            this.dgvBR.ReadOnly = true;
             this.dgvBR.Size = new System.Drawing.Size(786, 394);
             this.dgvBR.TabIndex = 0;
             // 
@@ -271,7 +272,7 @@
             this.dgvS.Name = "dgvS";
             this.dgvS.Size = new System.Drawing.Size(792, 400);
             this.dgvS.TabIndex = 1;
-            // 
+           // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

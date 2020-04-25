@@ -50,6 +50,7 @@ namespace MainForm.DGV
             using (var ctx = new OutpostDataContext())
             {
                 resource r = (resource)row.Cells["Source"].Value;
+                r.resources_name = row.Cells["resources_name"].Value.ToString();
                 ctx.Entry(r).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
@@ -70,11 +71,16 @@ namespace MainForm.DGV
                     || r.machines_resources_consume.Count > 0)
                 {
                     MessageBox.Show("Вы не можете удалить данный ресурс, так как он используется");
-                    return; 
+                    return;
                 }
                 ctx.resources.Remove(r);
                 ctx.SaveChanges();
             }
+        }
+
+        protected override bool RowReady(DataGridViewRow row)
+        {
+            return true && base.RowReady(row);
         }
     }
 }

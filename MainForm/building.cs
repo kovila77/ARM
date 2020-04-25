@@ -17,7 +17,7 @@ namespace MainForm
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int building_id { get; set; }
 
         [Required]

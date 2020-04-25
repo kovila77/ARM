@@ -55,6 +55,11 @@ namespace MainForm.DGV
 
         }
 
+        protected override bool RowReady(DataGridViewRow row)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void Update(DataGridViewRow row)
         {
             using (var ctx = new OutpostDataContext())

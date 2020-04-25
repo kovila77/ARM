@@ -15,7 +15,7 @@ namespace MainForm.DGV
         //protected bool isNewRow;
         public DataTable dataTable = new DataTable();
 
-        protected int NewRowIndex { get { return _dgv.AllowUserToAddRows ? _dgv.Rows.Count - 1 : _dgv.Rows.Count; } }
+        //protected int NewRowIndex { get { return _dgv.AllowUserToAddRows ? _dgv.Rows.Count - 1 : _dgv.Rows.Count; } }
 
         public DGVHandle(DataGridView dgv)
         {
@@ -38,11 +38,17 @@ namespace MainForm.DGV
         {
             // if (e.RowIndex == _dgv.Rows.Count - 1) return;
             if (_dgv.Rows[e.RowIndex].IsNewRow) return;
+            if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell))
+            {
+                if (_dgv[e.ColumnIndex, e.RowIndex].Value == null) CancelEdit();
+            }
+            else
             if (_dgv.Columns[e.ColumnIndex].ValueType == typeof(Int32))
             {
                 int t;
                 if (e.FormattedValue.ToString().Trim() != "")
                 {
+                    //_dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value
                     if (!int.TryParse(e.FormattedValue.ToString(), out t) || t < 0)
                     {
                         CancelEdit();
@@ -50,6 +56,11 @@ namespace MainForm.DGV
                 }
             }
             isCurrentRowDirty = _dgv.IsCurrentRowDirty;
+        }
+
+        protected virtual bool RowReady(DataGridViewRow row)
+        {
+            return true;
         }
 
         protected abstract void Insert(DataGridViewRow row);
@@ -60,17 +71,16 @@ namespace MainForm.DGV
         {
             if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
 
-
-            if (RowHaveSource(_dgv.Rows[e.RowIndex]))
-            {
-                Update(_dgv.Rows[e.RowIndex]);
-            }
-            else
-            {
-                Insert(_dgv.Rows[e.RowIndex]);
-            }
+            if (RowReady(_dgv.Rows[e.RowIndex]))
+                if (RowHaveSource(_dgv.Rows[e.RowIndex]))
+                {
+                    Update(_dgv.Rows[e.RowIndex]);
+                }
+                else
+                {
+                    Insert(_dgv.Rows[e.RowIndex]);
+                }
         }
-
 
         public abstract void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e);
 

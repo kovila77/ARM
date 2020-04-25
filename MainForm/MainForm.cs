@@ -55,7 +55,6 @@ namespace MainForm
 
         }
 
-
         //private void dgvR_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         //{
         //    if (isC)

@@ -77,32 +77,14 @@ namespace MainForm.DGV
             throw new NotImplementedException();
         }
 
+        protected override bool RowReady(DataGridViewRow row)
+        {
+            return false;
+        }
+
         protected override void Update(DataGridViewRow row)
         {
-            //var cs = (int)row.Cells["consume_speed"].Value;
-            //var ps = (int)row.Cells["produce_speed"].Value;
-            //if (cs != 0 || ps != 0)
-            //{
-            //    var building_id = (int)row.Cells["building_id"].Value;
-            //    var resources_id = (int)row.Cells["resources_id"].Value;
-            //    using (var ctx = new OutpostDataContext())
-            //    {
-            //        if (cs == 0) { 
-
-            //            ctx.buildings_resources_consume.Add(
-            //                new buildings_resources_consume
-            //                {
-            //                    building_id = building_id,
-            //                    resources_id = resources_id,
-            //                    consume_speed = cs
-            //                });
-            //            ctx.SaveChanges();
-            //        }
-            //        //if (cs != 0) { 
-            //        //    ctx.buildings_resources_consume.Find(building_id, resources_id);
-            //        //}
-            //    }
-            //}
+            throw new NotImplementedException();
         }
     }
 }

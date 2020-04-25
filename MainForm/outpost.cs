@@ -18,7 +18,7 @@ namespace MainForm
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int outpost_id { get; set; }
 
         [Required]
