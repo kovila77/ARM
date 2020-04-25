@@ -128,6 +128,7 @@ namespace MainForm.DGV
             if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))
             {
                 e.Cancel = true;
+                MessageBox.Show("Вы не не можете поменять эту информацию таким образом. Создайте другую строку!");
             }
         }
     }

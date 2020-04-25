@@ -89,8 +89,8 @@
             // загрузитьЗановоToolStripMenuItem
             // 
             this.загрузитьЗановоToolStripMenuItem.Name = "загрузитьЗановоToolStripMenuItem";
-            this.загрузитьЗановоToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.загрузитьЗановоToolStripMenuItem.Text = "Загрузить заново";
+            this.загрузитьЗановоToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.загрузитьЗановоToolStripMenuItem.Text = "Перезагрузить текущую таблицу";
             this.загрузитьЗановоToolStripMenuItem.Click += new System.EventHandler(this.Reload);
             // 
             // перезагрузитьВсеТаблицыToolStripMenuItem

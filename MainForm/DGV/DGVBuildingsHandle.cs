@@ -74,11 +74,6 @@ namespace MainForm.DGV
         {
             using (var ctx = new OutpostDataContext())
             {
-                //building b = ctx.buildings.Find((int)row.Cells["building_id"].Value);
-                //b.outpost_id = (int?)row.Cells["outpost_id"].Value;
-                //b.building_name = (string)row.Cells["building_name"].FormattedValue;
-                ////ctx.Entry(b).State = EntityState.Modified;
-                //ctx.SaveChanges();
                 building b = (building)row.Cells["Source"].Value;
                 if (row.Cells["outpost_id"].Value != DBNull.Value)
                     b.outpost_id = (int)row.Cells["outpost_id"].Value;
@@ -89,7 +84,18 @@ namespace MainForm.DGV
         }
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            throw new NotImplementedException();
+            using (var ctx = new OutpostDataContext())
+            {
+                var row = e.Row;
+                building b = (building)row.Cells["Source"].Value;
+
+                if (MessageBox.Show($"Вы уверены, что хотите удалить всю информацию о {b.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    ctx.buildings.Attach(b);
+                    ctx.buildings.Remove(b);
+                    ctx.SaveChanges();
+                }
+            }
         }
     }
 }
