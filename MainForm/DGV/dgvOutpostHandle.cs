@@ -40,11 +40,6 @@ namespace MainForm
                                                         otpst.outpost_coordinate_z,
                                                         otpst));
                 _dgv.DataSource = dataTable;
-                _dgv.Columns["outpost_name"].HeaderText = "outpost_name";
-                _dgv.Columns["outpost_economic_value"].HeaderText = "Название форпоста";
-                _dgv.Columns["outpost_coordinate_x"].HeaderText = "Координата x";
-                _dgv.Columns["outpost_coordinate_y"].HeaderText = "Координата y";
-                _dgv.Columns["outpost_coordinate_z"].HeaderText = "Координата x";
             }
             MakeThisColumnVisible(new string[] {
                     "outpost_name",

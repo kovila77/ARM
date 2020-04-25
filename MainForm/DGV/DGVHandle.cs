@@ -32,6 +32,36 @@ namespace MainForm.DGV
                 columnsToSee.Add(_dgv.Columns[cn]);
             foreach (DataGridViewColumn c in _dgv.Columns)
                 c.Visible = columnsToSee.Contains(c);
+            foreach (var column in columnsToSee)
+            {
+                switch (column.Name)
+                {
+                    case "outpost_id":             
+                        column.HeaderText = "Форпост"; break;
+                    case "building_id":            
+                        column.HeaderText = "Здание"; break;
+                    case "resources_id":           
+                        column.HeaderText = "Ресурс"; break;
+                    case "produce_speed":           
+                        column.HeaderText = "Скорость производства"; break;
+                    case "consume_speed":          
+                        column.HeaderText = "Скорость потребления"; break;
+                    case "count":                   
+                        column.HeaderText = "Количество"; break;
+                    case "resources_name":          
+                        column.HeaderText = "Ресурс"; break;
+                    case "outpost_name":            
+                        column.HeaderText = "Форпост"; break;
+                    case "outpost_economic_value": 
+                        column.HeaderText = "Экономическая ценность"; break;
+                    case "outpost_coordinate_x":   
+                        column.HeaderText = "Координата x"; break;
+                    case "outpost_coordinate_y":    
+                        column.HeaderText = "Координата y"; break;
+                    case "outpost_coordinate_z":    
+                        column.HeaderText = "Координата z"; break;
+                }
+            }
         }
 
         public void CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
