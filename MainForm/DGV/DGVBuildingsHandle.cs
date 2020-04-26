@@ -126,6 +126,7 @@ namespace MainForm.DGV
 
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (_dgv.ReadOnly) e.Cancel = true;
             _dgv.ClearSelection();
             _dgv[mouseLocation.ColumnIndex, mouseLocation.RowIndex].Selected = true;
         }

@@ -80,6 +80,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Authorization\Authentication.csproj">
+      <Project>{858ab400-bf51-4671-b807-009afc78c021}</Project>
+      <Name>Authentication</Name>
+    </ProjectReference>
     <ProjectReference Include="DBUsers.Handler\DBUsersHandler.csproj">
       <Project>{8ECEB982-8A70-4EAA-BA47-9F5709C41245}</Project>
       <Name>DBUsersHandler</Name>

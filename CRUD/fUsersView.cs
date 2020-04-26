@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Authentication;
 
 namespace CRUD
 {
@@ -16,8 +17,25 @@ namespace CRUD
     {
         private DBUsersHandler.DBUsersHandler _dbConrol = new DBUsersHandler.DBUsersHandler();
 
-        public fUsersView()
+        private string _userRole;
+
+        public fUsersView(string userRole)
         {
+            _userRole = userRole;
+            if (_userRole == null || _userRole.Trim().ToLower() != "admin")
+            {
+                fAuth f = new fAuth(fAuth.TypeLoad.Authentication);
+                if (f.ShowDialog() != DialogResult.OK)
+                    this.Close();
+                else
+                {
+                    if (f.UserRole == null || f.UserRole.Trim().ToLower() != "admin")
+                    {
+                        MessageBox.Show($"Пользователь с ролью {f.UserRole} не может использовать данное приложение");
+                        this.Close();
+                    }
+                }
+            }
             InitializeComponent();
             InitializeLVUsers();
         }

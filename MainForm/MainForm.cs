@@ -174,7 +174,7 @@ namespace MainForm
             }
             if (_userControl == null)
             {
-                _userControl = new fUsersView();
+                _userControl = new fUsersView(_userRole.ToLower());
                 _userControl.ShowDialog();
             }
         }
