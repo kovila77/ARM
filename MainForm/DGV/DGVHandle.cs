@@ -77,7 +77,7 @@ namespace MainForm.DGV
 
                 if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell))
                 {
-                    if (_dgv[e.ColumnIndex, e.RowIndex].Value == null)
+                    if (_dgv[e.ColumnIndex, e.RowIndex].Value == null || _dgv[e.ColumnIndex, e.RowIndex].Value == DBNull.Value)
                     {
                         canCommit = false;
                     }
@@ -121,7 +121,6 @@ namespace MainForm.DGV
             if (RowReady(_dgv.Rows[e.RowIndex]))
             {
                 if (RowHaveSource(_dgv.Rows[e.RowIndex]))
-
                 {
                     Update(_dgv.Rows[e.RowIndex]);
                 }

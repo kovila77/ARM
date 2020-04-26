@@ -76,6 +76,7 @@ namespace MainForm.DGV
                     || r.machines_resources_consume.Count > 0)
                 {
                     MessageBox.Show("Вы не можете удалить данный ресурс, так как он используется");
+                    e.Cancel = true;
                     return;
                 }
                 ctx.resources.Remove(r);

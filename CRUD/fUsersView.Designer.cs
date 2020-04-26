@@ -36,6 +36,7 @@
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выровнятьСтолбцыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузитьДанныеЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lvUsers = new System.Windows.Forms.ListView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +44,6 @@
             this.удалитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.выровнятьСтолбцыToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.загрузитьДанныеЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -107,6 +107,13 @@
             this.выровнятьСтолбцыToolStripMenuItem.Text = "Выровнять столбцы";
             this.выровнятьСтолбцыToolStripMenuItem.Click += new System.EventHandler(this.выровнятьСтолбцыToolStripMenuItem_Click);
             // 
+            // загрузитьДанныеЗановоToolStripMenuItem
+            // 
+            this.загрузитьДанныеЗановоToolStripMenuItem.Name = "загрузитьДанныеЗановоToolStripMenuItem";
+            this.загрузитьДанныеЗановоToolStripMenuItem.Size = new System.Drawing.Size(158, 20);
+            this.загрузитьДанныеЗановоToolStripMenuItem.Text = "Загрузить данные заново";
+            this.загрузитьДанныеЗановоToolStripMenuItem.Click += new System.EventHandler(this.загрузитьДанныеЗановоToolStripMenuItem_Click);
+            // 
             // lvUsers
             // 
             this.lvUsers.ContextMenuStrip = this.contextMenuStrip1;
@@ -168,13 +175,6 @@
             this.выровнятьСтолбцыToolStripMenuItem1.Text = "Выровнять столбцы";
             this.выровнятьСтолбцыToolStripMenuItem1.Click += new System.EventHandler(this.выровнятьСтолбцыToolStripMenuItem_Click);
             // 
-            // загрузитьДанныеЗановоToolStripMenuItem
-            // 
-            this.загрузитьДанныеЗановоToolStripMenuItem.Name = "загрузитьДанныеЗановоToolStripMenuItem";
-            this.загрузитьДанныеЗановоToolStripMenuItem.Size = new System.Drawing.Size(158, 20);
-            this.загрузитьДанныеЗановоToolStripMenuItem.Text = "Загрузить данные заново";
-            this.загрузитьДанныеЗановоToolStripMenuItem.Click += new System.EventHandler(this.загрузитьДанныеЗановоToolStripMenuItem_Click);
-            // 
             // fUsersView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -184,7 +184,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "fUsersView";
-            this.Text = "Просмотр";
+            this.Text = "Просмотр пользователей";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);

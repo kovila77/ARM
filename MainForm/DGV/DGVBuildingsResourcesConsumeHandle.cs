@@ -147,14 +147,5 @@ namespace MainForm.DGV
                 ctx.SaveChanges();
             }
         }
-
-        private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {
-            if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))
-            {
-                MessageBox.Show("Вы не не можете поменять эту информацию таким образом. Создайте другую строку!");
-                e.Cancel = true;
-            }
-        }
     }
 }

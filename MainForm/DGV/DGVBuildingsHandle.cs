@@ -22,6 +22,10 @@ namespace MainForm.DGV
             FlatStyle = FlatStyle.Flat
         };
 
+        private ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+        private ToolStripMenuItem убратьЗначениеToolStripMenuItem = new ToolStripMenuItem();
+        DataGridViewCellEventArgs mouseLocation;
+
         public DGVBuildingsHandle(DataGridView dgv, DataTable dtOutpost) : base(dgv)
         {
             using (var ctx = new OutpostDataContext())
@@ -39,7 +43,20 @@ namespace MainForm.DGV
                 _dgv.DataSource = dataTable;
             }
             HideColumns();
+
+            dgv.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(CellMouseEnter);
+            contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { убратьЗначениеToolStripMenuItem });
+            contextMenuStrip.Name = "contextMenuStrip";
+            contextMenuStrip.Size = new System.Drawing.Size(181, 48);
+            contextMenuStrip.Opening += ContextMenuStrip_Opening;
+            убратьЗначениеToolStripMenuItem.Name = "убратьЗначениеToolStripMenuItem";
+            убратьЗначениеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            убратьЗначениеToolStripMenuItem.Text = "Убрать значение";
+            убратьЗначениеToolStripMenuItem.Click += new System.EventHandler(this.SetNull);
+            _dgv.Columns["outpost_id"].ContextMenuStrip = contextMenuStrip;
         }
+
+
         protected void HideColumns()
         {
             MakeThisColumnVisible(new string[] {
@@ -81,6 +98,8 @@ namespace MainForm.DGV
                 building b = (building)row.Cells["Source"].Value;
                 if (row.Cells["outpost_id"].Value != DBNull.Value)
                     b.outpost_id = (int)row.Cells["outpost_id"].Value;
+                else
+                    b.outpost_id = null;
                 b.building_name = row.Cells["building_name"].Value.ToString();
                 ctx.Entry(b).State = EntityState.Modified;
                 ctx.SaveChanges();
@@ -100,7 +119,27 @@ namespace MainForm.DGV
                     ctx.buildings.Remove(b);
                     ctx.SaveChanges();
                 }
+                else
+                    e.Cancel = true;
             }
+        }
+
+        private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _dgv.ClearSelection();
+            _dgv[mouseLocation.ColumnIndex, mouseLocation.RowIndex].Selected = true;
+        }
+
+        private void CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            mouseLocation = e;
+        }
+
+        private void SetNull(object sender, EventArgs e)
+        {
+            _dgv[mouseLocation.ColumnIndex, mouseLocation.RowIndex].Value = DBNull.Value;
+            isCurrentRowDirty = true;
+            CellEndEdit(sender, new DataGridViewCellEventArgs(mouseLocation.ColumnIndex, mouseLocation.RowIndex));
         }
     }
 }

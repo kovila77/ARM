@@ -58,24 +58,38 @@ namespace MainForm
 
         private void InitializeDGV()
         {
+            //dgvO.DefaultCellStyle.NullValue = DBNull.Value;
+            //dgvO.DefaultCellStyle.
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
             dgvO.Tag = _dGVOutpostHandle;
+
+            //dgvR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
             dgvR.Tag = _dGVResourcesHandle;
+
+            //dgvB.DefaultCellStyle.NullValue =DBNull.Value;
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
             dgvB.Tag = _dGVBuildingsHandle;
+
+            //dgvBR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBR.Tag = _dGVBuildingsResourcesHandle;
+
+            //dgvBRC.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
+
+            //dgvBRP.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
+
+            //dgvSR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -175,7 +189,7 @@ namespace MainForm
                     ((DGVHandle)dgv.Tag).ClearChanges();
                 else
                 {
-                    e.Cancel = true; 
+                    e.Cancel = true;
                     return;
                 }
             //if (dgv == dgvB) ReloadB();
@@ -187,5 +201,11 @@ namespace MainForm
             if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBR) ReloadBR();
             currentTab = tabControl.SelectedIndex;
         }
+
+        private void сброситьРедактированиеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
+            ((DGVHandle)dgv.Tag).ClearChanges();
+        }        
     }
 }

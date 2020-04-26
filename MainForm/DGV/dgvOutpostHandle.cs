@@ -141,12 +141,13 @@ namespace MainForm
                 outpost o = (outpost)row.Cells["Source"].Value;
 
 
-                if (MessageBox.Show($"Вы уверены, что хотите удалить ВСЮ информацию о {o.outpost_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (MessageBox.Show($"Вы уверены, что хотите удалить ВСЮ информацию о {o.outpost_name}?", "Предупреждение!", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     ctx.outposts.Attach(o);
                     ctx.outposts.Remove(o);
                     ctx.SaveChanges();
-                }
+                }else
+                    e.Cancel = true;
             }
         }
     }

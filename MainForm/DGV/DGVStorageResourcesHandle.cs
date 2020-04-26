@@ -51,7 +51,7 @@ namespace MainForm.DGV
                 _dgv.DataSource = dataTable;
             }
             HideColumns();
-            _dgv.CellBeginEdit += CellBeginEdit;
+            //_dgv.CellBeginEdit += CellBeginEdit;
         }
 
         protected void HideColumns()
@@ -107,14 +107,38 @@ namespace MainForm.DGV
             {
                 storage_resources sr = (storage_resources)row.Cells["Source"].Value;
                 ctx.storage_resources.Attach(sr);
-
-                sr.outpost_id = (int)row.Cells["outpost_id"].Value;
-                sr.resources_id = (int)row.Cells["resources_id"].Value;
-                sr.count = (int)row.Cells["count"].Value;
-                sr.accumulation_speed = (int)row.Cells["accumulation_speed"].Value;
-
+                var newoutpost_id = (int)row.Cells["outpost_id"].Value;
+                var newresources_id = (int)row.Cells["resources_id"].Value;
+                if (sr.outpost_id != newoutpost_id
+                    || sr.resources_id != newresources_id)
+                {
+                    var srExisting = ctx.storage_resources.Find(newoutpost_id, newresources_id);
+                    if (srExisting != null)
+                    {
+                        MessageBox.Show($"Для форпоста {row.Cells["outpost_id"].FormattedValue} " +
+                            $"запись для ресурса {row.Cells["resources_id"].FormattedValue} " +
+                            $"уже существует! Измените или удалите текущую строку!");
+                        row.ErrorText = "Ошибка!";
+                        return;
+                    }
+                    ctx.storage_resources.Remove(sr);
+                    ctx.SaveChanges();
+                    sr = new storage_resources
+                    {
+                        outpost_id = newoutpost_id,
+                        resources_id = newresources_id,
+                        count = (int)row.Cells["count"].Value,
+                        accumulation_speed = (int)row.Cells["accumulation_speed"].Value,
+                    };
+                    ctx.storage_resources.Add(sr);
+                }
+                else
+                {
+                    sr.count = (int)row.Cells["count"].Value;
+                    sr.accumulation_speed = (int)row.Cells["accumulation_speed"].Value;
+                }
+                row.Cells["Source"].Value = sr;
                 row.ErrorText = "";
-                ctx.Entry(sr).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
         }
@@ -130,15 +154,6 @@ namespace MainForm.DGV
 
                 ctx.storage_resources.Remove(sr);
                 ctx.SaveChanges();
-            }
-        }
-
-        private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {
-            if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))
-            {
-                e.Cancel = true;
-                MessageBox.Show("Вы не не можете поменять эту информацию таким образом. Создайте другую строку!");
             }
         }
     }
