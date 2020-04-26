@@ -33,7 +33,8 @@
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.загрузитьЗановоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.перезагрузитьВсеТаблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.инструментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tbBR = new System.Windows.Forms.TabPage();
             this.dgvBR = new System.Windows.Forms.DataGridView();
@@ -49,7 +50,6 @@
             this.dgvO = new System.Windows.Forms.DataGridView();
             this.tpSR = new System.Windows.Forms.TabPage();
             this.dgvSR = new System.Windows.Forms.DataGridView();
-            this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.epMain = new System.Windows.Forms.ErrorProvider(this.components);
             this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -74,7 +74,7 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правкаToolStripMenuItem,
-            this.инструментыToolStripMenuItem});
+            this.tmiTools});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
@@ -104,13 +104,20 @@
             this.перезагрузитьВсеТаблицыToolStripMenuItem.Text = "Перезагрузить все таблицы";
             this.перезагрузитьВсеТаблицыToolStripMenuItem.Click += new System.EventHandler(this.FullReload);
             // 
-            // инструментыToolStripMenuItem
+            // tmiTools
             // 
-            this.инструментыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmiTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.управлениеПользователямиToolStripMenuItem});
-            this.инструментыToolStripMenuItem.Name = "инструментыToolStripMenuItem";
-            this.инструментыToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
-            this.инструментыToolStripMenuItem.Text = "Инструменты";
+            this.tmiTools.Name = "tmiTools";
+            this.tmiTools.Size = new System.Drawing.Size(95, 20);
+            this.tmiTools.Text = "Инструменты";
+            // 
+            // управлениеПользователямиToolStripMenuItem
+            // 
+            this.управлениеПользователямиToolStripMenuItem.Name = "управлениеПользователямиToolStripMenuItem";
+            this.управлениеПользователямиToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
+            this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -127,6 +134,7 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(800, 426);
             this.tabControl.TabIndex = 1;
+            this.tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl_Selecting);
             // 
             // tbBR
             // 
@@ -280,13 +288,6 @@
             this.dgvSR.Size = new System.Drawing.Size(792, 400);
             this.dgvSR.TabIndex = 1;
             // 
-            // управлениеПользователямиToolStripMenuItem
-            // 
-            this.управлениеПользователямиToolStripMenuItem.Name = "управлениеПользователямиToolStripMenuItem";
-            this.управлениеПользователямиToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
-            this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
-            // 
             // epMain
             // 
             this.epMain.ContainerControl = this;
@@ -329,7 +330,7 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem инструментыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tmiTools;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tbBR;
         private System.Windows.Forms.DataGridView dgvBR;

@@ -73,9 +73,12 @@ namespace MainForm.DGV
                 cbcResorces.ReadOnly = cbcBuldings.ReadOnly = true;
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+        }
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] { "building_id", "resources_id", "consume_speed", "produce_speed" });
         }
-
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             e.Cancel = true;

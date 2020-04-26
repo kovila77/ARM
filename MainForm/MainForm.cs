@@ -26,6 +26,8 @@ namespace MainForm
         private DGVBuildingsResourcesProduceHandle _dGVBuildingsResourcesProduceHandle;
         private DGVStorageResourcesHandle _dGVStorageResourcesHandle;
 
+        private int currentTab;
+
         private string _userRole = null;
 
         private fUsersView _userControl = null;
@@ -39,6 +41,11 @@ namespace MainForm
         private void MainForm_Load(object sender, EventArgs e)
         {
             InitializeDGV();
+            if (_userRole.ToLower() != "admin")
+            {
+                tmiTools.Enabled = false;
+                tmiTools.Visible = false;
+            }
             if (_userRole.ToLower() == "guest")
             {
                 foreach (TabPage tp in tabControl.TabPages)
@@ -46,25 +53,33 @@ namespace MainForm
                     ((DataGridView)tp.Controls[0]).ReadOnly = true;
                 }
             }
+            currentTab = tabControl.SelectedIndex;
         }
 
         private void InitializeDGV()
         {
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
+            dgvO.Tag = _dGVOutpostHandle;
             _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
+            dgvR.Tag = _dGVResourcesHandle;
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
+            dgvB.Tag = _dGVBuildingsHandle;
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBR.Tag = _dGVBuildingsResourcesHandle;
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvSR.Tag = _dGVStorageResourcesHandle;
         }
 
         public void ReloadO()
@@ -72,6 +87,7 @@ namespace MainForm
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
             _dGVBuildingsHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
             _dGVStorageResourcesHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
+            dgvO.Tag = _dGVOutpostHandle;
         }
         public void ReloadR()
         {
@@ -80,6 +96,7 @@ namespace MainForm
             _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
             _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
             _dGVStorageResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+            dgvR.Tag = _dGVResourcesHandle;
         }
         public void ReloadB()
         {
@@ -87,30 +104,35 @@ namespace MainForm
             //_dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
             _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
             _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
+            dgvB.Tag = _dGVBuildingsHandle;
         }
         public void ReloadBR()
         {
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBR.Tag = _dGVBuildingsResourcesHandle;
         }
         public void ReloadBRC()
         {
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
         }
         public void ReloadBRP()
         {
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
         }
         public void ReloadSR()
         {
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
+            dgvSR.Tag = _dGVStorageResourcesHandle;
         }
         public void Reload(object sender, EventArgs e)
         {
@@ -141,6 +163,29 @@ namespace MainForm
                 _userControl = new fUsersView();
                 _userControl.ShowDialog();
             }
+        }
+
+        private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
+            bool haveUncommitedChanges = false;
+            foreach (DataGridViewRow row in dgv.Rows) if (row.ErrorText != "") haveUncommitedChanges = true;
+            if (haveUncommitedChanges)
+                if (MessageBox.Show("Имееются несохранённые изменения!\nПри переключении на другую вкладку изменения будут сброшены.", "Предупреждение", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    ((DGVHandle)dgv.Tag).ClearChanges();
+                else
+                {
+                    e.Cancel = true; 
+                    return;
+                }
+            //if (dgv == dgvB) ReloadB();
+            //if (dgv == dgvR) ReloadR();
+            //if (dgv == dgvBRC) ReloadBRC();
+            //if (dgv == dgvBRP) ReloadBRP();
+            //if (dgv == dgvO) ReloadO();
+            //if (dgv == dgvSR) ReloadSR();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBR) ReloadBR();
+            currentTab = tabControl.SelectedIndex;
         }
     }
 }

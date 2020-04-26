@@ -18,10 +18,11 @@ namespace MainForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             fAuth fAuth = new fAuth(fAuth.TypeLoad.Authentication);
-            if (fAuth.ShowDialog() == DialogResult.OK)
+            //if (fAuth.ShowDialog() == DialogResult.OK)
             {
-                if (fAuth.UserRole == null) return;                
-                Application.Run(new MainForm(fAuth.UserRole));
+                //if (fAuth.UserRole == null) return;                
+                //Application.Run(new MainForm(fAuth.UserRole));
+                Application.Run(new MainForm("admin"));
             }            
         }
     }

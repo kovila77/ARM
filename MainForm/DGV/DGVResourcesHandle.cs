@@ -20,16 +20,20 @@ namespace MainForm.DGV
             {
                 ctx.resources.Load();
 
-                dataTable.Columns.Add("resources_id", typeof(int));
                 dataTable.Columns.Add("resources_name", typeof(string));
+                dataTable.Columns.Add("resources_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(resource));
-                ctx.resources.ToList().ForEach(x => dataTable.Rows.Add(x.resources_id, x.resources_name, x));
+                ctx.resources.ToList().ForEach(x => dataTable.Rows.Add(x.resources_name, x.resources_id, x));
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+        }
+
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "resources_name"
                 });
-            //_dgv.UserAddedRow += UserAddedRow;
         }
 
         protected override void Insert(DataGridViewRow row)
@@ -58,9 +62,10 @@ namespace MainForm.DGV
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
+            var row = e.Row;
+            if (row.Cells["Source"].Value == DBNull.Value) return;
             using (var ctx = new OutpostDataContext())
             {
-                var row = e.Row;
                 resource r = (resource)row.Cells["Source"].Value;
 
                 ctx.resources.Attach(r);

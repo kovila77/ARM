@@ -25,7 +25,7 @@ namespace DBUsers.Handler {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.88.102")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.88.101")]
         public string Host {
             get {
                 return ((string)(this["Host"]));

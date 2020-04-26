@@ -18,23 +18,28 @@ namespace MainForm
             {
                 ctx.outposts.Load();
 
-                dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("outpost_name", typeof(string));
                 dataTable.Columns.Add("outpost_economic_value", typeof(int));
                 dataTable.Columns.Add("outpost_coordinate_x", typeof(int));
                 dataTable.Columns.Add("outpost_coordinate_y", typeof(int));
                 dataTable.Columns.Add("outpost_coordinate_z", typeof(int));
+                dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(outpost));
-                ctx.outposts.ToList().ForEach(otpst => dataTable.Rows.Add(
-                                                        otpst.outpost_id,
+                ctx.outposts.ToList().ForEach(otpst => dataTable.Rows.Add(                                                        
                                                         otpst.outpost_name,
                                                         otpst.outpost_economic_value,
                                                         otpst.outpost_coordinate_x,
                                                         otpst.outpost_coordinate_y,
                                                         otpst.outpost_coordinate_z,
+                                                        otpst.outpost_id,
                                                         otpst));
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+        }
+
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "outpost_name",
                     "outpost_economic_value",
@@ -129,9 +134,10 @@ namespace MainForm
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
+            var row = e.Row;
+            if (row.Cells["Source"].Value == DBNull.Value) return;
             using (var ctx = new OutpostDataContext())
             {
-                var row = e.Row;
                 outpost o = (outpost)row.Cells["Source"].Value;
 
 

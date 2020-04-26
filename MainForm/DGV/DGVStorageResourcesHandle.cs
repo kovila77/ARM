@@ -50,14 +50,18 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+            _dgv.CellBeginEdit += CellBeginEdit;
+        }
+
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "outpost_id",
                     "resources_id",
                     "count",
                     "accumulation_speed",
                 });
-            _dgv.CellBeginEdit += CellBeginEdit;
-            //_dgv.UserAddedRow += UserAddedRow;
         }
 
         protected override bool RowReady(DataGridViewRow row)

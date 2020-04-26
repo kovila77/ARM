@@ -48,14 +48,18 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(cbcResorces);
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+            //_dgv.CellBeginEdit += CellBeginEdit;
+        }
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "building_id",
                     "resources_id",
                     "consume_speed"
                 });
-            _dgv.CellBeginEdit += CellBeginEdit;
-            //_dgv.UserAddedRow += UserAddedRow;
         }
+
         protected override bool RowReady(DataGridViewRow row)
         {
             return base.RowReady(row)
@@ -97,13 +101,36 @@ namespace MainForm.DGV
             {
                 buildings_resources_consume brc = (buildings_resources_consume)row.Cells["Source"].Value;
                 ctx.buildings_resources_consume.Attach(brc);
-
-                brc.building_id = (int)row.Cells["building_id"].Value;
-                brc.resources_id = (int)row.Cells["resources_id"].Value;
-                brc.consume_speed = (int)row.Cells["consume_speed"].Value;
-
+                var newbuilding_id = (int)row.Cells["building_id"].Value;
+                var newresources_id = (int)row.Cells["resources_id"].Value;
+                if (brc.building_id != newbuilding_id
+                    || brc.resources_id != newresources_id)
+                {
+                    var brcExisting = ctx.buildings_resources_consume.Find(newbuilding_id, newresources_id);
+                    if (brcExisting != null)
+                    {
+                        MessageBox.Show($"Для здания {row.Cells["building_id"].FormattedValue} " +
+                            $"потребляемый ресурс {row.Cells["resources_id"].FormattedValue} " +
+                            $"уже существует! Измените или удалите текущую строку!");
+                        row.ErrorText = "Ошибка!";
+                        return;
+                    }
+                    ctx.buildings_resources_consume.Remove(brc);
+                    ctx.SaveChanges();
+                    brc = new buildings_resources_consume
+                    {
+                        building_id = newbuilding_id,
+                        resources_id = newresources_id,
+                        consume_speed = (int)row.Cells["consume_speed"].Value
+                    };
+                    ctx.buildings_resources_consume.Add(brc);
+                }
+                else
+                {
+                    brc.consume_speed = (int)row.Cells["consume_speed"].Value;
+                }
+                row.Cells["Source"].Value = brc;
                 row.ErrorText = "";
-                ctx.Entry(brc).State = EntityState.Modified;
                 ctx.SaveChanges();
             }
         }
@@ -125,8 +152,8 @@ namespace MainForm.DGV
         {
             if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell) && RowHaveSource(_dgv.Rows[e.RowIndex]))
             {
-                e.Cancel = true;
                 MessageBox.Show("Вы не не можете поменять эту информацию таким образом. Создайте другую строку!");
+                e.Cancel = true;
             }
         }
     }

@@ -29,15 +29,19 @@ namespace MainForm.DGV
                 ctx.buildings.Load();
 
                 cbcOutpost.DataSource = dtOutpost;
-                dataTable.Columns.Add("building_id", typeof(int));
                 dataTable.Columns.Add("building_name", typeof(string));
                 dataTable.Columns.Add("outpost_id", typeof(int));
+                dataTable.Columns.Add("building_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(building));
-                ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.building_name, x.outpost_id, x));
+                ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_name, x.outpost_id, x.building_id, x));
 
                 _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+        }
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "building_name",
                     "outpost_id",
@@ -82,6 +86,7 @@ namespace MainForm.DGV
                 ctx.SaveChanges();
             }
         }
+
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             using (var ctx = new OutpostDataContext())
@@ -89,7 +94,7 @@ namespace MainForm.DGV
                 var row = e.Row;
                 building b = (building)row.Cells["Source"].Value;
 
-                if (MessageBox.Show($"Вы уверены, что хотите удалить всю информацию о {b.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (MessageBox.Show($"Вы уверены, что хотите удалить информацию о здании {b.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     ctx.buildings.Attach(b);
                     ctx.buildings.Remove(b);

@@ -147,9 +147,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\DataSources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CRUD\Authorization\Authentication.csproj">
       <Project>{858ab400-bf51-4671-b807-009afc78c021}</Project>

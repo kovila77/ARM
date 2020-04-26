@@ -49,13 +49,16 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(cbcResorces);
                 _dgv.DataSource = dataTable;
             }
+            HideColumns();
+        }
+        protected void HideColumns()
+        {
             MakeThisColumnVisible(new string[] {
                     "building_id",
                     "resources_id",
                     "produce_speed"
                 });
             _dgv.CellBeginEdit += CellBeginEdit;
-            //_dgv.UserAddedRow += UserAddedRow;
         }
 
         protected override bool RowReady(DataGridViewRow row)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,13 +13,11 @@ namespace MainForm.DGV
     {
         protected DataGridView _dgv;
         protected bool isCurrentRowDirty;
-        //protected bool isNewRow;
-        public DataTable dataTable = new DataTable();
-
-        //protected int NewRowIndex { get { return _dgv.AllowUserToAddRows ? _dgv.Rows.Count - 1 : _dgv.Rows.Count; } }
+        public DataTable dataTable;
 
         public DGVHandle(DataGridView dgv)
         {
+            dataTable = new DataTable();
             _dgv = dgv;
             _dgv.CellValidating += CellValidating;
             _dgv.CellEndEdit += CellEndEdit;
@@ -36,31 +35,31 @@ namespace MainForm.DGV
             {
                 switch (column.Name)
                 {
-                    case "outpost_id":             
+                    case "outpost_id":
                         column.HeaderText = "Форпост"; break;
-                    case "building_id":            
+                    case "building_id":
                         column.HeaderText = "Здание"; break;
-                    case "resources_id":           
+                    case "resources_id":
                         column.HeaderText = "Ресурс"; break;
-                    case "produce_speed":           
+                    case "produce_speed":
                         column.HeaderText = "Скорость производства"; break;
-                    case "consume_speed":          
+                    case "consume_speed":
                         column.HeaderText = "Скорость потребления"; break;
-                    case "count":                   
+                    case "count":
                         column.HeaderText = "Количество"; break;
-                    case "resources_name":          
+                    case "resources_name":
                         column.HeaderText = "Ресурс"; break;
                     case "building_name":
                         column.HeaderText = "Здание"; break;
-                    case "outpost_name":            
+                    case "outpost_name":
                         column.HeaderText = "Форпост"; break;
-                    case "outpost_economic_value": 
+                    case "outpost_economic_value":
                         column.HeaderText = "Экономическая ценность"; break;
-                    case "outpost_coordinate_x":   
+                    case "outpost_coordinate_x":
                         column.HeaderText = "Координата x"; break;
-                    case "outpost_coordinate_y":    
+                    case "outpost_coordinate_y":
                         column.HeaderText = "Координата y"; break;
-                    case "outpost_coordinate_z":    
+                    case "outpost_coordinate_z":
                         column.HeaderText = "Координата z"; break;
                     case "accumulation_speed":
                         column.HeaderText = "Скорость накопления"; break;
@@ -70,25 +69,39 @@ namespace MainForm.DGV
 
         public void CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            // if (e.RowIndex == _dgv.Rows.Count - 1) return;
             if (_dgv.Rows[e.RowIndex].IsNewRow) return;
-            if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell))
+            bool canCommit = true;
+            var cell = _dgv[e.ColumnIndex, e.RowIndex];
+            if (cell.OwningColumn.Visible)
             {
-                if (_dgv[e.ColumnIndex, e.RowIndex].Value == null) CancelEdit();
-            }
-            else
-            if (_dgv.Columns[e.ColumnIndex].ValueType == typeof(Int32))
-            {
-                int t;
-                if (e.FormattedValue.ToString().Trim() != "")
+
+                if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell))
                 {
-                    //_dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value
-                    if (!int.TryParse(e.FormattedValue.ToString(), out t) || t < 0)
+                    if (_dgv[e.ColumnIndex, e.RowIndex].Value == null)
                     {
-                        CancelEdit();
+                        canCommit = false;
+                    }
+                }
+                else
+                {
+                    if (_dgv.Columns[e.ColumnIndex].ValueType == typeof(Int32))
+                    {
+                        int t;
+                        if (e.FormattedValue.ToString().Trim() == "" || !int.TryParse(e.FormattedValue.ToString(), out t) || t < 0)
+                        {
+                            canCommit = false;
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(e.FormattedValue.ToString().Trim()))
+                        {
+                            canCommit = false;
+                        }
                     }
                 }
             }
+            if (!canCommit) CancelEdit();
             isCurrentRowDirty = _dgv.IsCurrentRowDirty;
         }
 
@@ -106,7 +119,9 @@ namespace MainForm.DGV
             if (_dgv.Rows[e.RowIndex].IsNewRow || !isCurrentRowDirty) return;
 
             if (RowReady(_dgv.Rows[e.RowIndex]))
+            {
                 if (RowHaveSource(_dgv.Rows[e.RowIndex]))
+
                 {
                     Update(_dgv.Rows[e.RowIndex]);
                 }
@@ -114,6 +129,12 @@ namespace MainForm.DGV
                 {
                     Insert(_dgv.Rows[e.RowIndex]);
                 }
+                _dgv.Rows[e.RowIndex].ErrorText.Replace("Строка не зафиксирована!", "");
+            }
+            else
+            {
+                _dgv.Rows[e.RowIndex].ErrorText = "Строка не зафиксирована!";
+            }
         }
 
         public abstract void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e);
@@ -121,6 +142,30 @@ namespace MainForm.DGV
         public void CancelEdit()
         {
             _dgv.CancelEdit();
+        }
+
+        public void ClearChanges()
+        {
+            foreach (DataGridViewRow row in _dgv.Rows)
+            {
+                if (row.ErrorText != "")
+                {
+                    if (row.Cells["Source"].Value == DBNull.Value)
+                        _dgv.Rows.Remove(row);
+                    else
+                    {
+                        var src = row.Cells["Source"].Value;
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            if (cell.OwningColumn.Visible)
+                            {
+                                cell.Value = src.GetType().GetProperty(cell.OwningColumn.Name).GetValue(src);
+                                row.ErrorText = "";
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public bool RowHaveSource(DataGridViewRow row)
