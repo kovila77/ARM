@@ -118,9 +118,13 @@ namespace MainForm.DGV
                     ctx.buildings.Attach(b);
                     ctx.buildings.Remove(b);
                     ctx.SaveChanges();
+                    row.Cells["Source"].Value = DBNull.Value;
                 }
                 else
+                {
                     e.Cancel = true;
+                    return;
+                }
             }
         }
 

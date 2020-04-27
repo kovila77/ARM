@@ -155,6 +155,7 @@ namespace MainForm.DGV
                 ctx.storage_resources.Remove(sr);
                 ctx.SaveChanges();
             }
+            row.Cells["Source"].Value = DBNull.Value;
         }
     }
 }

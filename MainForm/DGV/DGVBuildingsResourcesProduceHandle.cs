@@ -147,6 +147,7 @@ namespace MainForm.DGV
                 ctx.buildings_resources_produce.Remove(brp);
                 ctx.SaveChanges();
             }
+            row.Cells["Source"].Value = DBNull.Value;
         }
     }
 }

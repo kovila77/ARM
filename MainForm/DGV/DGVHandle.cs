@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace MainForm.DGV
 {
-    abstract class DGVHandle
+    abstract class DGVHandle : IDisposable
     {
         protected DataGridView _dgv;
         protected bool isCurrentRowDirty;
@@ -19,6 +19,10 @@ namespace MainForm.DGV
         {
             dataTable = new DataTable();
             _dgv = dgv;
+            //if (_dgv.Rows.Count > 0)
+            //_dgv.Rows.Clear();
+            if (_dgv.Columns.Count > 0)
+                _dgv.Columns.Clear();
             _dgv.CellValidating += CellValidating;
             _dgv.CellEndEdit += CellEndEdit;
             _dgv.UserDeletingRow += UserDeletingRow;
@@ -77,9 +81,11 @@ namespace MainForm.DGV
 
                 if (_dgv.Columns[e.ColumnIndex].CellType == typeof(DataGridViewComboBoxCell))
                 {
-                    if (_dgv[e.ColumnIndex, e.RowIndex].Value == null || _dgv[e.ColumnIndex, e.RowIndex].Value == DBNull.Value)
+                    //if (_dgv[e.ColumnIndex, e.RowIndex].Value == null || _dgv[e.ColumnIndex, e.RowIndex].Value == DBNull.Value)
+                    if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
                     {
-                        canCommit = false;
+                        if (!(this.GetType() == typeof(DGVBuildingsHandle) && _dgv.Columns[e.ColumnIndex].Name == "outpost_id"))
+                            canCommit = false;
                     }
                 }
                 else
@@ -128,7 +134,9 @@ namespace MainForm.DGV
                 {
                     Insert(_dgv.Rows[e.RowIndex]);
                 }
-                _dgv.Rows[e.RowIndex].ErrorText.Replace("Строка не зафиксирована!", "");
+                if (_dgv.Rows[e.RowIndex].ErrorText.Contains("Строка не зафиксирована!"))
+                    _dgv.Rows[e.RowIndex].ErrorText = "";
+                //_dgv.Rows[e.RowIndex].ErrorText.Replace("Строка не зафиксирована!", "");
             }
             else
             {
@@ -170,6 +178,13 @@ namespace MainForm.DGV
         public bool RowHaveSource(DataGridViewRow row)
         {
             return !(row.Cells["Source"].Value == null || row.Cells["Source"].Value == DBNull.Value);
+        }
+
+        public virtual void Dispose()
+        {
+            _dgv.CellValidating -= CellValidating;
+            _dgv.CellEndEdit -= CellEndEdit;
+            _dgv.UserDeletingRow -= UserDeletingRow;
         }
     }
 }

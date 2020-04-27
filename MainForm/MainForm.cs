@@ -35,6 +35,10 @@ namespace MainForm
         public MainForm(string userRole)
         {
             _userRole = userRole;
+            if ((!(new List<string> { "admin", "user", "guest" }.Contains(_userRole.ToLower()))))
+            {
+                this.Close();
+            }
             InitializeComponent();
         }
 
@@ -46,50 +50,53 @@ namespace MainForm
                 tmiTools.Enabled = false;
                 tmiTools.Visible = false;
             }
+            else
+                this.Text += " Администратор";
             if (_userRole.ToLower() == "guest")
             {
                 foreach (TabPage tp in tabControl.TabPages)
                 {
                     ((DataGridView)tp.Controls[0]).ReadOnly = true;
                 }
+                this.Text += " Гость";
             }
             currentTab = tabControl.SelectedIndex;
         }
 
         private void InitializeDGV()
         {
-            //dgvO.DefaultCellStyle.NullValue = DBNull.Value;
-            //dgvO.DefaultCellStyle.
+            _dGVOutpostHandle?.Dispose();
+            _dGVResourcesHandle?.Dispose();
+            _dGVBuildingsHandle?.Dispose();
+            _dGVBuildingsResourcesHandle?.Dispose();
+            _dGVBuildingsResourcesConsumeHandle?.Dispose();
+            _dGVBuildingsResourcesProduceHandle?.Dispose();
+            _dGVStorageResourcesHandle?.Dispose();
+
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
             dgvO.Tag = _dGVOutpostHandle;
 
-            //dgvR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
             dgvR.Tag = _dGVResourcesHandle;
 
-            //dgvB.DefaultCellStyle.NullValue =DBNull.Value;
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
             dgvB.Tag = _dGVBuildingsHandle;
 
-            //dgvBR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBR.Tag = _dGVBuildingsResourcesHandle;
 
-            //dgvBRC.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
 
-            //dgvBRP.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
             dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
 
-            //dgvSR.DefaultCellStyle.NullValue = DBNull.Value;
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -98,6 +105,7 @@ namespace MainForm
 
         public void ReloadO()
         {
+            _dGVOutpostHandle.Dispose();
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
             _dGVBuildingsHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
             _dGVStorageResourcesHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
@@ -105,8 +113,9 @@ namespace MainForm
         }
         public void ReloadR()
         {
-            _dGVResourcesHandle = new DGVResourcesHandle(dgvO);
-            //_dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
+            _dGVResourcesHandle.Dispose();
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
+            _dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
             _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
             _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
             _dGVStorageResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
@@ -114,14 +123,16 @@ namespace MainForm
         }
         public void ReloadB()
         {
+            _dGVBuildingsHandle.Dispose();
             _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
-            //_dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
+            _dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
             _dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
             _dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
             dgvB.Tag = _dGVBuildingsHandle;
         }
         public void ReloadBR()
         {
+            _dGVBuildingsResourcesHandle.Dispose();
             _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -129,6 +140,7 @@ namespace MainForm
         }
         public void ReloadBRC()
         {
+            _dGVBuildingsResourcesConsumeHandle.Dispose();
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -136,6 +148,7 @@ namespace MainForm
         }
         public void ReloadBRP()
         {
+            _dGVBuildingsResourcesProduceHandle.Dispose();
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
                                                                     _dGVBuildingsHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -143,6 +156,7 @@ namespace MainForm
         }
         public void ReloadSR()
         {
+            _dGVStorageResourcesHandle.Dispose();
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
                                                                     _dGVOutpostHandle.dataTable,
                                                                     _dGVResourcesHandle.dataTable);
@@ -192,12 +206,12 @@ namespace MainForm
                     e.Cancel = true;
                     return;
                 }
-            //if (dgv == dgvB) ReloadB();
-            //if (dgv == dgvR) ReloadR();
-            //if (dgv == dgvBRC) ReloadBRC();
-            //if (dgv == dgvBRP) ReloadBRP();
-            //if (dgv == dgvO) ReloadO();
-            //if (dgv == dgvSR) ReloadSR();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvB) ReloadB();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvR) ReloadR();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBRC) ReloadBRC();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBRP) ReloadBRP();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvO) ReloadO();
+            if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvSR) ReloadSR();
             if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBR) ReloadBR();
             currentTab = tabControl.SelectedIndex;
         }
@@ -206,6 +220,6 @@ namespace MainForm
         {
             DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
             ((DGVHandle)dgv.Tag).ClearChanges();
-        }        
+        }
     }
 }

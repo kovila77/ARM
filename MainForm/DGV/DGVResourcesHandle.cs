@@ -75,13 +75,14 @@ namespace MainForm.DGV
                     || r.storage_resources.Count > 0
                     || r.machines_resources_consume.Count > 0)
                 {
-                    MessageBox.Show("Вы не можете удалить данный ресурс, так как он используется");
+                    MessageBox.Show($"Вы не можете удалить ресурс {r.resources_name}, так как он используется");
                     e.Cancel = true;
                     return;
                 }
                 ctx.resources.Remove(r);
                 ctx.SaveChanges();
             }
+            row.Cells["Source"].Value = DBNull.Value;
         }
 
         protected override bool RowReady(DataGridViewRow row)

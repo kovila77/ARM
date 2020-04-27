@@ -25,7 +25,7 @@ namespace MainForm
                 dataTable.Columns.Add("outpost_coordinate_z", typeof(int));
                 dataTable.Columns.Add("outpost_id", typeof(int));
                 dataTable.Columns.Add("Source", typeof(outpost));
-                ctx.outposts.ToList().ForEach(otpst => dataTable.Rows.Add(                                                        
+                ctx.outposts.ToList().ForEach(otpst => dataTable.Rows.Add(
                                                         otpst.outpost_name,
                                                         otpst.outpost_economic_value,
                                                         otpst.outpost_coordinate_x,
@@ -146,9 +146,14 @@ namespace MainForm
                     ctx.outposts.Attach(o);
                     ctx.outposts.Remove(o);
                     ctx.SaveChanges();
-                }else
+                }
+                else
+                {
                     e.Cancel = true;
+                    return;
+                }
             }
+            row.Cells["Source"].Value = DBNull.Value;
         }
     }
 }
