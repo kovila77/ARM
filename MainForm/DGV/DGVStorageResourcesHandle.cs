@@ -52,6 +52,9 @@ namespace MainForm.DGV
             _dgv.Columns.Add(MyHelper.strAccumulationSpeed, "Скорость накопления");
             _dgv.Columns.Add(MyHelper.strSource, "src");
 
+            foreach (DataGridViewColumn column in _dgv.Columns)
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+
             _dgv.Columns[MyHelper.strOutpostId].ValueType = typeof(int);
             _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
             _dgv.Columns[MyHelper.strCount].ValueType = typeof(int);

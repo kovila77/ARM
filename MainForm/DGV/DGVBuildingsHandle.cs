@@ -57,6 +57,9 @@ namespace MainForm.DGV
             _dgv.Columns.Add(MyHelper.strBuildingId, "id");
             _dgv.Columns.Add(MyHelper.strSource, "src");
 
+            foreach (DataGridViewColumn column in _dgv.Columns)
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+
             _dgv.Columns[MyHelper.strBuildingName].ValueType = typeof(string);
             _dgv.Columns[MyHelper.strOutpostId].ValueType = typeof(int);
             _dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);

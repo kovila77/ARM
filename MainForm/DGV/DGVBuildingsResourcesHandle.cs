@@ -75,6 +75,9 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(MyHelper.strConsumeSpeed, "Скорость потребления");
                 _dgv.Columns.Add(MyHelper.strProduceSpeed, "Скорость производства");
 
+                foreach (DataGridViewColumn column in _dgv.Columns)
+                    column.SortMode = DataGridViewColumnSortMode.Programmatic;
+
                 _dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);
                 _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
                 _dgv.Columns[MyHelper.strConsumeSpeed].ValueType = typeof(int);

@@ -105,6 +105,13 @@ namespace MainForm
             _dGVBuildingsResourcesConsumeHandle.Initialize();
             _dGVBuildingsResourcesProduceHandle.Initialize();
             _dGVStorageResourcesHandle.Initialize();
+
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                DataGridView dgv = tabPage.Controls[0] as DataGridView;
+                if (dgv == null) continue;
+                dgv.ColumnHeaderMouseClick += ColumnHeaderMouseClick;
+            }
         }
 
         private void InitializeDGV()
@@ -236,6 +243,60 @@ namespace MainForm
         {
             //DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
             //((DGVHandle)dgv.Tag).ClearChanges();
+        }
+
+        private void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+            if (dgv == null) return;
+
+            if (dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection == SortOrder.Ascending)
+            {
+                dgv.Sort(new RowComparerFormattedValue(SortOrder.Descending, e.ColumnIndex));
+                dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+            }
+            else
+            {
+                dgv.Sort(new RowComparerFormattedValue(SortOrder.Ascending, e.ColumnIndex));
+                dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+            }
+
+            foreach (DataGridViewColumn column in dgv.Columns)
+            {
+                if (column.Index == e.ColumnIndex) continue;
+                column.HeaderCell.SortGlyphDirection = SortOrder.None;
+            }
+        }
+
+        private class RowComparerFormattedValue : System.Collections.IComparer
+        {
+            private static int sortOrderModifier = 1;
+            private int columnIndex;
+
+            public RowComparerFormattedValue(SortOrder sortOrder, int columnIndex)
+            {
+                this.columnIndex = columnIndex;
+                if (sortOrder == SortOrder.Descending)
+                {
+                    sortOrderModifier = -1;
+                }
+                else if (sortOrder == SortOrder.Ascending)
+                {
+                    sortOrderModifier = 1;
+                }
+            }
+
+            public int Compare(object x, object y)
+            {
+                DataGridViewRow row1 = (DataGridViewRow)x;
+                DataGridViewRow row2 = (DataGridViewRow)y;
+
+                int CompareResult = System.String.Compare(
+                    row1.Cells[columnIndex].FormattedValue.ToString(),
+                    row2.Cells[columnIndex].FormattedValue.ToString());
+
+                return CompareResult * sortOrderModifier;
+            }
         }
     }
 }

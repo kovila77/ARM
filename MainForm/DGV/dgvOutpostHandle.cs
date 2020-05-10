@@ -35,6 +35,9 @@ namespace MainForm
             _dgv.Columns.Add(MyHelper.strOutpostId, "id");
             _dgv.Columns.Add(MyHelper.strSource, "src");
 
+            foreach (DataGridViewColumn column in _dgv.Columns)
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+
             _dgv.Columns[MyHelper.strOutpostName].ValueType = typeof(string);
             _dgv.Columns[MyHelper.strOutpostEconomicValue].ValueType = typeof(int);
             _dgv.Columns[MyHelper.strOutpostCoordinateX].ValueType = typeof(int);
