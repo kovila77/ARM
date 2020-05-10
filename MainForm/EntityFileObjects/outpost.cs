@@ -33,12 +33,15 @@ namespace MainForm
         public int outpost_coordinate_z { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.ComponentModel.Browsable(false)]
         public virtual ICollection<building> buildings { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.ComponentModel.Browsable(false)]
         public virtual ICollection<outpost_missions> outpost_missions { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.ComponentModel.Browsable(false)]
         public virtual ICollection<storage_resources> storage_resources { get; set; }
     }
 }

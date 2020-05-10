@@ -21,8 +21,10 @@ namespace MainForm
 
         public int consume_speed { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual machine machine { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual resource resource { get; set; }
     }
 }

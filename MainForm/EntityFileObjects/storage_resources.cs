@@ -23,8 +23,10 @@ namespace MainForm
 
         public int accumulation_speed { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual outpost outpost { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual resource resource { get; set; }
     }
 }

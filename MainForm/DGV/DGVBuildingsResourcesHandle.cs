@@ -75,6 +75,16 @@ namespace MainForm.DGV
             }
             HideColumns();
         }
+
+        public override void Initialize()
+        {
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+
+            throw new NotImplementedException();
+        }
+
         protected void HideColumns()
         {
             MakeThisColumnVisible(new string[] { "building_id", "resources_id", "consume_speed", "produce_speed" });
@@ -89,7 +99,7 @@ namespace MainForm.DGV
             throw new NotImplementedException();
         }
 
-        protected override bool RowReady(DataGridViewRow row)
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
             return false;
         }
@@ -98,5 +108,7 @@ namespace MainForm.DGV
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

@@ -11,27 +11,41 @@ namespace MainForm.DGV
 {
     class DGVStorageResourcesHandle : DGVHandle
     {
-        public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
-        {
-            Name = "outpost_id",
-            HeaderText = "Форпост",
-            DisplayMember = "outpost_name",
-            ValueMember = "outpost_id",
-            DataPropertyName = "outpost_id",
-            FlatStyle = FlatStyle.Flat
-        };
-        public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
-        {
-            Name = "resources_id",
-            HeaderText = "Ресурс",
-            DisplayMember = "resources_name",
-            ValueMember = "resources_id",
-            DataPropertyName = "resources_id",
-            FlatStyle = FlatStyle.Flat
-        };
+        //public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
+        //{
+        //    Name = "outpost_id",
+        //    HeaderText = "Форпост",
+        //    DisplayMember = "outpost_name",
+        //    ValueMember = "outpost_id",
+        //    DataPropertyName = "outpost_id",
+        //    FlatStyle = FlatStyle.Flat
+        //};
+        //public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
+        //{
+        //    Name = "resources_id",
+        //    HeaderText = "Ресурс",
+        //    DisplayMember = "resources_name",
+        //    ValueMember = "resources_id",
+        //    DataPropertyName = "resources_id",
+        //    FlatStyle = FlatStyle.Flat
+        //};
+        private DataGridViewComboBoxColumnResources _cbcResources;
+        private DataGridViewComboBoxColumnOutpost _cbcOutposts;
 
-        public DGVStorageResourcesHandle(DataGridView dgv, DataTable dtOutpost, DataTable dtResources) : base(dgv)
+        public DGVStorageResourcesHandle(DataGridView dgv,
+                DataGridViewComboBoxColumnOutpost cbcOutposts,
+                DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
         {
+            this._cbcResources = cbcResources;
+            this._cbcOutposts = cbcOutposts;
+        }
+
+        public override void Initialize()
+        {
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+
             using (var ctx = new OutpostDataContext())
             {
                 ctx.storage_resources.Load();
@@ -50,23 +64,21 @@ namespace MainForm.DGV
                 _dgv.Columns.Add(cbcOutpost);
                 _dgv.DataSource = dataTable;
             }
-            HideColumns();
-            //_dgv.CellBeginEdit += CellBeginEdit;
         }
 
-        protected void HideColumns()
-        {
-            MakeThisColumnVisible(new string[] {
-                    "outpost_id",
-                    "resources_id",
-                    "count",
-                    "accumulation_speed",
-                });
-        }
+        //protected void HideColumns()
+        //{
+        //    MakeThisColumnVisible(new string[] {
+        //            "outpost_id",
+        //            "resources_id",
+        //            "count",
+        //            "accumulation_speed",
+        //        });
+        //}
 
-        protected override bool RowReady(DataGridViewRow row)
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.RowReady(row)
+            return base.ChekRowAndSayReady(row)
                 && row.Cells["outpost_id"].Value != DBNull.Value
                 && row.Cells["resources_id"].Value != DBNull.Value
                 && row.Cells["count"].Value != DBNull.Value
@@ -157,5 +169,6 @@ namespace MainForm.DGV
             }
             row.Cells["Source"].Value = DBNull.Value;
         }
+
     }
 }

@@ -26,6 +26,7 @@ namespace MainForm
         [Column(TypeName = "date")]
         public DateTime? date_actual_end { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual outpost outpost { get; set; }
     }
 }

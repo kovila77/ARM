@@ -11,59 +11,80 @@ namespace MainForm.DGV
 {
     class DGVBuildingsResourcesConsumeHandle : DGVHandle
     {
-        public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
-        {
-            Name = "resources_id",
-            HeaderText = "Ресурс",
-            DisplayMember = "resources_name",
-            ValueMember = "resources_id",
-            DataPropertyName = "resources_id",
-            FlatStyle = FlatStyle.Flat
-        };
-        public DataGridViewComboBoxColumn cbcBuldings = new DataGridViewComboBoxColumn()
-        {
-            Name = "building_id",
-            HeaderText = "Здание",
-            DisplayMember = "building_name",
-            ValueMember = "building_id",
-            DataPropertyName = "building_id",
-            FlatStyle = FlatStyle.Flat
-        };
-        public DGVBuildingsResourcesConsumeHandle(DataGridView dgv, DataTable dtBuildings, DataTable dtResources) : base(dgv)
-        {
-            using (var ctx = new OutpostDataContext())
-            {
-                ctx.buildings_resources_consume.Load();
+        //public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
+        //{
+        //    Name = "resources_id",
+        //    HeaderText = "Ресурс",
+        //    DisplayMember = "resources_name",
+        //    ValueMember = "resources_id",
+        //    DataPropertyName = "resources_id",
+        //    FlatStyle = FlatStyle.Flat
+        //};
+        //public DataGridViewComboBoxColumn cbcBuldings = new DataGridViewComboBoxColumn()
+        //{
+        //    Name = "building_id",
+        //    HeaderText = "Здание",
+        //    DisplayMember = "building_name",
+        //    ValueMember = "building_id",
+        //    DataPropertyName = "building_id",
+        //    FlatStyle = FlatStyle.Flat
+        //};
+        private DataGridViewComboBoxColumnBuildings _cbcBuilsings;
+        private DataGridViewComboBoxColumnResources _cbcResources;
 
-                cbcResorces.DataSource = dtResources;
-                cbcBuldings.DataSource = dtBuildings;
-
-                dataTable.Columns.Add("building_id", typeof(int));
-                dataTable.Columns.Add("resources_id", typeof(int));
-                dataTable.Columns.Add("consume_speed", typeof(int));
-                dataTable.Columns.Add("Source", typeof(buildings_resources_consume));
-                ctx.buildings_resources_consume.ToList().ForEach(x => dataTable.Rows.Add(x.building_id, x.resources_id, x.consume_speed, x));
-
-                _dgv.Columns.Add(cbcBuldings);
-                _dgv.Columns.Add(cbcResorces);
-                _dgv.DataSource = dataTable;
-            }
-            HideColumns();
+        public DGVBuildingsResourcesConsumeHandle(DataGridView dgv, DataGridViewComboBoxColumnBuildings cbcBuilsings, DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+        {
+            this._cbcBuilsings = cbcBuilsings;
+            this._cbcResources = cbcResources;
             //_dgv.CellBeginEdit += CellBeginEdit;
         }
-        protected void HideColumns()
+
+        public override void Initialize()
         {
-            MakeThisColumnVisible(new string[] {
-                    "building_id",
-                    "resources_id",
-                    "consume_speed"
-                });
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+
+            _dgv.Columns.Add(_cbcBuilsings);
+            _dgv.Columns.Add(_cbcResources);
+            _dgv.Columns.Add(MyHelper.strConsumeSpeed, "Скорость потребления");
+            _dgv.Columns.Add(MyHelper.strSource, "");
+
+            _dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strConsumeSpeed].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(buildings_resources_consume);
+
+            _dgv.Columns[MyHelper.strSource].Visible = false;
+
+            try
+            {
+                using (var ctx = new OutpostDataContext())
+                {
+                    foreach (var brc in ctx.buildings_resources_consume)
+                    {
+                        _dgv.Rows.Add(brc.building_id, brc.resources_id, brc.consume_speed, brc);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        protected override bool RowReady(DataGridViewRow row)
+        //protected void HideColumns()
+        //{
+        //    MakeThisColumnVisible(new string[] {
+        //            "building_id",
+        //            "resources_id",
+        //            "consume_speed"
+        //        });
+        //}
+
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.RowReady(row)
-                 && row.Cells["building_id"].Value != DBNull.Value
+            return row.Cells["building_id"].Value != DBNull.Value
                  && row.Cells["resources_id"].Value != DBNull.Value
                  && row.Cells["consume_speed"].Value != DBNull.Value
                  ;
@@ -148,5 +169,6 @@ namespace MainForm.DGV
             }
             row.Cells["Source"].Value = DBNull.Value;
         }
+
     }
 }

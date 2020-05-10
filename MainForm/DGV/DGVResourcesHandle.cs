@@ -13,81 +13,168 @@ namespace MainForm.DGV
 {
     class DGVResourcesHandle : DGVHandle
     {
+        private DataGridViewComboBoxColumnResources _cbcResources;
 
-        public DGVResourcesHandle(DataGridView dgv) : base(dgv)
+        public DGVResourcesHandle(DataGridView dgv, ref DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
         {
-            using (var ctx = new OutpostDataContext())
+            this._cbcResources = cbcResources;
+        }
+
+        public override void Initialize()
+        {
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+            _cbcResources.InitializeDataTableResources();
+
+            _dgv.Columns.Add(MyHelper.strResourceName, "Название ресурса");
+            _dgv.Columns.Add(MyHelper.strResourceId, "id");
+            _dgv.Columns.Add(MyHelper.strSource, "");
+
+            _dgv.Columns[MyHelper.strResourceName].ValueType = typeof(string);
+            _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(resource);
+
+            _dgv.Columns[MyHelper.strResourceId].Visible = false;
+            _dgv.Columns[MyHelper.strSource].Visible = false;
+
+            try
             {
-                ctx.resources.Load();
-
-                dataTable.Columns.Add("resources_name", typeof(string));
-                dataTable.Columns.Add("resources_id", typeof(int));
-                dataTable.Columns.Add("Source", typeof(resource));
-                ctx.resources.ToList().ForEach(x => dataTable.Rows.Add(x.resources_name, x.resources_id, x));
-                _dgv.DataSource = dataTable;
+                using (var ctx = new OutpostDataContext())
+                {
+                    foreach (var res in ctx.resources)
+                    {
+                        _dgv.Rows.Add(res.resources_name, res.resources_id, res);
+                        _cbcResources.Add(res.resources_id, res.resources_name);
+                    }
+                }
             }
-            HideColumns();
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        protected void HideColumns()
-        {
-            MakeThisColumnVisible(new string[] {
-                    "resources_name"
-                });
-        }
+        //protected void HideColumns()
+        //{
+        //    MakeThisColumnVisible(new string[] {
+        //            "resources_name"
+        //        });
+        //}
 
         protected override void Insert(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                resource res = new resource { resources_name = row.Cells["resources_name"].Value.ToString() };
-                ctx.resources.Add(res);
-                ctx.SaveChanges();
+                using (var ctx = new OutpostDataContext())
+                {
+                    string new_resources_name = (string)row.Cells[MyHelper.strResourceName].Value;
 
-                row.Cells["resources_id"].Value = res.resources_id;
-                row.Cells["Source"].Value = res;
+                    if (ctx.resources.AsEnumerable().FirstOrDefault(res => res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
+                    {
+                        string eo = $"Ресурс {new_resources_name} уже существует!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
+
+                    var new_res = new resource();
+                    new_res.resources_name = new_resources_name;
+                    ctx.resources.Add(new_res);
+                    ctx.SaveChanges();
+                    row.Cells[MyHelper.strSource].Value = new_res;
+                    row.Cells[MyHelper.strResourceId].Value = new_res.resources_id;
+                    _cbcResources.Add(new_res.resources_id, new_res.resources_name);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+                row.ErrorText = MyHelper.strError + err.Message;
             }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                resource r = (resource)row.Cells["Source"].Value;
-                r.resources_name = row.Cells["resources_name"].Value.ToString();
-                ctx.Entry(r).State = EntityState.Modified;
-                ctx.SaveChanges();
+                using (var ctx = new OutpostDataContext())
+                {
+                    var new_res = (resource)row.Cells[MyHelper.strSource].Value;
+                    ctx.resources.Attach(new_res);
+
+                    string new_resources_name = (string)row.Cells[MyHelper.strResourceName].Value;
+
+                    if (ctx.resources.AsEnumerable().FirstOrDefault(res => res != new_res && res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
+                    {
+                        string eo = $"Ресурс {new_resources_name} уже существует!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
+
+                    new_res.resources_name = new_resources_name;
+
+                    ctx.SaveChanges();
+                    _cbcResources.Change(new_res.resources_id, new_res.resources_name);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+                row.ErrorText = MyHelper.strError + err.Message;
             }
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            var row = e.Row;
-            if (row.Cells["Source"].Value == DBNull.Value) return;
-            using (var ctx = new OutpostDataContext())
+            if (e.Row.HaveSource())
             {
-                resource r = (resource)row.Cells["Source"].Value;
-
-                ctx.resources.Attach(r);
-
-                if (r.buildings_resources_consume.Count > 0
-                    || r.buildings_resources_produce.Count > 0
-                    || r.storage_resources.Count > 0
-                    || r.machines_resources_consume.Count > 0)
+                try
                 {
-                    MessageBox.Show($"Вы не можете удалить ресурс {r.resources_name}, так как он используется");
-                    e.Cancel = true;
-                    return;
+                    using (var ctx = new OutpostDataContext())
+                    {
+                        var res = ctx.resources.Find(((resource)e.Row.Cells[MyHelper.strSource].Value).resources_id);
+
+                        if (res.buildings_resources_consume.Count > 0
+                            || res.buildings_resources_produce.Count > 0
+                            || res.storage_resources.Count > 0
+                            || res.machines_resources_consume.Count > 0)
+                        {
+                            MessageBox.Show($"Вы не можете удалить ресурс {res.resources_name}, так как он используется");
+                            e.Cancel = true;
+                            return;
+                        }
+
+                        ctx.resources.Remove(res);
+                        ctx.SaveChanges();
+                        _cbcResources.Remove(res.resources_id);
+                    }
                 }
-                ctx.resources.Remove(r);
-                ctx.SaveChanges();
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                    e.Row.ErrorText = MyHelper.strError + err.Message;
+                    e.Cancel = true;
+                }
             }
-            row.Cells["Source"].Value = DBNull.Value;
         }
 
-        protected override bool RowReady(DataGridViewRow row)
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return true && base.RowReady(row);
+            var cellWithPotentialError = _dgv[MyHelper.strResourceName, row.Index];
+            if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
+            {
+                cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                row.ErrorText = MyHelper.strBadRow;
+                return false;
+            }
+            else
+            {
+                cellWithPotentialError.ErrorText = "";
+                row.ErrorText = "";
+                return true;
+            }
         }
     }
 }

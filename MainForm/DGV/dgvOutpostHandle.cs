@@ -12,52 +12,101 @@ namespace MainForm
 {
     class DGVOutpostHandle : DGVHandle
     {
-        public DGVOutpostHandle(DataGridView dgv) : base(dgv)
+        private DataGridViewComboBoxColumnOutpost _cbcOutposts;
+
+        public DGVOutpostHandle(DataGridView dgv, ref DataGridViewComboBoxColumnOutpost cbcOutposts) : base(dgv)
         {
-            using (var ctx = new OutpostDataContext())
+            this._cbcOutposts = cbcOutposts;
+        }
+
+        public override void Initialize()
+        {
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+            _cbcOutposts.InitializeDataTableOutpost();
+
+            _dgv.Columns.Add(MyHelper.strOutpostName, "Название");
+            _dgv.Columns.Add(MyHelper.strOutpostEconomicValue, "Экономическая ценность");
+            _dgv.Columns.Add(MyHelper.strOutpostCoordinateX, "Координата x");
+            _dgv.Columns.Add(MyHelper.strOutpostCoordinateY, "Координата y");
+            _dgv.Columns.Add(MyHelper.strOutpostCoordinateZ, "Координата z");
+            _dgv.Columns.Add(MyHelper.strOutpostId, "id");
+            _dgv.Columns.Add(MyHelper.strSource, "src");
+
+            _dgv.Columns[MyHelper.strOutpostName].ValueType = typeof(string);
+            _dgv.Columns[MyHelper.strOutpostEconomicValue].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strOutpostCoordinateX].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strOutpostCoordinateY].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strOutpostCoordinateZ].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(outpost);
+
+            _dgv.Columns[MyHelper.strOutpostId].Visible = false;
+
+            try
             {
-                ctx.outposts.Load();
-
-                dataTable.Columns.Add("outpost_name", typeof(string));
-                dataTable.Columns.Add("outpost_economic_value", typeof(int));
-                dataTable.Columns.Add("outpost_coordinate_x", typeof(int));
-                dataTable.Columns.Add("outpost_coordinate_y", typeof(int));
-                dataTable.Columns.Add("outpost_coordinate_z", typeof(int));
-                dataTable.Columns.Add("outpost_id", typeof(int));
-                dataTable.Columns.Add("Source", typeof(outpost));
-                ctx.outposts.ToList().ForEach(otpst => dataTable.Rows.Add(
-                                                        otpst.outpost_name,
-                                                        otpst.outpost_economic_value,
-                                                        otpst.outpost_coordinate_x,
-                                                        otpst.outpost_coordinate_y,
-                                                        otpst.outpost_coordinate_z,
-                                                        otpst.outpost_id,
-                                                        otpst));
-                _dgv.DataSource = dataTable;
+                using (var ctx = new OutpostDataContext())
+                {
+                    foreach (var otpst in ctx.outposts)
+                    {
+                        _dgv.Rows.Add(otpst.outpost_name,
+                                      otpst.outpost_economic_value,
+                                      otpst.outpost_coordinate_x,
+                                      otpst.outpost_coordinate_y,
+                                      otpst.outpost_coordinate_z,
+                                      otpst.outpost_id,
+                                      otpst);
+                        _cbcOutposts.Add(otpst.outpost_id,
+                                         otpst.outpost_name,
+                                         otpst.outpost_coordinate_x,
+                                         otpst.outpost_coordinate_y,
+                                         otpst.outpost_coordinate_z);
+                    }
+                }
             }
-            HideColumns();
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        protected void HideColumns()
-        {
-            MakeThisColumnVisible(new string[] {
-                    "outpost_name",
-                    "outpost_economic_value",
-                    "outpost_coordinate_x",
-                    "outpost_coordinate_y",
-                    "outpost_coordinate_z"
-                });
-        }
+        //protected void HideColumns()
+        //{
+        //    MakeThisColumnVisible(new string[] {
+        //            "outpost_name",
+        //            "outpost_economic_value",
+        //            "outpost_coordinate_x",
+        //            "outpost_coordinate_y",
+        //            "outpost_coordinate_z"
+        //        });
+        //}
 
-        protected override bool RowReady(DataGridViewRow row)
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.RowReady(row)
-                && row.Cells["outpost_name"].Value != DBNull.Value
-                && row.Cells["outpost_economic_value"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_x"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_y"].Value != DBNull.Value
-                && row.Cells["outpost_coordinate_z"].Value != DBNull.Value
-                ;
+            var cellsWithPotentialErrors = new List<DataGridViewCell> {
+                                                   row.Cells[MyHelper.strOutpostName],
+                                                   row.Cells[MyHelper.strOutpostEconomicValue],
+                                                   row.Cells[MyHelper.strOutpostCoordinateX],
+                                                   row.Cells[MyHelper.strOutpostCoordinateY],
+                                                   row.Cells[MyHelper.strOutpostCoordinateZ],
+                                                 };
+            foreach (var cellWithPotentialError in cellsWithPotentialErrors)
+            {
+                if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
+                {
+                    cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                    row.ErrorText = MyHelper.strBadRow;
+                }
+                else
+                {
+                    cellWithPotentialError.ErrorText = "";
+                }
+            }
+            if (cellsWithPotentialErrors.FirstOrDefault(cellWithPotentialError => cellWithPotentialError.ErrorText.Length > 0) == null)
+                row.ErrorText = "";
+            else
+                return false;
+            return true;
         }
 
         protected override void Insert(DataGridViewRow row)

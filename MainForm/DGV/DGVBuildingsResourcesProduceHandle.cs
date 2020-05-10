@@ -52,6 +52,40 @@ namespace MainForm.DGV
             HideColumns();
             //_dgv.CellBeginEdit += CellBeginEdit;
         }
+
+        public override void Initialize()
+        {
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+
+            _dgv.Columns.Add(_cbcBuilsings);
+            _dgv.Columns.Add(_cbcResources);
+            _dgv.Columns.Add(MyHelper.strConsumeSpeed, "Скорость потребления");
+            _dgv.Columns.Add(MyHelper.strSource, "");
+
+            _dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strConsumeSpeed].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(buildings_resources_consume);
+
+            _dgv.Columns[MyHelper.strSource].Visible = false;
+
+            try
+            {
+                using (var ctx = new OutpostDataContext())
+                {
+                    foreach (var brc in ctx.buildings_resources_consume)
+                    {
+                        _dgv.Rows.Add(brc.building_id, brc.resources_id, brc.consume_speed, brc);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
         protected void HideColumns()
         {
             MakeThisColumnVisible(new string[] {
@@ -61,9 +95,9 @@ namespace MainForm.DGV
                 });
         }
 
-        protected override bool RowReady(DataGridViewRow row)
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.RowReady(row)
+            return base.ChekRowAndSayReady(row)
                  && row.Cells["building_id"].Value != DBNull.Value
                  && row.Cells["resources_id"].Value != DBNull.Value
                  && row.Cells["produce_speed"].Value != DBNull.Value

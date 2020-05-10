@@ -12,39 +12,28 @@ namespace MainForm.DGV
     class DGVBuildingsHandle : DGVHandle
     {
 
-        public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
-        {
-            Name = "outpost_id",
-            HeaderText = "Форпост",
-            DisplayMember = "outpost_name",
-            ValueMember = "outpost_id",
-            DataPropertyName = "outpost_id",
-            FlatStyle = FlatStyle.Flat
-        };
+        //public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
+        //{
+        //    Name = "outpost_id",
+        //    HeaderText = "Форпост",
+        //    DisplayMember = "outpost_name",
+        //    ValueMember = "outpost_id",
+        //    DataPropertyName = "outpost_id",
+        //    FlatStyle = FlatStyle.Flat
+        //};
+        private DataGridViewComboBoxColumnOutpost _cbcOutpost;
+        private DataGridViewComboBoxColumnBuildings _cbcBuildings;
 
         private ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         private ToolStripMenuItem убратьЗначениеToolStripMenuItem = new ToolStripMenuItem();
         DataGridViewCellEventArgs mouseLocation;
 
-        public DGVBuildingsHandle(DataGridView dgv, DataTable dtOutpost) : base(dgv)
+        public DGVBuildingsHandle(DataGridView dgv, DataGridViewComboBoxColumnOutpost cbcOutpost, DataGridViewComboBoxColumnBuildings cbcBuildings) : base(dgv)
         {
-            using (var ctx = new OutpostDataContext())
-            {
-                ctx.buildings.Load();
+            this._cbcOutpost = cbcOutpost;
+            this._cbcBuildings = cbcBuildings;
 
-                cbcOutpost.DataSource = dtOutpost;
-                dataTable.Columns.Add("building_name", typeof(string));
-                dataTable.Columns.Add("outpost_id", typeof(int));
-                dataTable.Columns.Add("building_id", typeof(int));
-                dataTable.Columns.Add("Source", typeof(building));
-                ctx.buildings.ToList().ForEach(x => dataTable.Rows.Add(x.building_name, x.outpost_id, x.building_id, x));
-
-                _dgv.Columns.Add(cbcOutpost);
-                _dgv.DataSource = dataTable;
-            }
-            HideColumns();
-
-            dgv.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(CellMouseEnter);
+            _dgv.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(CellMouseEnter);
             contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { убратьЗначениеToolStripMenuItem });
             contextMenuStrip.Name = "contextMenuStrip";
             contextMenuStrip.Size = new System.Drawing.Size(181, 48);
@@ -53,27 +42,65 @@ namespace MainForm.DGV
             убратьЗначениеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             убратьЗначениеToolStripMenuItem.Text = "Убрать значение";
             убратьЗначениеToolStripMenuItem.Click += new System.EventHandler(this.SetNull);
-            _dgv.Columns["outpost_id"].ContextMenuStrip = contextMenuStrip;
         }
 
-
-        protected void HideColumns()
+        public override void Initialize()
         {
-            MakeThisColumnVisible(new string[] {
-                    "building_name",
-                    "outpost_id",
-                });
+            _dgv.CancelEdit();
+            _dgv.Rows.Clear();
+            _dgv.Columns.Clear();
+            _cbcBuildings.InitializeDataTableBuildings();
+
+            _dgv.Columns.Add(MyHelper.strBuildingName, "Название здания");
+            //_dgv.Columns.Add(MyHelper.strOutpostId, "Форпост");
+            _dgv.Columns.Add(_cbcOutpost);
+            _dgv.Columns.Add(MyHelper.strBuildingId, "id");
+            _dgv.Columns.Add(MyHelper.strSource, "src");
+
+            _dgv.Columns[MyHelper.strBuildingName].ValueType = typeof(string);
+            _dgv.Columns[MyHelper.strOutpostId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(building);
+
+            _dgv.Columns[MyHelper.strBuildingId].Visible = false;
+            _dgv.Columns[MyHelper.strSource].Visible = false;
+
+            try
+            {
+                using (var ctx = new OutpostDataContext())
+                {
+                    foreach (var build in ctx.buildings)
+                    {
+                        _dgv.Rows.Add(build.building_name, build.outpost_id, build.building_id, build);
+                        _cbcBuildings.Add(build.building_id, build.building_name, build.outpost_id);
+                    }
+                }
+                _dgv.Columns[MyHelper.strOutpostId].ContextMenuStrip = contextMenuStrip;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        protected override bool RowReady(DataGridViewRow row)
+        //protected void HideColumns()
+        //{
+        //    MakeThisColumnVisible(new string[] {
+        //            "building_name",
+        //            "outpost_id",
+        //        });
+        //}
+
+        protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.RowReady(row)
-                && row.Cells["building_name"].Value != DBNull.Value
+            throw new NotImplementedException();
+            return row.Cells["building_name"].Value != DBNull.Value
                 ;
         }
 
         protected override void Insert(DataGridViewRow row)
         {
+            throw new NotImplementedException();
             using (var ctx = new OutpostDataContext())
             {
                 building b = new building
@@ -93,6 +120,7 @@ namespace MainForm.DGV
 
         protected override void Update(DataGridViewRow row)
         {
+            throw new NotImplementedException();
             using (var ctx = new OutpostDataContext())
             {
                 building b = (building)row.Cells["Source"].Value;
@@ -108,6 +136,7 @@ namespace MainForm.DGV
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
+            throw new NotImplementedException();
             using (var ctx = new OutpostDataContext())
             {
                 var row = e.Row;
@@ -143,8 +172,7 @@ namespace MainForm.DGV
         private void SetNull(object sender, EventArgs e)
         {
             _dgv[mouseLocation.ColumnIndex, mouseLocation.RowIndex].Value = DBNull.Value;
-            isCurrentRowDirty = true;
-            CellEndEdit(sender, new DataGridViewCellEventArgs(mouseLocation.ColumnIndex, mouseLocation.RowIndex));
+            _dgv_RowValidating(_dgv, new DataGridViewCellCancelEventArgs(mouseLocation.ColumnIndex, mouseLocation.RowIndex));
         }
     }
 }

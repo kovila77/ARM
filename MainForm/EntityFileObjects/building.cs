@@ -25,12 +25,15 @@ namespace MainForm
 
         public int? outpost_id { get; set; }
 
+        [System.ComponentModel.Browsable(false)]
         public virtual outpost outpost { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.ComponentModel.Browsable(false)]
         public virtual ICollection<buildings_resources_consume> buildings_resources_consume { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.ComponentModel.Browsable(false)]
         public virtual ICollection<buildings_resources_produce> buildings_resources_produce { get; set; }
     }
 }

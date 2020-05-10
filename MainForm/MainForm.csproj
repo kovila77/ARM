@@ -94,6 +94,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnBuildings.cs" />
+    <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnOutpost.cs" />
+    <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnResources.cs" />
     <Compile Include="EntityFileObjects\building.cs" />
     <Compile Include="EntityFileObjects\buildings_resources.cs" />
     <Compile Include="EntityFileObjects\buildings_resources_consume.cs" />
@@ -115,6 +118,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EntityFileObjects\outpost.cs" />
+    <Compile Include="MyHelper.cs" />
     <Compile Include="OutpostDataContext.cs" />
     <Compile Include="EntityFileObjects\outpost_missions.cs" />
     <Compile Include="Program.cs" />
