@@ -132,7 +132,7 @@ namespace MainForm.DGV
         protected void _dgv_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             var row = _dgv.Rows[e.RowIndex];
-            if (row.IsNewRow || !_dgv.IsCurrentRowDirty) return;
+            if ((row.IsNewRow || !_dgv.IsCurrentRowDirty) && sender.GetType() != typeof(ContextMenuStrip)) return;
             //var cell = dgvOutposts[e.ColumnIndex, e.RowIndex];
             //var cellFormatedValue = cell.FormattedValue.ToString().RmvExtrSpaces();
 

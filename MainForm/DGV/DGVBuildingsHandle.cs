@@ -166,7 +166,7 @@ namespace MainForm.DGV
                     }
 
                     new_building.building_name = new_building_name;
-                    new_building.outpost_id = (int?)new_outpost_id;
+                    new_building.outpost_id = new_outpost_id == null || new_outpost_id == DBNull.Value ? new int?() : new int?((int)new_outpost_id);//(int?)new_outpost_id;
 
                     ctx.SaveChanges();
                     _buildingsDataTableHandler.Change(new_building.building_id, new_building.building_name);
@@ -229,7 +229,7 @@ namespace MainForm.DGV
         private void SetNull(object sender, EventArgs e)
         {
             _dgv[mouseLocation.ColumnIndex, mouseLocation.RowIndex].Value = DBNull.Value;
-            _dgv_RowValidating(_dgv, new DataGridViewCellCancelEventArgs(mouseLocation.ColumnIndex, mouseLocation.RowIndex));
+            _dgv_RowValidating(contextMenuStrip, new DataGridViewCellCancelEventArgs(mouseLocation.ColumnIndex, mouseLocation.RowIndex));
         }
     }
 }
