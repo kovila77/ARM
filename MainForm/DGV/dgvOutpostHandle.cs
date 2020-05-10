@@ -14,7 +14,7 @@ namespace MainForm
     {
         private OutpostDataTableHandler _outpostDataTableHandler;
 
-        public DGVOutpostHandle(DataGridView dgv, 
+        public DGVOutpostHandle(DataGridView dgv,
             ref OutpostDataTableHandler outpostDataTableHandler) : base(dgv)
         {
             this._outpostDataTableHandler = outpostDataTableHandler;
@@ -113,98 +113,128 @@ namespace MainForm
 
         protected override void Insert(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                outpost o = new outpost
+                using (var ctx = new OutpostDataContext())
                 {
-                    outpost_name = row.Cells["outpost_name"].Value.ToString(),
-                    outpost_economic_value = (int)row.Cells["outpost_economic_value"].Value,
-                    outpost_coordinate_x = (int)row.Cells["outpost_coordinate_x"].Value,
-                    outpost_coordinate_y = (int)row.Cells["outpost_coordinate_y"].Value,
-                    outpost_coordinate_z = (int)row.Cells["outpost_coordinate_z"].Value,
-                };
+                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString();
+                    int new_outpost_economic_value = (int)row.Cells[MyHelper.strOutpostEconomicValue].Value;
+                    int new_outpost_coordinate_x = (int)row.Cells[MyHelper.strOutpostCoordinateX].Value;
+                    int new_outpost_coordinate_y = (int)row.Cells[MyHelper.strOutpostCoordinateY].Value;
+                    int new_outpost_coordinate_z = (int)row.Cells[MyHelper.strOutpostCoordinateZ].Value;
 
-                foreach (var x in ctx.outposts)
-                {
-                    if (x.outpost_name == o.outpost_name
-                        && x.outpost_economic_value == o.outpost_economic_value
-                        && x.outpost_coordinate_x == o.outpost_coordinate_x
-                        && x.outpost_coordinate_y == o.outpost_coordinate_y
-                        && x.outpost_coordinate_z == o.outpost_coordinate_z
-                        )
+                    if (ctx.outposts.AsEnumerable().FirstOrDefault(outpst =>
+                        outpst.outpost_name == new_outpost_name
+                        && outpst.outpost_coordinate_x == new_outpost_coordinate_x
+                        && outpst.outpost_coordinate_y == new_outpost_coordinate_y
+                        && outpst.outpost_coordinate_z == new_outpost_coordinate_z) != null)
                     {
-                        MessageBox.Show("Форпост идентичен существующему!");
-                        row.ErrorText = "Ошибка!";
+                        string eo = $"Форпост {new_outpost_name} - {new_outpost_coordinate_x};{new_outpost_coordinate_y};{new_outpost_coordinate_z} идентичен существующему!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
                         return;
                     }
+                    var o = new outpost();
+                    o.outpost_name = new_outpost_name;
+                    o.outpost_economic_value = new_outpost_economic_value;
+                    o.outpost_coordinate_x = new_outpost_coordinate_x;
+                    o.outpost_coordinate_y = new_outpost_coordinate_y;
+                    o.outpost_coordinate_z = new_outpost_coordinate_z;
+
+                    ctx.outposts.Add(o);
+                    ctx.SaveChanges();
+
+                    row.Cells[MyHelper.strOutpostId].Value = o.outpost_id;
+                    row.Cells[MyHelper.strSource].Value = o;
+                    _outpostDataTableHandler.Add(o.outpost_id, o.outpost_name, o.outpost_coordinate_x, o.outpost_coordinate_y, o.outpost_coordinate_z);
                 }
-                row.ErrorText = "";
-
-                ctx.outposts.Add(o);
-                ctx.SaveChanges();
-
-                row.Cells["outpost_id"].Value = o.outpost_id;
-                row.Cells["Source"].Value = o;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                outpost o = ctx.outposts.Find((int)row.Cells["outpost_id"].Value);
-
-                foreach (var x in ctx.outposts)
+                using (var ctx = new OutpostDataContext())
                 {
-                    if (x.outpost_id == o.outpost_id)
-                        continue;
-                    if (x.outpost_name == row.Cells["outpost_name"].Value.ToString()
-                        && x.outpost_economic_value == (int)row.Cells["outpost_economic_value"].Value
-                        && x.outpost_coordinate_x == (int)row.Cells["outpost_coordinate_x"].Value
-                        && x.outpost_coordinate_y == (int)row.Cells["outpost_coordinate_y"].Value
-                        && x.outpost_coordinate_z == (int)row.Cells["outpost_coordinate_z"].Value
-                        )
+                    outpost o = ctx.outposts.Find((int)row.Cells[MyHelper.strOutpostId].Value);
+
+                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString();
+                    int new_outpost_economic_value = (int)row.Cells[MyHelper.strOutpostEconomicValue].Value;
+                    int new_outpost_coordinate_x = (int)row.Cells[MyHelper.strOutpostCoordinateX].Value;
+                    int new_outpost_coordinate_y = (int)row.Cells[MyHelper.strOutpostCoordinateY].Value;
+                    int new_outpost_coordinate_z = (int)row.Cells[MyHelper.strOutpostCoordinateZ].Value;
+
+                    if (ctx.outposts.AsEnumerable().FirstOrDefault(outpst =>
+                        outpst.outpost_id != o.outpost_id
+                        && outpst.outpost_name == new_outpost_name
+                        && outpst.outpost_coordinate_x == new_outpost_coordinate_x
+                        && outpst.outpost_coordinate_y == new_outpost_coordinate_y
+                        && outpst.outpost_coordinate_z == new_outpost_coordinate_z) != null)
                     {
-                        MessageBox.Show("Форпост идентичен существующему!");
-                        row.ErrorText = "Ошибка!";
+                        string eo = $"Форпост {new_outpost_name} - {new_outpost_coordinate_x};{new_outpost_coordinate_y};{new_outpost_coordinate_z} идентичен существующему!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
                         return;
                     }
+
+                    o.outpost_name = new_outpost_name;
+                    o.outpost_economic_value = new_outpost_economic_value;
+                    o.outpost_coordinate_x = new_outpost_coordinate_x;
+                    o.outpost_coordinate_y = new_outpost_coordinate_y;
+                    o.outpost_coordinate_z = new_outpost_coordinate_z;
+
+                    //ctx.Entry(o).State = EntityState.Modified;
+                    ctx.SaveChanges();
+                    _outpostDataTableHandler.Change(o.outpost_id, o.outpost_name, o.outpost_coordinate_x, o.outpost_coordinate_y, o.outpost_coordinate_z);
                 }
-                row.ErrorText = "";
-
-                o.outpost_name = row.Cells["outpost_name"].Value.ToString();
-                o.outpost_economic_value = (int)row.Cells["outpost_economic_value"].Value;
-                o.outpost_coordinate_x = (int)row.Cells["outpost_coordinate_x"].Value;
-                o.outpost_coordinate_y = (int)row.Cells["outpost_coordinate_y"].Value;
-                o.outpost_coordinate_z = (int)row.Cells["outpost_coordinate_z"].Value;
-
-                ctx.Entry(o).State = EntityState.Modified;
-                ctx.SaveChanges();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            var row = e.Row;
-            if (row.Cells["Source"].Value == DBNull.Value) return;
-            using (var ctx = new OutpostDataContext())
+            if (e.Row.HaveSource())
             {
-                outpost o = (outpost)row.Cells["Source"].Value;
-
-
-                if (MessageBox.Show($"Вы уверены, что хотите удалить ВСЮ информацию о {o.outpost_name}?", "Предупреждение!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                try
                 {
-                    ctx.outposts.Attach(o);
-                    ctx.outposts.Remove(o);
-                    ctx.SaveChanges();
+                    using (var ctx = new OutpostDataContext())
+                    {
+                        var o = ctx.outposts.Find(e.Row.Cells[MyHelper.strOutpostId].Value);
+
+                        if (o.buildings.Count > 0
+                                || o.storage_resources.Count > 0)
+                        {
+                            MessageBox.Show($"Вы не можете удалить Форпост {o.outpost_name} - {o.outpost_coordinate_x};{o.outpost_coordinate_y};{o.outpost_coordinate_z}, так как он используется");
+                            e.Cancel = true;
+                            return;
+                        }
+
+                        if (MessageBox.Show($"Вы уверены, что хотите удалить {o.outpost_name} - {o.outpost_coordinate_x};{o.outpost_coordinate_y};{o.outpost_coordinate_z}?", "Предупреждение!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            ctx.outposts.Remove(o);
+                            ctx.SaveChanges();
+                            _outpostDataTableHandler.Remove(o.outpost_id);
+                        }
+                        else
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                    }
                 }
-                else
+                catch (Exception err)
                 {
-                    e.Cancel = true;
-                    return;
+                    MessageBox.Show(err.Message);
                 }
             }
-            row.Cells["Source"].Value = DBNull.Value;
         }
     }
 }

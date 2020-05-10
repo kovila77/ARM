@@ -38,8 +38,7 @@ namespace MainForm
         public void Add(int building_id, string building_name, int? outpost_id)
         {
             //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
-            _dtBuildings.Rows.Add(building_id, building_name + (outpost_id.HasValue ? " — "
-                                             + outpost_id.ToString() : ""));
+            _dtBuildings.Rows.Add(building_id, building_name);
         }
 
         public void Change(int building_id, string building_name, int? outpost_id = null)
@@ -47,8 +46,7 @@ namespace MainForm
             DataRow forChange = _dtBuildings.AsEnumerable().SingleOrDefault(row => row.Field<int>(MyHelper.strBuildingId) == building_id);
             if (forChange != null)
             {
-                forChange[MyHelper.strBuildingName] = building_name + (outpost_id.HasValue ? " — "
-                                                                    + outpost_id.ToString() : "");
+                forChange[MyHelper.strBuildingName] = building_name;
             }
         }
 

@@ -81,11 +81,29 @@ namespace MainForm.DGV
 
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return row.Cells["outpost_id"].Value != DBNull.Value
-                && row.Cells["resources_id"].Value != DBNull.Value
-                && row.Cells["count"].Value != DBNull.Value
-                && row.Cells["accumulation_speed"].Value != DBNull.Value
-                ;
+            var cellsWithPotentialErrors = new List<DataGridViewCell> {
+                                                   row.Cells[MyHelper.strOutpostId],
+                                                   row.Cells[MyHelper.strResourceId],
+                                                   row.Cells[MyHelper.strCount],
+                                                   row.Cells[MyHelper.strCount],
+                                                 };
+            foreach (var cellWithPotentialError in cellsWithPotentialErrors)
+            {
+                if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
+                {
+                    cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                    row.ErrorText = MyHelper.strBadRow;
+                }
+                else
+                {
+                    cellWithPotentialError.ErrorText = "";
+                }
+            }
+            if (cellsWithPotentialErrors.FirstOrDefault(cellWithPotentialError => cellWithPotentialError.ErrorText.Length > 0) == null)
+                row.ErrorText = "";
+            else
+                return false;
+            return true;
         }
 
         protected override void Insert(DataGridViewRow row)
@@ -113,64 +131,119 @@ namespace MainForm.DGV
 
                 row.Cells["Source"].Value = sr;
             }
+            try
+            {
+                using (var ctx = new OutpostDataContext())
+                {
+                    int new_outpost_id = (int)row.Cells[MyHelper.strOutpostId].Value;
+                    int new_resource_id = (int)row.Cells[MyHelper.strResourceId].Value;
+                    int new_count = (int)row.Cells[MyHelper.strCount].Value;
+                    int new_accumulation_speed = (int)row.Cells[MyHelper.strAccumulationSpeed].Value;
+
+                    if (ctx.storage_resources.AsEnumerable().FirstOrDefault(sr =>
+                                sr.outpost_id == new_outpost_id
+                                && sr.resources_id == new_resource_id) != null)
+                    {
+                        string eo = $"Для форпоста {row.Cells[MyHelper.strOutpostId].FormattedValue} " +
+                                    $"ресурс {row.Cells[MyHelper.strResourceId].FormattedValue} " +
+                                    $"уже существует! Измените или удалите текущую строку!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
+
+                    var new_sr = new storage_resources();
+                    new_sr.outpost_id = new_outpost_id;
+                    new_sr.resources_id = new_resource_id;
+                    new_sr.count = new_count;
+                    new_sr.accumulation_speed = new_accumulation_speed;
+
+                    ctx.storage_resources.Add(new_sr);
+
+                    ctx.SaveChanges();
+
+                    row.Cells[MyHelper.strSource].Value = new_sr;
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                storage_resources sr = (storage_resources)row.Cells["Source"].Value;
-                ctx.storage_resources.Attach(sr);
-                var newoutpost_id = (int)row.Cells["outpost_id"].Value;
-                var newresources_id = (int)row.Cells["resources_id"].Value;
-                if (sr.outpost_id != newoutpost_id
-                    || sr.resources_id != newresources_id)
+                using (var ctx = new OutpostDataContext())
                 {
-                    var srExisting = ctx.storage_resources.Find(newoutpost_id, newresources_id);
-                    if (srExisting != null)
+                    var new_sr = (storage_resources)row.Cells[MyHelper.strSource].Value;
+                    ctx.storage_resources.Attach(new_sr);
+
+                    int new_outpost_id = (int)row.Cells[MyHelper.strOutpostId].Value;
+                    int new_resource_id = (int)row.Cells[MyHelper.strResourceId].Value;
+                    int new_count = (int)row.Cells[MyHelper.strCount].Value;
+                    int new_accumulation_speed = (int)row.Cells[MyHelper.strAccumulationSpeed].Value;
+
+                    if (ctx.storage_resources.AsEnumerable().FirstOrDefault(sr =>
+                                sr != new_sr
+                                && sr.outpost_id == new_outpost_id
+                                && sr.resources_id == new_resource_id) != null)
                     {
-                        MessageBox.Show($"Для форпоста {row.Cells["outpost_id"].FormattedValue} " +
-                            $"запись для ресурса {row.Cells["resources_id"].FormattedValue} " +
-                            $"уже существует! Измените или удалите текущую строку!");
-                        row.ErrorText = "Ошибка!";
+                        string eo = $"Для форпоста {row.Cells[MyHelper.strOutpostId].FormattedValue} " +
+                                    $"ресурс {row.Cells[MyHelper.strResourceId].FormattedValue} " +
+                                    $"уже существует! Измените или удалите текущую строку!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
                         return;
                     }
-                    ctx.storage_resources.Remove(sr);
-                    ctx.SaveChanges();
-                    sr = new storage_resources
+
+                    if (new_sr.resources_id != new_resource_id || new_sr.outpost_id != new_outpost_id)
                     {
-                        outpost_id = newoutpost_id,
-                        resources_id = newresources_id,
-                        count = (int)row.Cells["count"].Value,
-                        accumulation_speed = (int)row.Cells["accumulation_speed"].Value,
-                    };
-                    ctx.storage_resources.Add(sr);
+                        ctx.storage_resources.Remove(new_sr);
+                        ctx.SaveChanges();
+                        new_sr = new storage_resources();
+
+                        new_sr.outpost_id = new_outpost_id;
+                        new_sr.resources_id = new_resource_id;
+                        new_sr.count = new_count;
+                        new_sr.accumulation_speed = new_accumulation_speed;
+                        ctx.storage_resources.Add(new_sr);
+                    }
+                    else
+                    {
+                        new_sr.count = new_count;
+                        new_sr.accumulation_speed = new_accumulation_speed;
+                    }
+
+                    ctx.SaveChanges();
                 }
-                else
-                {
-                    sr.count = (int)row.Cells["count"].Value;
-                    sr.accumulation_speed = (int)row.Cells["accumulation_speed"].Value;
-                }
-                row.Cells["Source"].Value = sr;
-                row.ErrorText = "";
-                ctx.SaveChanges();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            var row = e.Row;
-            if (row.Cells["Source"].Value == DBNull.Value) return;
-            storage_resources sr = (storage_resources)row.Cells["Source"].Value;
-            using (var ctx = new OutpostDataContext())
+            if (e.Row.HaveSource())
             {
-                ctx.storage_resources.Attach(sr);
-
-                ctx.storage_resources.Remove(sr);
-                ctx.SaveChanges();
+                try
+                {
+                    using (var ctx = new OutpostDataContext())
+                    {
+                        var sr = (storage_resources)e.Row.Cells[MyHelper.strSource].Value;
+                        ctx.storage_resources.Attach(sr);
+                        ctx.storage_resources.Remove(sr);
+                        ctx.SaveChanges();
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
-            row.Cells["Source"].Value = DBNull.Value;
         }
-
     }
 }

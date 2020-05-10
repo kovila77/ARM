@@ -86,90 +86,140 @@ namespace MainForm.DGV
 
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return row.Cells["building_id"].Value != DBNull.Value
-                 && row.Cells["resources_id"].Value != DBNull.Value
-                 && row.Cells["produce_speed"].Value != DBNull.Value
-                 ;
+            var cellsWithPotentialErrors = new List<DataGridViewCell> {
+                                                   row.Cells[MyHelper.strBuildingId],
+                                                   row.Cells[MyHelper.strResourceId],
+                                                   row.Cells[MyHelper.strProduceSpeed],
+                                                 };
+            foreach (var cellWithPotentialError in cellsWithPotentialErrors)
+            {
+                if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
+                {
+                    cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                    row.ErrorText = MyHelper.strBadRow;
+                }
+                else
+                {
+                    cellWithPotentialError.ErrorText = "";
+                }
+            }
+            if (cellsWithPotentialErrors.FirstOrDefault(cellWithPotentialError => cellWithPotentialError.ErrorText.Length > 0) == null)
+                row.ErrorText = "";
+            else
+                return false;
+            return true;
         }
 
         protected override void Insert(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                buildings_resources_produce brp = new buildings_resources_produce
+                using (var ctx = new OutpostDataContext())
                 {
-                    building_id = (int)row.Cells["building_id"].Value,
-                    resources_id = (int)row.Cells["resources_id"].Value,
-                    produce_speed = (int)row.Cells["produce_speed"].Value,
-                };
-                if (ctx.buildings_resources_produce.Find(brp.building_id, brp.resources_id) != null)
-                {
-                    MessageBox.Show($"Для здания {row.Cells["building_id"].FormattedValue} " +
-                        $"производимый ресурс {row.Cells["resources_id"].FormattedValue} " +
-                        $"уже существует! Измените или удалите текущую строку!");
-                    row.ErrorText = "Ошибка!";
-                    return;
-                }
-                row.ErrorText = "";
-                ctx.buildings_resources_produce.Add(brp);
-                ctx.SaveChanges();
+                    int new_building_id = (int)row.Cells[MyHelper.strBuildingId].Value;
+                    int new_resource_id = (int)row.Cells[MyHelper.strResourceId].Value;
+                    int new_produce_speed = (int)row.Cells[MyHelper.strProduceSpeed].Value;
 
-                row.Cells["Source"].Value = brp;
+                    if (ctx.buildings_resources_consume.AsEnumerable().FirstOrDefault(brp =>
+                                brp.building_id == new_building_id
+                                && brp.resources_id == new_resource_id) != null)
+                    {
+                        string eo = $"Для здания {row.Cells["building_id"].FormattedValue} " +
+                                    $"производимый ресурс {row.Cells["resources_id"].FormattedValue} " +
+                                    $"уже существует! Измените или удалите текущую строку!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
+
+                    var new_brp = new buildings_resources_produce();
+                    new_brp.resources_id = new_resource_id;
+                    new_brp.building_id = new_building_id;
+                    new_brp.produce_speed = new_produce_speed;
+
+                    ctx.buildings_resources_produce.Add(new_brp);
+
+                    ctx.SaveChanges();
+
+                    row.Cells[MyHelper.strSource].Value = new_brp;
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                buildings_resources_produce brp = (buildings_resources_produce)row.Cells["Source"].Value;
-                ctx.buildings_resources_produce.Attach(brp);
-                var newbuilding_id = (int)row.Cells["building_id"].Value;
-                var newresources_id = (int)row.Cells["resources_id"].Value;
-                if (brp.building_id != newbuilding_id
-                    || brp.resources_id != newresources_id)
+                using (var ctx = new OutpostDataContext())
                 {
-                    var brpExisting = ctx.buildings_resources_produce.Find(newbuilding_id, newresources_id);
-                    if (brpExisting != null)
+                    var new_brp = (buildings_resources_produce)row.Cells[MyHelper.strSource].Value;
+                    ctx.buildings_resources_produce.Attach(new_brp);
+
+                    int new_building_id = (int)row.Cells[MyHelper.strBuildingId].Value;
+                    int new_resource_id = (int)row.Cells[MyHelper.strResourceId].Value;
+                    int new_produce_speed = (int)row.Cells[MyHelper.strProduceSpeed].Value;
+
+                    if (ctx.buildings_resources_produce.AsEnumerable().FirstOrDefault(brp =>
+                                brp != new_brp
+                                && brp.building_id == new_building_id
+                                && brp.resources_id == new_resource_id) != null)
                     {
-                        MessageBox.Show($"Для здания {row.Cells["building_id"].FormattedValue} " +
-                            $"потребляемый ресурс {row.Cells["resources_id"].FormattedValue} " +
-                            $"уже существует! Измените или удалите текущую строку!");
-                        row.ErrorText = "Ошибка!";
+                        string eo = $"Для здания {row.Cells["building_id"].FormattedValue} " +
+                                    $"производимый ресурс {row.Cells["resources_id"].FormattedValue} " +
+                                    $"уже существует! Измените или удалите текущую строку!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
                         return;
                     }
-                    ctx.buildings_resources_produce.Remove(brp);
-                    ctx.SaveChanges();
-                    brp = new buildings_resources_produce
+
+                    if (new_brp.resources_id != new_resource_id || new_brp.building_id != new_building_id)
                     {
-                        building_id = newbuilding_id,
-                        resources_id = newresources_id,
-                        produce_speed = (int)row.Cells["produce_speed"].Value
-                    };
-                    ctx.buildings_resources_produce.Add(brp);
+                        ctx.buildings_resources_produce.Remove(new_brp);
+                        ctx.SaveChanges();
+                        new_brp = new buildings_resources_produce();
+
+                        new_brp.resources_id = new_resource_id;
+                        new_brp.building_id = new_building_id;
+                        new_brp.produce_speed = new_produce_speed;
+                        ctx.buildings_resources_produce.Add(new_brp);
+                    }
+                    else
+                    {
+                        new_brp.produce_speed = new_produce_speed;
+                    }
+
+                    ctx.SaveChanges();
                 }
-                else
-                {
-                    brp.produce_speed = (int)row.Cells["produce_speed"].Value;
-                }
-                row.Cells["Source"].Value = brp;
-                row.ErrorText = "";
-                ctx.SaveChanges();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            var row = e.Row;
-            if (row.Cells["Source"].Value == DBNull.Value) return;
-            buildings_resources_produce brp = (buildings_resources_produce)row.Cells["Source"].Value;
-            using (var ctx = new OutpostDataContext())
+            if (e.Row.HaveSource())
             {
-                ctx.buildings_resources_produce.Attach(brp);
-                ctx.buildings_resources_produce.Remove(brp);
-                ctx.SaveChanges();
+                try
+                {
+                    using (var ctx = new OutpostDataContext())
+                    {
+                        var brp = (buildings_resources_produce)e.Row.Cells[MyHelper.strSource].Value;
+                        ctx.buildings_resources_produce.Attach(brp);
+                        ctx.buildings_resources_produce.Remove(brp);
+                        ctx.SaveChanges();
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
-            row.Cells["Source"].Value = DBNull.Value;
         }
     }
 }

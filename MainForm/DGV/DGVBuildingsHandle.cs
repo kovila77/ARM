@@ -93,9 +93,26 @@ namespace MainForm.DGV
 
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            throw new NotImplementedException();
-            return row.Cells["building_name"].Value != DBNull.Value
-                ;
+            var cellsWithPotentialErrors = new List<DataGridViewCell> {
+                                                   row.Cells[MyHelper.strBuildingName],
+                                                 };
+            foreach (var cellWithPotentialError in cellsWithPotentialErrors)
+            {
+                if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
+                {
+                    cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                    row.ErrorText = MyHelper.strBadRow;
+                }
+                else
+                {
+                    cellWithPotentialError.ErrorText = "";
+                }
+            }
+            if (cellsWithPotentialErrors.FirstOrDefault(cellWithPotentialError => cellWithPotentialError.ErrorText.Length > 0) == null)
+                row.ErrorText = "";
+            else
+                return false;
+            return true;
         }
 
         protected override void Insert(DataGridViewRow row)

@@ -101,12 +101,11 @@ namespace MainForm.DGV
             {
                 using (var ctx = new OutpostDataContext())
                 {
-                    var new_res = (resource)row.Cells[MyHelper.strSource].Value;
-                    ctx.resources.Attach(new_res);
+                    var new_res = ctx.resources.Find((int)row.Cells[MyHelper.strResourceId].Value);
 
                     string new_resources_name = (string)row.Cells[MyHelper.strResourceName].Value;
 
-                    if (ctx.resources.AsEnumerable().FirstOrDefault(res => res != new_res && res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
+                    if (ctx.resources.AsEnumerable().FirstOrDefault(res => res.resources_id != new_res.resources_id && res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
                     {
                         string eo = $"Ресурс {new_resources_name} уже существует!";
                         MessageBox.Show(eo);
