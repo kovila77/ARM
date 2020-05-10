@@ -252,12 +252,18 @@ namespace MainForm
 
             if (dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection == SortOrder.Ascending)
             {
-                dgv.Sort(new RowComparerFormattedValue(SortOrder.Descending, e.ColumnIndex));
+                if (dgv.Columns[e.ColumnIndex].CellType != typeof(DataGridViewComboBoxCell) && dgv.Columns[e.ColumnIndex].ValueType == typeof(Int32))
+                    dgv.Sort(new RowComparerForInt(SortOrder.Descending, e.ColumnIndex));
+                else
+                    dgv.Sort(new RowComparerFormattedValue(SortOrder.Descending, e.ColumnIndex));
                 dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Descending;
             }
             else
             {
-                dgv.Sort(new RowComparerFormattedValue(SortOrder.Ascending, e.ColumnIndex));
+                if (dgv.Columns[e.ColumnIndex].CellType != typeof(DataGridViewComboBoxCell) && dgv.Columns[e.ColumnIndex].ValueType == typeof(Int32))
+                    dgv.Sort(new RowComparerForInt(SortOrder.Ascending, e.ColumnIndex));
+                else
+                    dgv.Sort(new RowComparerFormattedValue(SortOrder.Ascending, e.ColumnIndex));
                 dgv.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
             }
 
@@ -294,6 +300,37 @@ namespace MainForm
                 int CompareResult = System.String.Compare(
                     row1.Cells[columnIndex].FormattedValue.ToString(),
                     row2.Cells[columnIndex].FormattedValue.ToString());
+
+                return CompareResult * sortOrderModifier;
+            }
+        }
+
+        private class RowComparerForInt : System.Collections.IComparer
+        {
+            private static int sortOrderModifier = 1;
+            private int columnIndex;
+
+            public RowComparerForInt(SortOrder sortOrder, int columnIndex)
+            {
+                this.columnIndex = columnIndex;
+                if (sortOrder == SortOrder.Descending)
+                {
+                    sortOrderModifier = -1;
+                }
+                else if (sortOrder == SortOrder.Ascending)
+                {
+                    sortOrderModifier = 1;
+                }
+            }
+
+            public int Compare(object x, object y)
+            {
+                DataGridViewRow row1 = (DataGridViewRow)x;
+                DataGridViewRow row2 = (DataGridViewRow)y;
+                int v1 = (int)row1.Cells[columnIndex].Value;
+                int v2 = (int)row2.Cells[columnIndex].Value;
+
+                int CompareResult = v1 > v2 ? 1 : (v1 == v2 ? 0 : -1);
 
                 return CompareResult * sortOrderModifier;
             }
