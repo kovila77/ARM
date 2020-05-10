@@ -35,13 +35,13 @@ namespace MainForm
             return new DataGridViewComboBoxColumnBuildings(this);
         }
 
-        public void Add(int building_id, string building_name, int? outpost_id)
+        public void Add(int building_id, string building_name)
         {
             //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
             _dtBuildings.Rows.Add(building_id, building_name);
         }
 
-        public void Change(int building_id, string building_name, int? outpost_id = null)
+        public void Change(int building_id, string building_name)
         {
             DataRow forChange = _dtBuildings.AsEnumerable().SingleOrDefault(row => row.Field<int>(MyHelper.strBuildingId) == building_id);
             if (forChange != null)

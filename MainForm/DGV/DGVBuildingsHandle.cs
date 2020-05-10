@@ -75,7 +75,7 @@ namespace MainForm.DGV
                     foreach (var build in ctx.buildings)
                     {
                         _dgv.Rows.Add(build.building_name, build.outpost_id, build.building_id, build);
-                        _buildingsDataTableHandler.Add(build.building_id, build.building_name, build.outpost_id);
+                        _buildingsDataTableHandler.Add(build.building_id, build.building_name);
                     }
                 }
                 _dgv.Columns[MyHelper.strOutpostId].ContextMenuStrip = contextMenuStrip;
@@ -96,84 +96,121 @@ namespace MainForm.DGV
 
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            var cellsWithPotentialErrors = new List<DataGridViewCell> {
-                                                   row.Cells[MyHelper.strBuildingName],
-                                                 };
-            foreach (var cellWithPotentialError in cellsWithPotentialErrors)
+            var cellWithPotentialError = _dgv[MyHelper.strBuildingName, row.Index];
+            if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
             {
-                if (cellWithPotentialError.FormattedValue.ToString().RmvExtrSpaces() == "")
-                {
-                    cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
-                    row.ErrorText = MyHelper.strBadRow;
-                }
-                else
-                {
-                    cellWithPotentialError.ErrorText = "";
-                }
-            }
-            if (cellsWithPotentialErrors.FirstOrDefault(cellWithPotentialError => cellWithPotentialError.ErrorText.Length > 0) == null)
-                row.ErrorText = "";
-            else
+                cellWithPotentialError.ErrorText = MyHelper.strEmptyCell;
+                row.ErrorText = MyHelper.strBadRow;
                 return false;
-            return true;
+            }
+            else
+            {
+                cellWithPotentialError.ErrorText = "";
+                row.ErrorText = "";
+                return true;
+            }
         }
 
         protected override void Insert(DataGridViewRow row)
         {
-            throw new NotImplementedException();
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                building b = new building
+                using (var ctx = new OutpostDataContext())
                 {
-                    building_name = row.Cells["building_name"].Value.ToString(),
-                };
-                if (row.Cells["outpost_id"].Value != DBNull.Value)
-                    b.outpost_id = (int)row.Cells["outpost_id"].Value;
+                    string new_building_name = (string)row.Cells[MyHelper.strBuildingName].Value;
+                    var new_outpost_id = row.Cells[MyHelper.strOutpostId].Value;
 
-                ctx.buildings.Add(b);
-                ctx.SaveChanges();
+                    if (ctx.buildings.AsEnumerable().FirstOrDefault(b => b.building_name.ToLower() == new_building_name.ToLower()) != null)
+                    {
+                        string eo = $"Здание {new_building_name} уже существует!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
 
-                row.Cells["building_id"].Value = b.building_id;
-                row.Cells["Source"].Value = b;
+                    var new_building = new building();
+                    new_building.building_name = new_building_name;
+                    new_building.outpost_id = (int?)new_outpost_id;
+
+                    ctx.buildings.Add(new_building);
+                    ctx.SaveChanges();
+
+                    row.Cells[MyHelper.strSource].Value = new_building;
+                    row.Cells[MyHelper.strBuildingId].Value = new_building.building_id;
+                    _buildingsDataTableHandler.Add(new_building.building_id, new_building.building_name);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         protected override void Update(DataGridViewRow row)
         {
-            throw new NotImplementedException();
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                building b = (building)row.Cells["Source"].Value;
-                if (row.Cells["outpost_id"].Value != DBNull.Value)
-                    b.outpost_id = (int)row.Cells["outpost_id"].Value;
-                else
-                    b.outpost_id = null;
-                b.building_name = row.Cells["building_name"].Value.ToString();
-                ctx.Entry(b).State = EntityState.Modified;
-                ctx.SaveChanges();
+                using (var ctx = new OutpostDataContext())
+                {
+                    var new_building = ctx.buildings.Find((int)row.Cells[MyHelper.strBuildingId].Value);
+
+                    string new_building_name = (string)row.Cells[MyHelper.strBuildingName].Value;
+                    var new_outpost_id = row.Cells[MyHelper.strOutpostId].Value;
+
+                    if (ctx.buildings.AsEnumerable().FirstOrDefault(b => b.building_id != new_building.building_id && b.building_name.ToLower() == new_building_name.ToLower()) != null)
+                    {
+                        string eo = $"Здание {new_building_name} уже существует!";
+                        MessageBox.Show(eo);
+                        row.ErrorText = MyHelper.strBadRow + " " + eo;
+                        return;
+                    }
+
+                    new_building.building_name = new_building_name;
+                    new_building.outpost_id = (int?)new_outpost_id;
+
+                    ctx.SaveChanges();
+                    _buildingsDataTableHandler.Change(new_building.building_id, new_building.building_name);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            throw new NotImplementedException();
-            using (var ctx = new OutpostDataContext())
+            try
             {
-                var row = e.Row;
-                building b = (building)row.Cells["Source"].Value;
+                using (var ctx = new OutpostDataContext())
+                {
+                    var building = ctx.buildings.Find(((building)e.Row.Cells[MyHelper.strSource].Value).building_id);
 
-                if (MessageBox.Show($"Вы уверены, что хотите удалить информацию о здании {b.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
-                    ctx.buildings.Attach(b);
-                    ctx.buildings.Remove(b);
-                    ctx.SaveChanges();
-                    row.Cells["Source"].Value = DBNull.Value;
+                    if (building.buildings_resources_consume.Count > 0
+                        || building.buildings_resources_produce.Count > 0)
+                    {
+                        MessageBox.Show($"Вы не можете удалить здание {building.building_name}, так как оно используется в других таблицах");
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    if (MessageBox.Show($"Вы уверены, что хотите удалить информацию о здании {building.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        ctx.buildings.Attach(building);
+                        ctx.buildings.Remove(building);
+                        ctx.SaveChanges();
+                        _buildingsDataTableHandler.Remove(building.building_id);
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
                 }
-                else
-                {
-                    e.Cancel = true;
-                    return;
-                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
