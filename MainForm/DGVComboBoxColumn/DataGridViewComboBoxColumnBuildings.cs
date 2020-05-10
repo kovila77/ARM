@@ -21,6 +21,9 @@ namespace MainForm
             this.DataPropertyName = MyHelper.strBuildingId;
             this.FlatStyle = FlatStyle.Flat;
             InitializeDataTableBuildings();
+            MainForm.BuildingAdded += Add;
+            MainForm.BuildingChanged += Change;
+            MainForm.BuildingDeleted += Remove;
         }
 
         public void InitializeDataTableBuildings()

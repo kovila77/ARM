@@ -26,6 +26,27 @@ namespace MainForm
         private DGVBuildingsResourcesProduceHandle _dGVBuildingsResourcesProduceHandle;
         private DGVStorageResourcesHandle _dGVStorageResourcesHandle;
 
+        public delegate void OutpostAddedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
+        public delegate void OutpostChangedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
+        public delegate void OutpostDeletedHandler(int outpost_id);
+        public static event OutpostAddedHandler OutpostAdded;
+        public static event OutpostChangedHandler OutpostChanged;
+        public static event OutpostDeletedHandler OutpostDeleted;
+
+        public delegate void BuildingAddedHandler(int building_id, string building_name, int? outpost_id);
+        public delegate void BuildingChangedHandler(int building_id, string building_name, int? outpost_id = null);
+        public delegate void BuildingDeletedHandler(int building_id);
+        public static event BuildingAddedHandler BuildingAdded;
+        public static event BuildingChangedHandler BuildingChanged;
+        public static event BuildingDeletedHandler BuildingDeleted;
+
+        public delegate void ResourceAddedHandler(int resource_id, string resource_name);
+        public delegate void ResourceChangedHandler(int resource_id, string resource_name);
+        public delegate void ResourceDeletedHandler(int resource_id);
+        public static event ResourceAddedHandler ResourceAdded;
+        public static event ResourceChangedHandler ResourceChanged;
+        public static event ResourceDeletedHandler ResourceDeleted;
+
         DataGridViewComboBoxColumnOutpost cbcOutposts = new DataGridViewComboBoxColumnOutpost();
         DataGridViewComboBoxColumnBuildings cbcBuildings = new DataGridViewComboBoxColumnBuildings();
         DataGridViewComboBoxColumnResources cbcResources = new DataGridViewComboBoxColumnResources();

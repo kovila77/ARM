@@ -21,6 +21,9 @@ namespace MainForm
             this.DataPropertyName = MyHelper.strOutpostId;
             this.FlatStyle = FlatStyle.Flat;
             InitializeDataTableOutpost();
+            MainForm.OutpostAdded += Add;
+            MainForm.OutpostChanged += Change;
+            MainForm.OutpostDeleted += Remove;
         }
 
         public void InitializeDataTableOutpost()

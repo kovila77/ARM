@@ -22,6 +22,9 @@ namespace MainForm
             this.DataPropertyName = MyHelper.strResourceId;
             this.FlatStyle = FlatStyle.Flat;
             InitializeDataTableResources();
+            MainForm.ResourceAdded += Add;
+            MainForm.ResourceChanged += Change;
+            MainForm.ResourceDeleted += Remove;
         }
 
         public void InitializeDataTableResources()
