@@ -196,6 +196,7 @@ namespace MainForm.DGV
                     }
 
                     ctx.SaveChanges();
+                    row.Cells[MyHelper.strSource].Value = new_brp;
                 }
             }
             catch (Exception err)

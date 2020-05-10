@@ -158,6 +158,8 @@ namespace MainForm.DGV
                 using (var ctx = new OutpostDataContext())
                 {
                     var new_brc = (buildings_resources_consume)row.Cells[MyHelper.strSource].Value;
+                    //var tmp = (buildings_resources_consume)row.Cells[MyHelper.strSource].Value;
+                    //var new_brc = ctx.buildings_resources_consume.Find(tmp.building_id, tmp.resources_id);
                     ctx.buildings_resources_consume.Attach(new_brc);
 
                     int new_building_id = (int)row.Cells[MyHelper.strBuildingId].Value;
@@ -194,6 +196,7 @@ namespace MainForm.DGV
                     }
 
                     ctx.SaveChanges();
+                    row.Cells[MyHelper.strSource].Value = new_brc;
                 }
             }
             catch (Exception err)

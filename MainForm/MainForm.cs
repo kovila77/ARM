@@ -236,6 +236,12 @@ namespace MainForm
             //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvO) ReloadO();
             //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvSR) ReloadSR();
             //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBR) ReloadBR();
+            
+            DataGridView dgv = tabControl.TabPages[e.TabPageIndex].Controls[0] as DataGridView;
+            if (dgv != null && dgv == dgvBR)
+            {
+                ((DGVHandle)dgv.Tag).Initialize();
+            }
             currentTab = tabControl.SelectedIndex;
         }
 

@@ -220,6 +220,7 @@ namespace MainForm.DGV
                     }
 
                     ctx.SaveChanges();
+                    row.Cells[MyHelper.strSource].Value = new_sr;
                 }
             }
             catch (Exception err)

@@ -180,37 +180,40 @@ namespace MainForm.DGV
 
         public override void UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            try
+            if (e.Row.HaveSource())
             {
-                using (var ctx = new OutpostDataContext())
+                try
                 {
-                    var building = ctx.buildings.Find(((building)e.Row.Cells[MyHelper.strSource].Value).building_id);
+                    using (var ctx = new OutpostDataContext())
+                    {
+                        var building = ctx.buildings.Find(((building)e.Row.Cells[MyHelper.strSource].Value).building_id);
 
-                    if (building.buildings_resources_consume.Count > 0
-                        || building.buildings_resources_produce.Count > 0)
-                    {
-                        MessageBox.Show($"Вы не можете удалить здание {building.building_name}, так как оно используется в других таблицах");
-                        e.Cancel = true;
-                        return;
-                    }
+                        if (building.buildings_resources_consume.Count > 0
+                            || building.buildings_resources_produce.Count > 0)
+                        {
+                            MessageBox.Show($"Вы не можете удалить здание {building.building_name}, так как оно используется в других таблицах");
+                            e.Cancel = true;
+                            return;
+                        }
 
-                    if (MessageBox.Show($"Вы уверены, что хотите удалить информацию о здании {building.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                    {
-                        ctx.buildings.Attach(building);
-                        ctx.buildings.Remove(building);
-                        ctx.SaveChanges();
-                        _buildingsDataTableHandler.Remove(building.building_id);
-                    }
-                    else
-                    {
-                        e.Cancel = true;
-                        return;
+                        if (MessageBox.Show($"Вы уверены, что хотите удалить информацию о здании {building.building_name}?", "Предупреждение!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        {
+                            ctx.buildings.Attach(building);
+                            ctx.buildings.Remove(building);
+                            ctx.SaveChanges();
+                            _buildingsDataTableHandler.Remove(building.building_id);
+                        }
+                        else
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
                     }
                 }
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message);
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
         }
 
