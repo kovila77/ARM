@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MainForm.DGVComboBoxColumn
+namespace MainForm
 {
     class DataGridViewComboBoxColumnOutpost : DataGridViewComboBoxColumn
     {

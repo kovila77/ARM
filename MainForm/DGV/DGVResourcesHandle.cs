@@ -13,12 +13,12 @@ namespace MainForm.DGV
 {
     class DGVResourcesHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumnResources _cbcResources;
+        private ResourcesDataTableHandler _resourcesDataTableHandler;
 
         public DGVResourcesHandle(DataGridView dgv, 
-            ref DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+            ref ResourcesDataTableHandler resourcesDataTableHandler) : base(dgv)
         {
-            this._cbcResources = cbcResources;
+            this._resourcesDataTableHandler = resourcesDataTableHandler;
         }
 
         public override void Initialize()
@@ -26,7 +26,7 @@ namespace MainForm.DGV
             _dgv.CancelEdit();
             _dgv.Rows.Clear();
             _dgv.Columns.Clear();
-            _cbcResources.InitializeDataTableResources();
+            _resourcesDataTableHandler.InitializeDataTableResources();
 
             _dgv.Columns.Add(MyHelper.strResourceName, "Название ресурса");
             _dgv.Columns.Add(MyHelper.strResourceId, "id");
@@ -46,7 +46,7 @@ namespace MainForm.DGV
                     foreach (var res in ctx.resources)
                     {
                         _dgv.Rows.Add(res.resources_name, res.resources_id, res);
-                        _cbcResources.Add(res.resources_id, res.resources_name);
+                        _resourcesDataTableHandler.Add(res.resources_id, res.resources_name);
                     }
                 }
             }
@@ -85,7 +85,7 @@ namespace MainForm.DGV
                     ctx.SaveChanges();
                     row.Cells[MyHelper.strSource].Value = new_res;
                     row.Cells[MyHelper.strResourceId].Value = new_res.resources_id;
-                    _cbcResources.Add(new_res.resources_id, new_res.resources_name);
+                    _resourcesDataTableHandler.Add(new_res.resources_id, new_res.resources_name);
                 }
             }
             catch (Exception err)
@@ -117,7 +117,7 @@ namespace MainForm.DGV
                     new_res.resources_name = new_resources_name;
 
                     ctx.SaveChanges();
-                    _cbcResources.Change(new_res.resources_id, new_res.resources_name);
+                    _resourcesDataTableHandler.Change(new_res.resources_id, new_res.resources_name);
                 }
             }
             catch (Exception err)
@@ -149,7 +149,7 @@ namespace MainForm.DGV
 
                         ctx.resources.Remove(res);
                         ctx.SaveChanges();
-                        _cbcResources.Remove(res.resources_id);
+                        _resourcesDataTableHandler.Remove(res.resources_id);
                     }
                 }
                 catch (Exception err)

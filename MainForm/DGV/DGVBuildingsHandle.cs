@@ -22,16 +22,16 @@ namespace MainForm.DGV
         //    FlatStyle = FlatStyle.Flat
         //};
         private DataGridViewComboBoxColumnOutpost _cbcOutpost;
-        private DataGridViewComboBoxColumnBuildings _cbcBuildings;
+        private BuildingsDataTableHandler _buildingsDataTableHandler;
 
         private ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         private ToolStripMenuItem убратьЗначениеToolStripMenuItem = new ToolStripMenuItem();
         DataGridViewCellEventArgs mouseLocation;
 
-        public DGVBuildingsHandle(DataGridView dgv, ref DataGridViewComboBoxColumnOutpost cbcOutpost, ref DataGridViewComboBoxColumnBuildings cbcBuildings) : base(dgv)
+        public DGVBuildingsHandle(DataGridView dgv, DataGridViewComboBoxColumnOutpost cbcOutpost, ref BuildingsDataTableHandler buildingsDataTableHandler) : base(dgv)
         {
             this._cbcOutpost = cbcOutpost;
-            this._cbcBuildings = cbcBuildings;
+            this._buildingsDataTableHandler = buildingsDataTableHandler;
 
             _dgv.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(CellMouseEnter);
             contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { убратьЗначениеToolStripMenuItem });
@@ -49,7 +49,7 @@ namespace MainForm.DGV
             _dgv.CancelEdit();
             _dgv.Rows.Clear();
             _dgv.Columns.Clear();
-            _cbcBuildings.InitializeDataTableBuildings();
+            _buildingsDataTableHandler.InitializeDataTableBuildings();
 
             _dgv.Columns.Add(MyHelper.strBuildingName, "Название здания");
             //_dgv.Columns.Add(MyHelper.strOutpostId, "Форпост");
@@ -72,7 +72,7 @@ namespace MainForm.DGV
                     foreach (var build in ctx.buildings)
                     {
                         _dgv.Rows.Add(build.building_name, build.outpost_id, build.building_id, build);
-                        _cbcBuildings.Add(build.building_id, build.building_name, build.outpost_id);
+                        _buildingsDataTableHandler.Add(build.building_id, build.building_name, build.outpost_id);
                     }
                 }
                 _dgv.Columns[MyHelper.strOutpostId].ContextMenuStrip = contextMenuStrip;

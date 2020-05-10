@@ -33,8 +33,8 @@ namespace MainForm.DGV
         private DataGridViewComboBoxColumnOutpost _cbcOutposts;
 
         public DGVStorageResourcesHandle(DataGridView dgv,
-                ref DataGridViewComboBoxColumnOutpost cbcOutposts,
-                ref DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+                DataGridViewComboBoxColumnOutpost cbcOutposts,
+                DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
         {
             this._cbcResources = cbcResources;
             this._cbcOutposts = cbcOutposts;

@@ -43,6 +43,7 @@ namespace MainForm
             _dgv.Columns[MyHelper.strSource].ValueType = typeof(outpost);
 
             _dgv.Columns[MyHelper.strOutpostId].Visible = false;
+            _dgv.Columns[MyHelper.strSource].Visible = false;
 
             try
             {

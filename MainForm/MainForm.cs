@@ -48,8 +48,8 @@ namespace MainForm
         //public static event ResourceDeletedHandler ResourceDeleted;
 
         OutpostDataTableHandler outpostDataTableHandler = new OutpostDataTableHandler();
-        DataGridViewComboBoxColumnBuildings cbcBuildings = new DataGridViewComboBoxColumnBuildings();
-        DataGridViewComboBoxColumnResources cbcResources = new DataGridViewComboBoxColumnResources();
+        BuildingsDataTableHandler buildingsDataTableHandler = new BuildingsDataTableHandler();
+        ResourcesDataTableHandler resourcesDataTableHandler = new ResourcesDataTableHandler();
 
         private int currentTab;
         private string _userRole = null;
@@ -85,12 +85,12 @@ namespace MainForm
             currentTab = tabControl.SelectedIndex;
 
             _dGVOutpostHandle = new DGVOutpostHandle(dgvO, ref outpostDataTableHandler);
-            _dGVResourcesHandle = new DGVResourcesHandle(dgvR, ref cbcResources);
-            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, ref cbcOutposts, ref cbcBuildings);
-            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR, ref cbcBuildings, ref cbcResources);
-            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC, ref cbcBuildings, ref cbcResources);
-            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP, ref cbcBuildings, ref cbcResources);
-            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR, ref cbcOutposts, ref cbcResources);
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvR, ref resourcesDataTableHandler);
+            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, outpostDataTableHandler.CreateComboBoxColumnOutposts(), ref buildingsDataTableHandler);
+            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
+            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
+            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR, outpostDataTableHandler.CreateComboBoxColumnOutposts(), resourcesDataTableHandler.CreateComboBoxColumnResources());
             dgvO.Tag = _dGVOutpostHandle;
             dgvR.Tag = _dGVResourcesHandle;
             dgvB.Tag = _dGVBuildingsHandle;
