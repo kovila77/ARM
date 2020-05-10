@@ -28,7 +28,7 @@ namespace MainForm.DGV
         private ToolStripMenuItem убратьЗначениеToolStripMenuItem = new ToolStripMenuItem();
         DataGridViewCellEventArgs mouseLocation;
 
-        public DGVBuildingsHandle(DataGridView dgv, DataGridViewComboBoxColumnOutpost cbcOutpost, DataGridViewComboBoxColumnBuildings cbcBuildings) : base(dgv)
+        public DGVBuildingsHandle(DataGridView dgv, ref DataGridViewComboBoxColumnOutpost cbcOutpost, ref DataGridViewComboBoxColumnBuildings cbcBuildings) : base(dgv)
         {
             this._cbcOutpost = cbcOutpost;
             this._cbcBuildings = cbcBuildings;

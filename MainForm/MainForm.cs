@@ -46,7 +46,6 @@ namespace MainForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            InitializeDGV();
             if (_userRole.ToLower() != "admin")
             {
                 tmiTools.Enabled = false;
@@ -63,46 +62,38 @@ namespace MainForm
                 this.Text += " Гость";
             }
             currentTab = tabControl.SelectedIndex;
+
+            _dGVOutpostHandle = new DGVOutpostHandle(dgvO, ref cbcOutposts);
+            _dGVResourcesHandle = new DGVResourcesHandle(dgvR, ref cbcResources);
+            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, ref cbcOutposts, ref cbcBuildings);
+            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR, ref cbcBuildings, ref cbcResources);
+            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC, ref cbcBuildings, ref cbcResources);
+            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP, ref cbcBuildings, ref cbcResources);
+            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR, ref cbcOutposts, ref cbcResources);
+            dgvO.Tag = _dGVOutpostHandle;
+            dgvR.Tag = _dGVResourcesHandle;
+            dgvB.Tag = _dGVBuildingsHandle;
+            dgvBR.Tag = _dGVBuildingsResourcesHandle;
+            dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
+            dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
+            dgvSR.Tag = _dGVStorageResourcesHandle;
+            _dGVOutpostHandle.Initialize();
+            _dGVResourcesHandle.Initialize();
+            _dGVBuildingsHandle.Initialize();
+            _dGVBuildingsResourcesHandle.Initialize();
+            _dGVBuildingsResourcesConsumeHandle.Initialize();
+            _dGVBuildingsResourcesProduceHandle.Initialize();
+            _dGVStorageResourcesHandle.Initialize();
         }
 
         private void InitializeDGV()
         {
-            _dGVOutpostHandle?.Dispose();
-            _dGVResourcesHandle?.Dispose();
-            _dGVBuildingsHandle?.Dispose();
-            _dGVBuildingsResourcesHandle?.Dispose();
-            _dGVBuildingsResourcesConsumeHandle?.Dispose();
-            _dGVBuildingsResourcesProduceHandle?.Dispose();
-            _dGVStorageResourcesHandle?.Dispose();
-
-            _dGVOutpostHandle = new DGVOutpostHandle(dgvO);
-            dgvO.Tag = _dGVOutpostHandle;
-
-            _dGVResourcesHandle = new DGVResourcesHandle(dgvR);
-            dgvR.Tag = _dGVResourcesHandle;
-
-            _dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
-            dgvB.Tag = _dGVBuildingsHandle;
-
-            _dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
-                                                                    _dGVBuildingsHandle.dataTable,
-                                                                    _dGVResourcesHandle.dataTable);
-            dgvBR.Tag = _dGVBuildingsResourcesHandle;
-
-            _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
-                                                                    _dGVBuildingsHandle.dataTable,
-                                                                    _dGVResourcesHandle.dataTable);
-            dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
-
-            _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
-                                                                    _dGVBuildingsHandle.dataTable,
-                                                                    _dGVResourcesHandle.dataTable);
-            dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
-
-            _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
-                                                                    _dGVOutpostHandle.dataTable,
-                                                                    _dGVResourcesHandle.dataTable);
-            dgvSR.Tag = _dGVStorageResourcesHandle;
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                DataGridView dgv = tabPage.Controls[0] as DataGridView;
+                if (dgv == null) continue;
+                ((DGVHandle)dgv.Tag).Initialize();
+            }
         }
 
         public void ReloadO()
@@ -166,14 +157,16 @@ namespace MainForm
         }
         public void Reload(object sender, EventArgs e)
         {
-            var dgv = tabControl.SelectedTab.Controls[0];
-            if (dgv == dgvB) ReloadB();
-            if (dgv == dgvR) ReloadR();
-            if (dgv == dgvBRC) ReloadBRC();
-            if (dgv == dgvBRP) ReloadBRP();
-            if (dgv == dgvO) ReloadO();
-            if (dgv == dgvBR) ReloadBR();
-            if (dgv == dgvSR) ReloadSR();
+            DataGridView dgv = tabControl.SelectedTab.Controls[0] as DataGridView;
+            if (dgv == null) return;
+            ((DGVHandle)dgv.Tag).Initialize();
+            //if (dgv == dgvB) ReloadB();
+            //if (dgv == dgvR) ReloadR();
+            //if (dgv == dgvBRC) ReloadBRC();
+            //if (dgv == dgvBRP) ReloadBRP();
+            //if (dgv == dgvO) ReloadO();
+            //if (dgv == dgvBR) ReloadBR();
+            //if (dgv == dgvSR) ReloadSR();
         }
 
         private void FullReload(object sender, EventArgs e)

@@ -39,6 +39,12 @@ namespace MainForm
 
         public static readonly string strConsumeSpeed = "consume_speed";
 
+        public static readonly string strProduceSpeed = "produce_speed";
+
+        public static readonly string strCount = "count";
+
+        public static readonly string strAccumulationSpeed = "accumulation_speed";
+
         //public static readonly string strUniqueOutpostConstraintName = "unique_outpost";
 
         public static string RmvExtrSpaces(this String str)

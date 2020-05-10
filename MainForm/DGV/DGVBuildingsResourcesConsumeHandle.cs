@@ -32,7 +32,7 @@ namespace MainForm.DGV
         private DataGridViewComboBoxColumnBuildings _cbcBuilsings;
         private DataGridViewComboBoxColumnResources _cbcResources;
 
-        public DGVBuildingsResourcesConsumeHandle(DataGridView dgv, DataGridViewComboBoxColumnBuildings cbcBuilsings, DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+        public DGVBuildingsResourcesConsumeHandle(DataGridView dgv, ref DataGridViewComboBoxColumnBuildings cbcBuilsings, ref DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
         {
             this._cbcBuilsings = cbcBuilsings;
             this._cbcResources = cbcResources;

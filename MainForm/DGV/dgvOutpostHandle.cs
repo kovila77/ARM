@@ -14,7 +14,8 @@ namespace MainForm
     {
         private DataGridViewComboBoxColumnOutpost _cbcOutposts;
 
-        public DGVOutpostHandle(DataGridView dgv, ref DataGridViewComboBoxColumnOutpost cbcOutposts) : base(dgv)
+        public DGVOutpostHandle(DataGridView dgv, 
+            ref DataGridViewComboBoxColumnOutpost cbcOutposts) : base(dgv)
         {
             this._cbcOutposts = cbcOutposts;
         }

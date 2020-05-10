@@ -33,8 +33,8 @@ namespace MainForm.DGV
         private DataGridViewComboBoxColumnOutpost _cbcOutposts;
 
         public DGVStorageResourcesHandle(DataGridView dgv,
-                DataGridViewComboBoxColumnOutpost cbcOutposts,
-                DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+                ref DataGridViewComboBoxColumnOutpost cbcOutposts,
+                ref DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
         {
             this._cbcResources = cbcResources;
             this._cbcOutposts = cbcOutposts;
@@ -46,23 +46,26 @@ namespace MainForm.DGV
             _dgv.Rows.Clear();
             _dgv.Columns.Clear();
 
+            _dgv.Columns.Add(_cbcOutposts);
+            _dgv.Columns.Add(_cbcResources);
+            _dgv.Columns.Add(MyHelper.strCount, "Количество");
+            _dgv.Columns.Add(MyHelper.strAccumulationSpeed, "Скорость накопления");
+            _dgv.Columns.Add(MyHelper.strSource, "src");
+
+            _dgv.Columns[MyHelper.strOutpostId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strCount].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strAccumulationSpeed].ValueType = typeof(int);
+            _dgv.Columns[MyHelper.strSource].ValueType = typeof(storage_resources);
+
+            _dgv.Columns[MyHelper.strSource].Visible = false;
+
             using (var ctx = new OutpostDataContext())
             {
-                ctx.storage_resources.Load();
-
-                cbcResorces.DataSource = dtResources;
-                cbcOutpost.DataSource = dtOutpost;
-
-                dataTable.Columns.Add("outpost_id", typeof(int));
-                dataTable.Columns.Add("resources_id", typeof(int));
-                dataTable.Columns.Add("count", typeof(int));
-                dataTable.Columns.Add("accumulation_speed", typeof(int));
-                dataTable.Columns.Add("Source", typeof(storage_resources));
-                ctx.storage_resources.ToList().ForEach(x => dataTable.Rows.Add(x.outpost_id, x.resources_id, x.count, x.accumulation_speed, x));
-
-                _dgv.Columns.Add(cbcResorces);
-                _dgv.Columns.Add(cbcOutpost);
-                _dgv.DataSource = dataTable;
+                foreach (var sr in ctx.storage_resources)
+                {
+                    _dgv.Rows.Add(sr.outpost_id, sr.resources_id, sr.count, sr.accumulation_speed, sr);
+                }
             }
         }
 
@@ -78,8 +81,7 @@ namespace MainForm.DGV
 
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
-            return base.ChekRowAndSayReady(row)
-                && row.Cells["outpost_id"].Value != DBNull.Value
+            return row.Cells["outpost_id"].Value != DBNull.Value
                 && row.Cells["resources_id"].Value != DBNull.Value
                 && row.Cells["count"].Value != DBNull.Value
                 && row.Cells["accumulation_speed"].Value != DBNull.Value
