@@ -6,13 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MainForm
+namespace MainForm.DGVComboBoxColumn
 {
     class DataGridViewComboBoxColumnOutpost : DataGridViewComboBoxColumn
     {
-        private DataTable _dtOutposts = null;
-
-        public DataGridViewComboBoxColumnOutpost() : base()
+        public DataGridViewComboBoxColumnOutpost(OutpostDataTableHandler dataTableHandler) : base()
         {
             this.Name = MyHelper.strOutpostId;
             this.HeaderText = "Форпост";
@@ -20,53 +18,13 @@ namespace MainForm
             this.ValueMember = MyHelper.strOutpostId;
             this.DataPropertyName = MyHelper.strOutpostId;
             this.FlatStyle = FlatStyle.Flat;
-            InitializeDataTableOutpost();
-            MainForm.OutpostAdded += Add;
-            MainForm.OutpostChanged += Change;
-            MainForm.OutpostDeleted += Remove;
+            this.DataSource = dataTableHandler.DtOutposts;
+            dataTableHandler.OutpostDataTableChanged += OnDataSourceChanged;
         }
 
-        public void InitializeDataTableOutpost()
+        private void OnDataSourceChanged(DataTable dt)
         {
-            _dtOutposts = new DataTable();
-            _dtOutposts.Columns.Add(MyHelper.strOutpostId, typeof(int));
-            _dtOutposts.Columns.Add(MyHelper.strOutpostName, typeof(string));
-            this.DataSource = _dtOutposts;
+            this.DataSource = dt;
         }
-
-        public void Add(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z)
-        {
-            //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
-            _dtOutposts.Rows.Add(outpost_id, outpost_name + " — "
-                                             + outpost_coordinate_x.ToString() + ";"
-                                             + outpost_coordinate_y.ToString() + ";"
-                                             + outpost_coordinate_z.ToString());
-        }
-
-        public void Change(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z)
-        {
-            DataRow forChange = _dtOutposts.AsEnumerable().SingleOrDefault(row => row.Field<int>("outpost_id") == outpost_id);
-            if (forChange != null)
-            {
-                forChange[MyHelper.strOutpostName] = outpost_name + " — "
-                                            + outpost_coordinate_x.ToString() + ";"
-                                            + outpost_coordinate_y.ToString() + ";"
-                                            + outpost_coordinate_z.ToString();
-            }
-        }
-
-        public void Remove(int outpost_id)
-        {
-            DataRow forDel = _dtOutposts.AsEnumerable().SingleOrDefault(row => row.Field<int>("outpost_id") == outpost_id);
-            if (forDel != null)
-            {
-                _dtOutposts.Rows.Remove(forDel);
-            }
-        }
-
-        //public void Clear()
-        //{
-        //    _dtOutposts.Clear();
-        //}
     }
 }

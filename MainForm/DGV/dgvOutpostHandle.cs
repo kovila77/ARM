@@ -12,12 +12,12 @@ namespace MainForm
 {
     class DGVOutpostHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumnOutpost _cbcOutposts;
+        private OutpostDataTableHandler _outpostDataTableHandler;
 
         public DGVOutpostHandle(DataGridView dgv, 
-            ref DataGridViewComboBoxColumnOutpost cbcOutposts) : base(dgv)
+            ref OutpostDataTableHandler outpostDataTableHandler) : base(dgv)
         {
-            this._cbcOutposts = cbcOutposts;
+            this._outpostDataTableHandler = outpostDataTableHandler;
         }
 
         public override void Initialize()
@@ -25,7 +25,7 @@ namespace MainForm
             _dgv.CancelEdit();
             _dgv.Rows.Clear();
             _dgv.Columns.Clear();
-            _cbcOutposts.InitializeDataTableOutpost();
+            _outpostDataTableHandler.InitializeDataTableOutpost();
 
             _dgv.Columns.Add(MyHelper.strOutpostName, "Название");
             _dgv.Columns.Add(MyHelper.strOutpostEconomicValue, "Экономическая ценность");
@@ -57,7 +57,7 @@ namespace MainForm
                                       otpst.outpost_coordinate_z,
                                       otpst.outpost_id,
                                       otpst);
-                        _cbcOutposts.Add(otpst.outpost_id,
+                        _outpostDataTableHandler.Add(otpst.outpost_id,
                                          otpst.outpost_name,
                                          otpst.outpost_coordinate_x,
                                          otpst.outpost_coordinate_y,

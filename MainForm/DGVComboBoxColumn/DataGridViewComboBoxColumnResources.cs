@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainForm.DGVComboBoxColumn;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MainForm
 
         private DataTable _dtResources = null;
 
-        public DataGridViewComboBoxColumnResources() : base()
+        public DataGridViewComboBoxColumnResources(ResourcesDataTableHandler resourcesDataTableHandler) : base()
         {
             this.Name = MyHelper.strResourceId;
             this.HeaderText = "Ресурс";
@@ -21,42 +22,13 @@ namespace MainForm
             this.ValueMember = MyHelper.strResourceId;
             this.DataPropertyName = MyHelper.strResourceId;
             this.FlatStyle = FlatStyle.Flat;
-            InitializeDataTableResources();
-            MainForm.ResourceAdded += Add;
-            MainForm.ResourceChanged += Change;
-            MainForm.ResourceDeleted += Remove;
+            this.DataSource = resourcesDataTableHandler.DtResources;
+            resourcesDataTableHandler.ResourcesDataTableChanged += OnDataSourceChanged;
         }
 
-        public void InitializeDataTableResources()
+        private void OnDataSourceChanged(DataTable dt)
         {
-            _dtResources = new DataTable();
-            _dtResources.Columns.Add(MyHelper.strResourceId, typeof(int));
-            _dtResources.Columns.Add(MyHelper.strResourceName, typeof(string));
-            this.DataSource = _dtResources;
-        }
-
-        public void Add(int resource_id, string resource_name)
-        {
-            //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
-            _dtResources.Rows.Add(resource_id, resource_name);
-        }
-
-        public void Change(int resource_id, string resource_name)
-        {
-            DataRow forChange = _dtResources.AsEnumerable().SingleOrDefault(row => row.Field<int>(MyHelper.strResourceId) == resource_id);
-            if (forChange != null)
-            {
-                forChange[MyHelper.strResourceName] = resource_name;
-            }
-        }
-
-        public void Remove(int resource_id)
-        {
-            DataRow forDel = _dtResources.AsEnumerable().SingleOrDefault(row => row.Field<int>(MyHelper.strResourceId) == resource_id);
-            if (forDel != null)
-            {
-                _dtResources.Rows.Remove(forDel);
-            }
+            this.DataSource = dt;
         }
     }
 }
