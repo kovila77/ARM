@@ -123,7 +123,7 @@ namespace MainForm.DGV
                     int new_resource_id = (int)row.Cells[MyHelper.strResourceId].Value;
                     int new_produce_speed = (int)row.Cells[MyHelper.strProduceSpeed].Value;
 
-                    if (ctx.buildings_resources_consume.AsEnumerable().FirstOrDefault(brp =>
+                    if (ctx.buildings_resources_produce.AsEnumerable().FirstOrDefault(brp =>
                                 brp.building_id == new_building_id
                                 && brp.resources_id == new_resource_id) != null)
                     {

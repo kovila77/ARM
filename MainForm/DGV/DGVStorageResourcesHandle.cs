@@ -88,7 +88,7 @@ namespace MainForm.DGV
                                                    row.Cells[MyHelper.strOutpostId],
                                                    row.Cells[MyHelper.strResourceId],
                                                    row.Cells[MyHelper.strCount],
-                                                   row.Cells[MyHelper.strCount],
+                                                   row.Cells[MyHelper.strAccumulationSpeed],
                                                  };
             foreach (var cellWithPotentialError in cellsWithPotentialErrors)
             {
@@ -111,29 +111,6 @@ namespace MainForm.DGV
 
         protected override void Insert(DataGridViewRow row)
         {
-            using (var ctx = new OutpostDataContext())
-            {
-                storage_resources sr = new storage_resources
-                {
-                    outpost_id = (int)row.Cells["outpost_id"].Value,
-                    resources_id = (int)row.Cells["resources_id"].Value,
-                    count = (int)row.Cells["count"].Value,
-                    accumulation_speed = (int)row.Cells["accumulation_speed"].Value,
-                };
-                if (ctx.storage_resources.Find(sr.outpost_id, sr.resources_id) != null)
-                {
-                    MessageBox.Show($"Для форпоста {row.Cells["outpost_id"].FormattedValue} " +
-                        $"ресурс {row.Cells["resources_id"].FormattedValue} " +
-                        $"уже существует! Измените или удалите текущую строку!");
-                    row.ErrorText = "Ошибка!";
-                    return;
-                }
-                row.ErrorText = "";
-                ctx.storage_resources.Add(sr);
-                ctx.SaveChanges();
-
-                row.Cells["Source"].Value = sr;
-            }
             try
             {
                 using (var ctx = new OutpostDataContext())
