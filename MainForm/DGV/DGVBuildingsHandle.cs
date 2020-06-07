@@ -11,16 +11,6 @@ namespace MainForm.DGV
 {
     class DGVBuildingsHandle : DGVHandle
     {
-
-        //public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
-        //{
-        //    Name = "outpost_id",
-        //    HeaderText = "Форпост",
-        //    DisplayMember = "outpost_name",
-        //    ValueMember = "outpost_id",
-        //    DataPropertyName = "outpost_id",
-        //    FlatStyle = FlatStyle.Flat
-        //};
         private DataGridViewComboBoxColumnOutpost _cbcOutpost;
         private BuildingsDataTableHandler _buildingsDataTableHandler;
 

@@ -73,14 +73,14 @@ namespace MainForm
                 tmiTools.Visible = false;
             }
             else
-                this.Text += " Администратор";
+                this.Text += " - Администратор";
             if (_userRole.ToLower() == "guest")
             {
                 foreach (TabPage tp in tabControl.TabPages)
                 {
                     ((DataGridView)tp.Controls[0]).ReadOnly = true;
                 }
-                this.Text += " Гость";
+                this.Text += " - Гость";
             }
             currentTab = tabControl.SelectedIndex;
 
@@ -120,81 +120,15 @@ namespace MainForm
             {
                 DataGridView dgv = tabPage.Controls[0] as DataGridView;
                 if (dgv == null) continue;
-                ((DGVHandle)dgv.Tag).Initialize();
+                (dgv.Tag as DGVHandle)?.Initialize();
             }
         }
 
-        public void ReloadO()
-        {
-            //_dGVOutpostHandle.Dispose();
-            //_dGVOutpostHandle = new DGVOutpostHandle(dgvO);
-            //_dGVBuildingsHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
-            //_dGVStorageResourcesHandle.cbcOutpost.DataSource = _dGVOutpostHandle.dataTable;
-            //dgvO.Tag = _dGVOutpostHandle;
-        }
-        public void ReloadR()
-        {
-            //_dGVResourcesHandle.Dispose();
-            //_dGVResourcesHandle = new DGVResourcesHandle(dgvR);
-            //_dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
-            //_dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
-            //_dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
-            //_dGVStorageResourcesHandle.cbcResorces.DataSource = _dGVResourcesHandle.dataTable;
-            //dgvR.Tag = _dGVResourcesHandle;
-        }
-        public void ReloadB()
-        {
-            //_dGVBuildingsHandle.Dispose();
-            //_dGVBuildingsHandle = new DGVBuildingsHandle(dgvB, _dGVOutpostHandle.dataTable);
-            //_dGVBuildingsResourcesHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
-            //_dGVBuildingsResourcesConsumeHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
-            //_dGVBuildingsResourcesProduceHandle.cbcResorces.DataSource = _dGVBuildingsHandle.dataTable;
-            //dgvB.Tag = _dGVBuildingsHandle;
-        }
-        public void ReloadBR()
-        {
-            //_dGVBuildingsResourcesHandle.Dispose();
-            //_dGVBuildingsResourcesHandle = new DGVBuildingsResourcesHandle(dgvBR,
-            //                                                        _dGVBuildingsHandle.dataTable,
-            //                                                        _dGVResourcesHandle.dataTable);
-            //dgvBR.Tag = _dGVBuildingsResourcesHandle;
-        }
-        public void ReloadBRC()
-        {
-            //_dGVBuildingsResourcesConsumeHandle.Dispose();
-            //_dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC,
-            //                                                        _dGVBuildingsHandle.dataTable,
-            //                                                        _dGVResourcesHandle.dataTable);
-            //dgvBRC.Tag = _dGVBuildingsResourcesConsumeHandle;
-        }
-        public void ReloadBRP()
-        {
-            //_dGVBuildingsResourcesProduceHandle.Dispose();
-            //_dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP,
-            //                                                        _dGVBuildingsHandle.dataTable,
-            //                                                        _dGVResourcesHandle.dataTable);
-            //dgvBRP.Tag = _dGVBuildingsResourcesProduceHandle;
-        }
-        public void ReloadSR()
-        {
-            //_dGVStorageResourcesHandle.Dispose();
-            //_dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR,
-            //                                                        _dGVOutpostHandle.dataTable,
-            //                                                        _dGVResourcesHandle.dataTable);
-            //dgvSR.Tag = _dGVStorageResourcesHandle;
-        }
         public void Reload(object sender, EventArgs e)
         {
             DataGridView dgv = tabControl.SelectedTab.Controls[0] as DataGridView;
             if (dgv == null) return;
-            ((DGVHandle)dgv.Tag).Initialize();
-            //if (dgv == dgvB) ReloadB();
-            //if (dgv == dgvR) ReloadR();
-            //if (dgv == dgvBRC) ReloadBRC();
-            //if (dgv == dgvBRP) ReloadBRP();
-            //if (dgv == dgvO) ReloadO();
-            //if (dgv == dgvBR) ReloadBR();
-            //if (dgv == dgvSR) ReloadSR();
+            (dgv.Tag as DGVHandle).Initialize();
         }
 
         private void FullReload(object sender, EventArgs e)
@@ -218,37 +152,12 @@ namespace MainForm
 
         private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
         {
-            //DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
-            //bool haveUncommitedChanges = false;
-            //foreach (DataGridViewRow row in dgv.Rows) if (row.ErrorText != "") haveUncommitedChanges = true;
-            //if (haveUncommitedChanges)
-            //    if (MessageBox.Show("Имееются несохранённые изменения!\nПри переключении на другую вкладку изменения будут сброшены.", "Предупреждение", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            //        ((DGVHandle)dgv.Tag).ClearChanges();
-            //    else
-            //    {
-            //        e.Cancel = true;
-            //        return;
-            //    }
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvB) ReloadB();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvR) ReloadR();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBRC) ReloadBRC();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBRP) ReloadBRP();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvO) ReloadO();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvSR) ReloadSR();
-            //if (tabControl.TabPages[tabControl.SelectedIndex].Controls[0] == dgvBR) ReloadBR();
-            
             DataGridView dgv = tabControl.TabPages[e.TabPageIndex].Controls[0] as DataGridView;
             if (dgv != null && dgv == dgvBR)
             {
-                ((DGVHandle)dgv.Tag).Initialize();
+                (dgv.Tag as DGVHandle)?.Initialize();
             }
             currentTab = tabControl.SelectedIndex;
-        }
-
-        private void сброситьРедактированиеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //DataGridView dgv = (DataGridView)tabControl.TabPages[currentTab].Controls[0];
-            //((DGVHandle)dgv.Tag).ClearChanges();
         }
 
         private void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)

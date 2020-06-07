@@ -142,7 +142,6 @@
             this.tbBR.Controls.Add(this.dgvBR);
             this.tbBR.Location = new System.Drawing.Point(4, 22);
             this.tbBR.Name = "tbBR";
-            this.tbBR.Padding = new System.Windows.Forms.Padding(3);
             this.tbBR.Size = new System.Drawing.Size(792, 400);
             this.tbBR.TabIndex = 0;
             this.tbBR.Text = "Состояние ресурсов";
@@ -157,10 +156,10 @@
             this.dgvBR.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SunkenHorizontal;
             this.dgvBR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBR.Location = new System.Drawing.Point(3, 3);
+            this.dgvBR.Location = new System.Drawing.Point(0, 0);
             this.dgvBR.Name = "dgvBR";
             this.dgvBR.ReadOnly = true;
-            this.dgvBR.Size = new System.Drawing.Size(786, 394);
+            this.dgvBR.Size = new System.Drawing.Size(792, 400);
             this.dgvBR.TabIndex = 0;
             // 
             // tpR
@@ -168,7 +167,6 @@
             this.tpR.Controls.Add(this.dgvR);
             this.tpR.Location = new System.Drawing.Point(4, 22);
             this.tpR.Name = "tpR";
-            this.tpR.Padding = new System.Windows.Forms.Padding(3);
             this.tpR.Size = new System.Drawing.Size(792, 400);
             this.tpR.TabIndex = 1;
             this.tpR.Text = "Ресурсы";
@@ -180,9 +178,9 @@
             this.dgvR.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvR.Location = new System.Drawing.Point(3, 3);
+            this.dgvR.Location = new System.Drawing.Point(0, 0);
             this.dgvR.Name = "dgvR";
-            this.dgvR.Size = new System.Drawing.Size(786, 394);
+            this.dgvR.Size = new System.Drawing.Size(792, 400);
             this.dgvR.TabIndex = 1;
             // 
             // tpB
