@@ -35,6 +35,8 @@
             this.перезагрузитьВсеТаблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tmiTools = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.запрос1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.запрос2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tbBR = new System.Windows.Forms.TabPage();
             this.dgvBR = new System.Windows.Forms.DataGridView();
@@ -50,6 +52,10 @@
             this.dgvO = new System.Windows.Forms.DataGridView();
             this.tpSR = new System.Windows.Forms.TabPage();
             this.dgvSR = new System.Windows.Forms.DataGridView();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dgvPoorOutposts = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dgvLittleExtractResources = new System.Windows.Forms.DataGridView();
             this.epMain = new System.Windows.Forms.ErrorProvider(this.components);
             this.убратьЗначениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
@@ -68,6 +74,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).BeginInit();
             this.tpSR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSR)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPoorOutposts)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLittleExtractResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.epMain)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +85,9 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правкаToolStripMenuItem,
-            this.tmiTools});
+            this.tmiTools,
+            this.запрос1ToolStripMenuItem,
+            this.запрос2ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
@@ -120,6 +132,20 @@
             this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
             this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
             // 
+            // запрос1ToolStripMenuItem
+            // 
+            this.запрос1ToolStripMenuItem.Name = "запрос1ToolStripMenuItem";
+            this.запрос1ToolStripMenuItem.Size = new System.Drawing.Size(141, 20);
+            this.запрос1ToolStripMenuItem.Text = "Дифицитные ресурсы";
+            this.запрос1ToolStripMenuItem.Click += new System.EventHandler(this.запрос1ToolStripMenuItem_Click);
+            // 
+            // запрос2ToolStripMenuItem
+            // 
+            this.запрос2ToolStripMenuItem.Name = "запрос2ToolStripMenuItem";
+            this.запрос2ToolStripMenuItem.Size = new System.Drawing.Size(172, 20);
+            this.запрос2ToolStripMenuItem.Text = "Список богатых форпостов";
+            this.запрос2ToolStripMenuItem.Click += new System.EventHandler(this.запрос2ToolStripMenuItem_Click);
+            // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tbBR);
@@ -129,6 +155,8 @@
             this.tabControl.Controls.Add(this.tpBRP);
             this.tabControl.Controls.Add(this.tpO);
             this.tabControl.Controls.Add(this.tpSR);
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 24);
             this.tabControl.Name = "tabControl";
@@ -288,6 +316,48 @@
             this.dgvSR.Size = new System.Drawing.Size(792, 400);
             this.dgvSR.TabIndex = 1;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.dgvPoorOutposts);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(792, 400);
+            this.tabPage1.TabIndex = 7;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // dgvPoorOutposts
+            // 
+            this.dgvPoorOutposts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvPoorOutposts.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvPoorOutposts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPoorOutposts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvPoorOutposts.Location = new System.Drawing.Point(0, 0);
+            this.dgvPoorOutposts.Name = "dgvPoorOutposts";
+            this.dgvPoorOutposts.Size = new System.Drawing.Size(792, 400);
+            this.dgvPoorOutposts.TabIndex = 2;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.dgvLittleExtractResources);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(792, 400);
+            this.tabPage2.TabIndex = 8;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgvLittleExtractResources
+            // 
+            this.dgvLittleExtractResources.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvLittleExtractResources.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvLittleExtractResources.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLittleExtractResources.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvLittleExtractResources.Location = new System.Drawing.Point(0, 0);
+            this.dgvLittleExtractResources.Name = "dgvLittleExtractResources";
+            this.dgvLittleExtractResources.Size = new System.Drawing.Size(792, 400);
+            this.dgvLittleExtractResources.TabIndex = 2;
+            // 
             // epMain
             // 
             this.epMain.ContainerControl = this;
@@ -325,6 +395,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvO)).EndInit();
             this.tpSR.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSR)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPoorOutposts)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLittleExtractResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.epMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -356,6 +430,12 @@
         private System.Windows.Forms.ToolStripMenuItem управлениеПользователямиToolStripMenuItem;
         private System.Windows.Forms.ErrorProvider epMain;
         private System.Windows.Forms.ToolStripMenuItem убратьЗначениеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem запрос1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem запрос2ToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.DataGridView dgvPoorOutposts;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DataGridView dgvLittleExtractResources;
     }
 }
 

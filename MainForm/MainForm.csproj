@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparers.cs" />
     <Compile Include="DGVComboBoxColumn\BuildingsDataTableHandler.cs" />
     <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnBuildings.cs" />
     <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnOutpost.cs" />

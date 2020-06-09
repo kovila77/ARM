@@ -128,7 +128,7 @@ namespace MainForm
         {
             DataGridView dgv = tabControl.SelectedTab.Controls[0] as DataGridView;
             if (dgv == null) return;
-            (dgv.Tag as DGVHandle).Initialize();
+            (dgv.Tag as DGVHandle)?.Initialize();
         }
 
         private void FullReload(object sender, EventArgs e)
@@ -189,66 +189,83 @@ namespace MainForm
             }
         }
 
-        private class RowComparerFormattedValue : System.Collections.IComparer
+        private void запрос1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            private static int sortOrderModifier = 1;
-            private int columnIndex;
+            //_dgv.CancelEdit();
+            //_dgv.Rows.Clear();
+            //_dgv.Columns.Clear();
 
-            public RowComparerFormattedValue(SortOrder sortOrder, int columnIndex)
-            {
-                this.columnIndex = columnIndex;
-                if (sortOrder == SortOrder.Descending)
-                {
-                    sortOrderModifier = -1;
-                }
-                else if (sortOrder == SortOrder.Ascending)
-                {
-                    sortOrderModifier = 1;
-                }
-            }
+            //_dgv.Columns.Add(_cbcBuilsings);
+            //_dgv.Columns.Add(_cbcResources);
+            //_dgv.Columns.Add(MyHelper.strConsumeSpeed, "Скорость потребления");
+            //_dgv.Columns.Add(MyHelper.strProduceSpeed, "Скорость производства");
 
-            public int Compare(object x, object y)
-            {
-                DataGridViewRow row1 = (DataGridViewRow)x;
-                DataGridViewRow row2 = (DataGridViewRow)y;
+            //foreach (DataGridViewColumn column in _dgv.Columns)
+            //    column.SortMode = DataGridViewColumnSortMode.Programmatic;
 
-                int CompareResult = System.String.Compare(
-                    row1.Cells[columnIndex].FormattedValue.ToString(),
-                    row2.Cells[columnIndex].FormattedValue.ToString());
+            //_dgv.Columns[MyHelper.strBuildingId].ValueType = typeof(int);
+            //_dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);
+            //_dgv.Columns[MyHelper.strConsumeSpeed].ValueType = typeof(int);
+            //_dgv.Columns[MyHelper.strProduceSpeed].ValueType = typeof(int);
 
-                return CompareResult * sortOrderModifier;
-            }
+            //using (var ctx = new OutpostDataContext())
+            //{
+            //    var query = from building in ctx.buildings
+            //                from resource in ctx.resources
+
+            //                join brc in ctx.buildings_resources_consume
+            //                    on new { building.building_id, resource.resources_id } equals new { brc.building_id, brc.resources_id } into leftJoin1
+            //                from brc1 in leftJoin1.DefaultIfEmpty()
+
+            //                join brp in ctx.buildings_resources_produce
+            //                    on new { building.building_id, resource.resources_id } equals new { brp.building_id, brp.resources_id } into leftJoin2
+            //                from brp1 in leftJoin2.DefaultIfEmpty()
+
+            //                select new
+            //                {
+            //                    building_id = building.building_id,
+            //                    resources_id = resource.resources_id,
+            //                    consume_speed = (int?)brc1.consume_speed,
+            //                    produce_speed = (int?)brp1.produce_speed
+            //                };
+            //    foreach (var item in query)
+            //    {
+            //        _dgv.Rows.Add(item.building_id, item.resources_id, item.consume_speed.HasValue ? item.consume_speed : 0, item.produce_speed.HasValue ? item.produce_speed : 0);
+            //    }
+            //}
+
+
+            //return;
+            //var connectionString = ConfigurationManager.ConnectionStrings["OutpostDataContext"].ConnectionString;
+            //using (var c = new NpgsqlConnection(connectionString))
+            //{
+            //    c.Open();
+            //    var comm = new NpgsqlCommand()
+            //    {
+            //        Connection = c,
+            //        CommandText = @"
+            //    SELECT  buildings.building_id,
+            //            resources.resources_id,
+            //            COALESCE(buildings_resources_consume.consume_speed, 0) AS consume_speed,
+            //            COALESCE(buildings_resources_produce.produce_speed, 0) AS produce_speed
+            //    FROM buildings
+            //    CROSS JOIN resources
+            //    FULL JOIN buildings_resources_produce ON buildings.building_id = buildings_resources_produce.building_id AND
+            //                                            resources.resources_id = buildings_resources_produce.resources_id
+            //    FULL JOIN buildings_resources_consume ON buildings.building_id = buildings_resources_consume.building_id AND
+            //                                                                resources.resources_id = buildings_resources_consume.resources_id;"
+            //    };
+            //    var r = comm.ExecuteReader();
+
+            //    while (r.Read())
+            //        _dgv.Rows.Add(r["building_id"], r["resources_id"], r["consume_speed"], r["produce_speed"], 1);
+
+            //}
         }
 
-        private class RowComparerForInt : System.Collections.IComparer
+        private void запрос2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            private static int sortOrderModifier = 1;
-            private int columnIndex;
 
-            public RowComparerForInt(SortOrder sortOrder, int columnIndex)
-            {
-                this.columnIndex = columnIndex;
-                if (sortOrder == SortOrder.Descending)
-                {
-                    sortOrderModifier = -1;
-                }
-                else if (sortOrder == SortOrder.Ascending)
-                {
-                    sortOrderModifier = 1;
-                }
-            }
-
-            public int Compare(object x, object y)
-            {
-                DataGridViewRow row1 = (DataGridViewRow)x;
-                DataGridViewRow row2 = (DataGridViewRow)y;
-                int v1 = (int)row1.Cells[columnIndex].Value;
-                int v2 = (int)row2.Cells[columnIndex].Value;
-
-                int CompareResult = v1 > v2 ? 1 : (v1 == v2 ? 0 : -1);
-
-                return CompareResult * sortOrderModifier;
-            }
         }
     }
 }
