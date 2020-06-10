@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms;
 using System.Data.Entity;
 using System.Data;
+using System.Drawing;
 
 namespace MainForm.DGV
 {
@@ -72,15 +73,37 @@ namespace MainForm.DGV
                 };
                 var r = comm.ExecuteReader();
 
+                int outpost = -1;
                 while (r.Read())
-                    _dgv.Rows.Add(
-                        ((string)r[MyHelper.strOutpostName] + " — "
-                                            + ((int)r[MyHelper.strOutpostCoordinateX]).ToString() + ";"
-                                             + ((int)r[MyHelper.strOutpostCoordinateY]).ToString() + ";"
-                                               + ((int)r[MyHelper.strOutpostCoordinateZ]).ToString()),
-                        r[MyHelper.strOutpostEconomicValue],
-                        r[MyHelper.strResourceName],
-                        r[MyHelper.strCount]);
+                {
+                    if (outpost == (int)r[MyHelper.strOutpostId])
+                    {
+                        _dgv.Rows.Add(DBNull.Value,
+                                      DBNull.Value,
+                                      r[MyHelper.strResourceName],
+                                      r[MyHelper.strCount]);
+                        // _dgv.Rows[_dgv.Rows.Count - 1].DividerHeight = 10;
+                    }
+                    else
+                    {
+                        if (outpost != -1)
+                        {
+                            var row = new DataGridViewRow();
+                            row.Height = 10;
+                            row.DefaultCellStyle.BackColor = Color.LightGray;
+                            _dgv.Rows.Add(row);
+                        }
+                        outpost = (int)r[MyHelper.strOutpostId];
+                        _dgv.Rows.Add(
+                            ((string)r[MyHelper.strOutpostName] + " — "
+                                                + ((int)r[MyHelper.strOutpostCoordinateX]).ToString() + ";"
+                                                 + ((int)r[MyHelper.strOutpostCoordinateY]).ToString() + ";"
+                                                   + ((int)r[MyHelper.strOutpostCoordinateZ]).ToString()),
+                            r[MyHelper.strOutpostEconomicValue],
+                            r[MyHelper.strResourceName],
+                            r[MyHelper.strCount]);
+                    }
+                }
             }
         }
 
