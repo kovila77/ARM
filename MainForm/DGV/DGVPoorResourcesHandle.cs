@@ -15,13 +15,9 @@ namespace MainForm.DGV
 {
     class DGVPoorResourcesHandle : DGVHandle
     {
-        private DataGridViewComboBoxColumnOutpost _cbcOutposts;
-        private DataGridViewComboBoxColumnResources _cbcResources;
 
-        public DGVPoorResourcesHandle(DataGridView dgv, DataGridViewComboBoxColumnOutpost cbcOutpost, DataGridViewComboBoxColumnResources cbcResources) : base(dgv)
+        public DGVPoorResourcesHandle(DataGridView dgv) : base(dgv)
         {
-            this._cbcOutposts = cbcOutpost;
-            _cbcResources = cbcResources;
             _dgv.ReadOnly = true;
         }
 

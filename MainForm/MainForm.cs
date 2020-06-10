@@ -93,7 +93,7 @@ namespace MainForm
             _dGVBuildingsResourcesConsumeHandle = new DGVBuildingsResourcesConsumeHandle(dgvBRC, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR, outpostDataTableHandler.CreateComboBoxColumnOutposts(), resourcesDataTableHandler.CreateComboBoxColumnResources());
-            _dGVPoorResourcesHandle = new DGVPoorResourcesHandle(dgvPoorRes, outpostDataTableHandler.CreateComboBoxColumnOutposts(), resourcesDataTableHandler.CreateComboBoxColumnResources());
+            _dGVPoorResourcesHandle = new DGVPoorResourcesHandle(dgvPoorRes);
             dgvO.Tag = _dGVOutpostHandle;
             dgvR.Tag = _dGVResourcesHandle;
             dgvB.Tag = _dGVBuildingsHandle;
