@@ -33,7 +33,7 @@ namespace MainForm.DGV
             _dgv.Columns.Add(MyHelper.strSource, "");
 
             foreach (DataGridViewColumn column in _dgv.Columns)
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
 
             _dgv.Columns[MyHelper.strResourceName].ValueType = typeof(string);
             _dgv.Columns[MyHelper.strResourceId].ValueType = typeof(int);

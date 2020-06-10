@@ -27,6 +27,7 @@ namespace MainForm
 
         private DGVBuildingsResourcesHandle _dGVBuildingsResourcesHandle;
         private DGVPoorResourcesHandle _dGVPoorResourcesHandle;
+        private DGVRichOutpostsHandle _dGVRichOutpostsHandle;
 
         //public delegate void OutpostAddedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
         //public delegate void OutpostChangedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
@@ -94,6 +95,7 @@ namespace MainForm
             _dGVBuildingsResourcesProduceHandle = new DGVBuildingsResourcesProduceHandle(dgvBRP, buildingsDataTableHandler.CreateComboBoxColumnBuildings(), resourcesDataTableHandler.CreateComboBoxColumnResources());
             _dGVStorageResourcesHandle = new DGVStorageResourcesHandle(dgvSR, outpostDataTableHandler.CreateComboBoxColumnOutposts(), resourcesDataTableHandler.CreateComboBoxColumnResources());
             _dGVPoorResourcesHandle = new DGVPoorResourcesHandle(dgvPoorRes);
+            _dGVRichOutpostsHandle = new DGVRichOutpostsHandle(dgvRichOutposts);
             dgvO.Tag = _dGVOutpostHandle;
             dgvR.Tag = _dGVResourcesHandle;
             dgvB.Tag = _dGVBuildingsHandle;
@@ -208,6 +210,9 @@ namespace MainForm
             if (!tabControl.Contains(tpRichOutposts))
                 tabControl.Controls.Add(tpRichOutposts);
 
+            _dGVRichOutpostsHandle.Initialize();
+
+            tabControl.SelectedTab = tpRichOutposts;
         }
     }
 }

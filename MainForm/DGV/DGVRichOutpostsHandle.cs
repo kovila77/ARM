@@ -13,10 +13,10 @@ using System.Data;
 
 namespace MainForm.DGV
 {
-    class DGVPoorResourcesHandle : DGVHandle
+    class DGVRichOutpostsHandle : DGVHandle
     {
 
-        public DGVPoorResourcesHandle(DataGridView dgv) : base(dgv)
+        public DGVRichOutpostsHandle(DataGridView dgv) : base(dgv)
         {
             _dgv.ReadOnly = true;
         }
@@ -28,17 +28,17 @@ namespace MainForm.DGV
             _dgv.Columns.Clear();
 
             _dgv.Columns.Add(MyHelper.strOutpostName, "Форпост");
+            _dgv.Columns.Add(MyHelper.strOutpostEconomicValue, "Экономическая ценность");
             _dgv.Columns.Add(MyHelper.strResourceName, "Ресурс");
             _dgv.Columns.Add(MyHelper.strCount, "Количество");
-            _dgv.Columns.Add(MyHelper.strAccumulationSpeed, "Скорость накопления");
 
             foreach (DataGridViewColumn column in _dgv.Columns)
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
 
             _dgv.Columns[MyHelper.strOutpostName].ValueType = typeof(string);
+            _dgv.Columns[MyHelper.strOutpostEconomicValue].ValueType = typeof(int);
             _dgv.Columns[MyHelper.strResourceName].ValueType = typeof(string);
             _dgv.Columns[MyHelper.strCount].ValueType = typeof(int);
-            _dgv.Columns[MyHelper.strAccumulationSpeed].ValueType = typeof(int);
 
             var connectionString = ConfigurationManager.ConnectionStrings["OutpostDataContext"].ConnectionString;
             using (var c = new NpgsqlConnection(connectionString))
@@ -48,18 +48,27 @@ namespace MainForm.DGV
                 {
                     Connection = c,
                     CommandText = @"
-                SELECT outposts.outpost_name,
-                       resources.resources_name,
-                       count,
-                       accumulation_speed,
+                WITH res AS (SELECT resources.resources_id, resources_name, outpost_id, count
+                             FROM storage_resources
+                                      JOIN resources ON storage_resources.resources_id = resources.resources_id
+                             WHERE count > 99)
+                SELECT outposts.outpost_id,
+                       outposts.outpost_name,
+                       outposts.outpost_economic_value,
+                       res.resources_name,
+                       res.count,
                        outposts.outpost_coordinate_x,
                        outposts.outpost_coordinate_y,
                        outposts.outpost_coordinate_z
                 FROM outposts
-                         JOIN storage_resources ON outposts.outpost_id = storage_resources.outpost_id
-                         JOIN resources ON storage_resources.resources_id = resources.resources_id
-                ORDER BY count, accumulation_speed
-                LIMIT 10"
+                         JOIN res ON res.outpost_id = outposts.outpost_id
+                WHERE exists(SELECT 1
+                             FROM res
+                             WHERE res.outpost_id = outposts.outpost_id
+                             GROUP BY res.outpost_id
+                             HAVING count(*) > 2)
+                  AND outposts.outpost_economic_value > 0
+                ORDER BY outposts.outpost_economic_value DESC, outposts.outpost_id, res.count DESC"
                 };
                 var r = comm.ExecuteReader();
 
@@ -69,9 +78,9 @@ namespace MainForm.DGV
                                             + ((int)r[MyHelper.strOutpostCoordinateX]).ToString() + ";"
                                              + ((int)r[MyHelper.strOutpostCoordinateY]).ToString() + ";"
                                                + ((int)r[MyHelper.strOutpostCoordinateZ]).ToString()),
+                        r[MyHelper.strOutpostEconomicValue],
                         r[MyHelper.strResourceName],
-                        r[MyHelper.strCount],
-                        r[MyHelper.strAccumulationSpeed]);
+                        r[MyHelper.strCount]);
             }
         }
 

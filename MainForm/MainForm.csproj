@@ -102,6 +102,7 @@
     <Compile Include="DGVComboBoxColumn\DataGridViewComboBoxColumnResources.cs" />
     <Compile Include="DGVComboBoxColumn\ResourcesDataTableHandler.cs" />
     <Compile Include="DGV\DGVPoorResourcesHandle.cs" />
+    <Compile Include="DGV\DGVRichOutpostsHandle.cs" />
     <Compile Include="EntityFileObjects\building.cs" />
     <Compile Include="EntityFileObjects\buildings_resources.cs" />
     <Compile Include="EntityFileObjects\buildings_resources_consume.cs" />
