@@ -58,6 +58,7 @@
             this.dgvRichOutposts = new System.Windows.Forms.DataGridView();
             this.epMain = new System.Windows.Forms.ErrorProvider(this.components);
             this.убратьЗначениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.запросыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tbBR.SuspendLayout();
@@ -86,8 +87,7 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правкаToolStripMenuItem,
             this.tmiTools,
-            this.ДифицитныеРесурсыToolStripMenuItem,
-            this.RichOutpostsToolStripMenuItem});
+            this.запросыToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
@@ -155,8 +155,6 @@
             this.tabControl.Controls.Add(this.tpBRP);
             this.tabControl.Controls.Add(this.tpO);
             this.tabControl.Controls.Add(this.tpSR);
-            //this.tabControl.Controls.Add(this.tpPoorRes);
-            //this.tabControl.Controls.Add(this.tpRichOutposts);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 24);
             this.tabControl.Name = "tabControl";
@@ -337,11 +335,11 @@
             this.dgvPoorRes.Size = new System.Drawing.Size(792, 400);
             this.dgvPoorRes.TabIndex = 2;
             // 
-            // tpCoolOutp
+            // tpRichOutposts
             // 
             this.tpRichOutposts.Controls.Add(this.dgvRichOutposts);
             this.tpRichOutposts.Location = new System.Drawing.Point(4, 22);
-            this.tpRichOutposts.Name = "tpCoolOutp";
+            this.tpRichOutposts.Name = "tpRichOutposts";
             this.tpRichOutposts.Size = new System.Drawing.Size(792, 400);
             this.tpRichOutposts.TabIndex = 8;
             this.tpRichOutposts.Text = "Богатые форпосты";
@@ -366,6 +364,16 @@
             // 
             this.убратьЗначениеToolStripMenuItem.Name = "убратьЗначениеToolStripMenuItem";
             this.убратьЗначениеToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            // 
+            // запросыToolStripMenuItem
+            // 
+            this.запросыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ДифицитныеРесурсыToolStripMenuItem,
+            this.RichOutpostsToolStripMenuItem
+            });
+            this.запросыToolStripMenuItem.Name = "запросыToolStripMenuItem";
+            this.запросыToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
+            this.запросыToolStripMenuItem.Text = "Запросы";
             // 
             // MainForm
             // 
@@ -436,6 +444,7 @@
         private System.Windows.Forms.DataGridView dgvPoorRes;
         private System.Windows.Forms.TabPage tpRichOutposts;
         private System.Windows.Forms.DataGridView dgvRichOutposts;
+        private System.Windows.Forms.ToolStripMenuItem запросыToolStripMenuItem;
     }
 }
 
