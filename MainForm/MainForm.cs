@@ -81,7 +81,9 @@ namespace MainForm
             {
                 foreach (TabPage tp in tabControl.TabPages)
                 {
-                    ((DataGridView)tp.Controls[0]).ReadOnly = true;
+                    var dgv = ((DataGridView)tp.Controls[0]);
+                    dgv.ReadOnly = true;
+                    dgv.AllowUserToDeleteRows = false;
                 }
                 this.Text += " - Гость";
             }
