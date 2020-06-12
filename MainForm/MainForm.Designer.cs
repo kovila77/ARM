@@ -35,6 +35,7 @@
             this.перезагрузитьВсеТаблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tmiTools = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.запросыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ДифицитныеРесурсыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RichOutpostsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
@@ -58,7 +59,6 @@
             this.dgvRichOutposts = new System.Windows.Forms.DataGridView();
             this.epMain = new System.Windows.Forms.ErrorProvider(this.components);
             this.убратьЗначениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.запросыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tbBR.SuspendLayout();
@@ -132,17 +132,26 @@
             this.управлениеПользователямиToolStripMenuItem.Text = "Управление пользователями";
             this.управлениеПользователямиToolStripMenuItem.Click += new System.EventHandler(this.управлениеПользователямиToolStripMenuItem_Click);
             // 
+            // запросыToolStripMenuItem
+            // 
+            this.запросыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ДифицитныеРесурсыToolStripMenuItem,
+            this.RichOutpostsToolStripMenuItem});
+            this.запросыToolStripMenuItem.Name = "запросыToolStripMenuItem";
+            this.запросыToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
+            this.запросыToolStripMenuItem.Text = "Запросы";
+            // 
             // ДифицитныеРесурсыToolStripMenuItem
             // 
             this.ДифицитныеРесурсыToolStripMenuItem.Name = "ДифицитныеРесурсыToolStripMenuItem";
-            this.ДифицитныеРесурсыToolStripMenuItem.Size = new System.Drawing.Size(141, 20);
+            this.ДифицитныеРесурсыToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.ДифицитныеРесурсыToolStripMenuItem.Text = "Дифицитные ресурсы";
             this.ДифицитныеРесурсыToolStripMenuItem.Click += new System.EventHandler(this.PoorRes_ToolStripMenuItem_Click);
             // 
             // RichOutpostsToolStripMenuItem
             // 
             this.RichOutpostsToolStripMenuItem.Name = "RichOutpostsToolStripMenuItem";
-            this.RichOutpostsToolStripMenuItem.Size = new System.Drawing.Size(172, 20);
+            this.RichOutpostsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.RichOutpostsToolStripMenuItem.Text = "Список богатых форпостов";
             this.RichOutpostsToolStripMenuItem.Click += new System.EventHandler(this.CoolOutpToolStripMenuItem_Click);
             // 
@@ -208,6 +217,7 @@
             this.dgvR.Name = "dgvR";
             this.dgvR.Size = new System.Drawing.Size(792, 400);
             this.dgvR.TabIndex = 1;
+            this.dgvR.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpB
             // 
@@ -229,6 +239,7 @@
             this.dgvB.Name = "dgvB";
             this.dgvB.Size = new System.Drawing.Size(792, 400);
             this.dgvB.TabIndex = 1;
+            this.dgvB.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpBRC
             // 
@@ -250,6 +261,7 @@
             this.dgvBRC.Name = "dgvBRC";
             this.dgvBRC.Size = new System.Drawing.Size(792, 400);
             this.dgvBRC.TabIndex = 1;
+            this.dgvBRC.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpBRP
             // 
@@ -271,6 +283,7 @@
             this.dgvBRP.Name = "dgvBRP";
             this.dgvBRP.Size = new System.Drawing.Size(792, 400);
             this.dgvBRP.TabIndex = 1;
+            this.dgvBRP.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpO
             // 
@@ -292,6 +305,7 @@
             this.dgvO.Name = "dgvO";
             this.dgvO.Size = new System.Drawing.Size(792, 400);
             this.dgvO.TabIndex = 0;
+            this.dgvO.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpSR
             // 
@@ -313,6 +327,7 @@
             this.dgvSR.Name = "dgvSR";
             this.dgvSR.Size = new System.Drawing.Size(792, 400);
             this.dgvSR.TabIndex = 1;
+            this.dgvSR.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError);
             // 
             // tpPoorRes
             // 
@@ -364,16 +379,6 @@
             // 
             this.убратьЗначениеToolStripMenuItem.Name = "убратьЗначениеToolStripMenuItem";
             this.убратьЗначениеToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
-            // запросыToolStripMenuItem
-            // 
-            this.запросыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ДифицитныеРесурсыToolStripMenuItem,
-            this.RichOutpostsToolStripMenuItem
-            });
-            this.запросыToolStripMenuItem.Name = "запросыToolStripMenuItem";
-            this.запросыToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
-            this.запросыToolStripMenuItem.Text = "Запросы";
             // 
             // MainForm
             // 

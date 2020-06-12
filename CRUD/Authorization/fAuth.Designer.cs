@@ -33,10 +33,10 @@
             this.lLogin = new System.Windows.Forms.Label();
             this.btAuthentication = new System.Windows.Forms.Button();
             this.pnPassword = new System.Windows.Forms.Panel();
+            this.checkBox = new System.Windows.Forms.CheckBox();
+            this.btBeginReg = new System.Windows.Forms.Button();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.lPassword = new System.Windows.Forms.Label();
-            this.btBeginReg = new System.Windows.Forms.Button();
-            this.checkBox = new System.Windows.Forms.CheckBox();
             this.pnLogin.SuspendLayout();
             this.pnPassword.SuspendLayout();
             this.SuspendLayout();
@@ -96,6 +96,27 @@
             this.pnPassword.Size = new System.Drawing.Size(284, 108);
             this.pnPassword.TabIndex = 2;
             // 
+            // checkBox
+            // 
+            this.checkBox.AutoSize = true;
+            this.checkBox.Location = new System.Drawing.Point(39, 50);
+            this.checkBox.Name = "checkBox";
+            this.checkBox.Size = new System.Drawing.Size(99, 17);
+            this.checkBox.TabIndex = 4;
+            this.checkBox.Text = "Гостевой вход";
+            this.checkBox.UseVisualStyleBackColor = true;
+            this.checkBox.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
+            // 
+            // btBeginReg
+            // 
+            this.btBeginReg.Location = new System.Drawing.Point(154, 46);
+            this.btBeginReg.Name = "btBeginReg";
+            this.btBeginReg.Size = new System.Drawing.Size(118, 23);
+            this.btBeginReg.TabIndex = 3;
+            this.btBeginReg.Text = "Регистрация";
+            this.btBeginReg.UseVisualStyleBackColor = true;
+            this.btBeginReg.Click += new System.EventHandler(this.btBeginReg_Click);
+            // 
             // tbPassword
             // 
             this.tbPassword.Dock = System.Windows.Forms.DockStyle.Top;
@@ -116,27 +137,6 @@
             this.lPassword.TabIndex = 1;
             this.lPassword.Text = "Пароль:";
             // 
-            // btBeginReg
-            // 
-            this.btBeginReg.Location = new System.Drawing.Point(154, 46);
-            this.btBeginReg.Name = "btBeginReg";
-            this.btBeginReg.Size = new System.Drawing.Size(118, 23);
-            this.btBeginReg.TabIndex = 3;
-            this.btBeginReg.Text = "Регистрация";
-            this.btBeginReg.UseVisualStyleBackColor = true;
-            this.btBeginReg.Click += new System.EventHandler(this.btBeginReg_Click);
-            // 
-            // checkBox
-            // 
-            this.checkBox.AutoSize = true;
-            this.checkBox.Location = new System.Drawing.Point(39, 50);
-            this.checkBox.Name = "checkBox";
-            this.checkBox.Size = new System.Drawing.Size(99, 17);
-            this.checkBox.TabIndex = 4;
-            this.checkBox.Text = "Гостевой вход";
-            this.checkBox.UseVisualStyleBackColor = true;
-            this.checkBox.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-            // 
             // fAuth
             // 
             this.AcceptButton = this.btAuthentication;
@@ -148,7 +148,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(300, 150);
             this.Name = "fAuth";
-            this.Text = "Authentication";
+            this.Text = "Аутентификация";
             this.pnLogin.ResumeLayout(false);
             this.pnLogin.PerformLayout();
             this.pnPassword.ResumeLayout(false);

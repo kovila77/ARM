@@ -216,5 +216,10 @@ namespace MainForm
 
             tabControl.SelectedTab = tpRichOutposts;
         }
+
+        private void DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
     }
 }
