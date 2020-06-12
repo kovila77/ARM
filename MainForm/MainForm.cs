@@ -153,8 +153,8 @@ namespace MainForm
             if (_userControl == null)
             {
                 _userControl = new fUsersView(_userRole.ToLower());
-                _userControl.ShowDialog();
             }
+            _userControl.ShowDialog();
         }
 
         private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
