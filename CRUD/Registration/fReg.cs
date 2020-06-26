@@ -15,6 +15,7 @@ namespace Registration
         private byte[] userSalt = null;
         private byte[] userPassword = null;
         private string role = "user";
+        private int userEditingUser = -1;
         private string oldRole = "user";
         private DateTime dateReg;
 
@@ -93,6 +94,8 @@ namespace Registration
                 }
             }
         }
+
+        public int UserEditingUserId { get { return userEditingUser; } set { userEditingUser = value; } }
 
         private void fReg_Load(object sender, EventArgs e)
         {
@@ -306,10 +309,20 @@ namespace Registration
             if (oldRole == role)
             {
                 epMain.SetError(cbRole, "");
+                cbRole.Tag = true;
             }
             else
             {
-                epMain.SetError(cbRole, "Роль будет изменена!");
+                if (UserEditingUserId == UserId && role != oldRole)
+                {
+                    epMain.SetError(cbRole, "Вы не можете изменять свою роль! Сделайте это с другой записи администратора!");
+                    cbRole.Tag = false;
+                }
+                else
+                {
+                    epMain.SetError(cbRole, "Роль будет изменена!");
+                    cbRole.Tag = true;
+                }
             }
 
             RefreshBtReg();

@@ -17,10 +17,12 @@ namespace CRUD
     {
         private DBUsersHandler.DBUsersHandler _dbConrol = new DBUsersHandler.DBUsersHandler();
 
+        private int _userId;
         private string _userRole;
 
-        public fUsersView(string userRole)
+        public fUsersView(string userRole, int userId)
         {
+            _userId = userId;
             _userRole = userRole;
             if (_userRole == null || _userRole.Trim().ToLower() != "admin")
             {
@@ -108,12 +110,14 @@ namespace CRUD
             foreach (ListViewItem selectedItem in lvUsers.SelectedItems)
             {
                 var selectedItemTagAsTuple = (Tuple<int, DateTime>)selectedItem.Tag;
+                string OldRole = selectedItem.SubItems[3].Text;
                 var formUpdating = new fReg(fReg.FormType.Update)
                 {
                     UserId = selectedItemTagAsTuple.Item1,
                     DateReg = selectedItemTagAsTuple.Item2,
                     UserLogin = selectedItem.SubItems[0].Text,
                     Role = selectedItem.SubItems[3].Text,
+                    UserEditingUserId = _userId,
                 };
                 if (formUpdating.ShowDialog() == DialogResult.OK)
                 {

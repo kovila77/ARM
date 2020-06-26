@@ -10,6 +10,7 @@ namespace Authentication
     {
         private readonly Regex _loginRegex = new Regex(DBUsersHandler.DBUsersHandler.regularOfCorrectLogin);
         private DBUsersHandler.DBUsersHandler _dbConrol;
+        private int _userId = -1;
         private string _role = null;
 
         public enum TypeLoad
@@ -19,6 +20,7 @@ namespace Authentication
         }
         private TypeLoad _typeLoad;
 
+        public int UserId { get { return _userId; } }
         public string UserRole { get { return _role; } }
 
         public fAuth(TypeLoad tl)
@@ -51,8 +53,7 @@ namespace Authentication
         {
             btAuthentication.Enabled = false;
             if (!checkBox.Checked) {
-                int uid;
-                _role = _dbConrol.Authentication(tbLogin.Text, tbPassword.Text, out uid);
+                _role = _dbConrol.Authentication(tbLogin.Text, tbPassword.Text, out _userId);
             }
             else
                 _role = "Guest";

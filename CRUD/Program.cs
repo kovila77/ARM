@@ -18,7 +18,7 @@ namespace CRUD
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fUsersView("noone"));
+            Application.Run(new fUsersView("noone", -1));
         }
     }
 }

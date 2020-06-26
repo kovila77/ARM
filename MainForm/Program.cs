@@ -21,7 +21,7 @@ namespace MainForm
             if (fAuth.ShowDialog() == DialogResult.OK)
             {
                 if (fAuth.UserRole == null) return;
-                Application.Run(new MainForm(fAuth.UserRole));
+                Application.Run(new MainForm(fAuth.UserRole, fAuth.UserId));
                 //Application.Run(new MainForm("admin"));
             }
         }
