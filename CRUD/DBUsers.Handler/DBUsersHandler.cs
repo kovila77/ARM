@@ -180,16 +180,15 @@ namespace DBUsersHandler
             return false;
         }
 
-        public string Authentication(string uLogin, string uPassword)
+        public string Authentication(string uLogin, string uPassword, out int userId)
         {
             uPassword = uPassword.Trim();
-
             uLogin = RemoveExtraSpaces(uLogin);
 
+            userId = -1;
             if (!_loginRegex.IsMatch(uLogin)) return null;
 
             byte[] uSalt;
-
             if (!IsExistsInDBLogin(uLogin, out uSalt)) return null;
 
             using (var sConn = new NpgsqlConnection(_sConnStr))
@@ -199,7 +198,7 @@ namespace DBUsersHandler
                 {
                     Connection = sConn,
                     CommandText = @"
-                        SELECT role
+                        SELECT role, uid
                         FROM users
                         WHERE lower(ulogin) = lower(@uLogin)
                           AND upassword = @uPassword;"
@@ -208,7 +207,18 @@ namespace DBUsersHandler
                 sCommand.Parameters.AddWithValue("@uLogin", uLogin);
                 sCommand.Parameters.AddWithValue("@uPassword", PasswordHandler.PasswordHandler.HashPassword(uPassword, uSalt));
 
-                return sCommand.ExecuteScalar() as string;
+                using (var reader = sCommand.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        userId = (int)reader["uid"];
+                        return reader["role"] as string;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
             }
         }
 

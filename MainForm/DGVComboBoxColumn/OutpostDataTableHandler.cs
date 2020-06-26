@@ -10,9 +10,6 @@ namespace MainForm
 {
     class OutpostDataTableHandler
     {
-        //public delegate void OutpostDataTableChangedHandler(DataTable outpost);
-        //public event OutpostDataTableChangedHandler OutpostDataTableChanged;
-
         private DataTable _dtOutposts = null;
         public Action<DataTable> OutpostDataTableChanged;
 
@@ -21,9 +18,6 @@ namespace MainForm
         public OutpostDataTableHandler() : base()
         {
             InitializeDataTableOutpost();
-            //MainForm.OutpostAdded += Add;
-            //MainForm.OutpostChanged += Change;
-            //MainForm.OutpostDeleted += Remove;
         }
 
         public void InitializeDataTableOutpost()
@@ -31,7 +25,6 @@ namespace MainForm
             _dtOutposts = new DataTable();
             _dtOutposts.Columns.Add(MyHelper.strOutpostId, typeof(int));
             _dtOutposts.Columns.Add(MyHelper.strOutpostName, typeof(string));
-            //this.DataSource = _dtOutposts;
             OutpostDataTableChanged?.Invoke(_dtOutposts);
         }
 
@@ -42,7 +35,6 @@ namespace MainForm
 
         public void Add(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z)
         {
-            //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
             _dtOutposts.Rows.Add(outpost_id, outpost_name + " — "
                                              + outpost_coordinate_x.ToString() + ";"
                                              + outpost_coordinate_y.ToString() + ";"
@@ -69,12 +61,5 @@ namespace MainForm
                 _dtOutposts.Rows.Remove(forDel);
             }
         }
-
-
-
-        //public void Clear()
-        //{
-        //    _dtOutposts.Clear();
-        //}
     }
 }

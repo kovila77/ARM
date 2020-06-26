@@ -29,43 +29,26 @@ namespace MainForm
         private DGVPoorResourcesHandle _dGVPoorResourcesHandle;
         private DGVRichOutpostsHandle _dGVRichOutpostsHandle;
 
-        //public delegate void OutpostAddedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
-        //public delegate void OutpostChangedHandler(int outpost_id, string outpost_name, int outpost_coordinate_x, int outpost_coordinate_y, int outpost_coordinate_z);
-        //public delegate void OutpostDeletedHandler(int outpost_id);
-        //public static event OutpostAddedHandler OutpostAdded;
-        //public static event OutpostChangedHandler OutpostChanged;
-        //public static event OutpostDeletedHandler OutpostDeleted;
-
-        //public delegate void BuildingAddedHandler(int building_id, string building_name, int? outpost_id);
-        //public delegate void BuildingChangedHandler(int building_id, string building_name, int? outpost_id = null);
-        //public delegate void BuildingDeletedHandler(int building_id);
-        //public static event BuildingAddedHandler BuildingAdded;
-        //public static event BuildingChangedHandler BuildingChanged;
-        //public static event BuildingDeletedHandler BuildingDeleted;
-
-        //public delegate void ResourceAddedHandler(int resource_id, string resource_name);
-        //public delegate void ResourceChangedHandler(int resource_id, string resource_name);
-        //public delegate void ResourceDeletedHandler(int resource_id);
-        //public static event ResourceAddedHandler ResourceAdded;
-        //public static event ResourceChangedHandler ResourceChanged;
-        //public static event ResourceDeletedHandler ResourceDeleted;
-
         OutpostDataTableHandler outpostDataTableHandler = new OutpostDataTableHandler();
         BuildingsDataTableHandler buildingsDataTableHandler = new BuildingsDataTableHandler();
         ResourcesDataTableHandler resourcesDataTableHandler = new ResourcesDataTableHandler();
 
         private int currentTab;
+        private int userId;
         private string _userRole = null;
         private fUsersView _userControl = null;
 
-        public MainForm(string userRole)
+        public MainForm(string userRole, int userId)
         {
             _userRole = userRole;
+            this.userId = userId;
             if ((!(new List<string> { "admin", "user", "guest" }.Contains(_userRole.ToLower()))))
             {
                 this.Close();
             }
             InitializeComponent();
+            ДифицитныеРесурсыToolStripMenuItem.ToolTipText = "Вывод 10 ресурсов, количество которых на складах форпостов, которые хранят данные ресурсы, наименьшее, по отношению к остальным ресурсам.";
+            RichOutpostsToolStripMenuItem.ToolTipText = "Cписок форпостов, которые имеют хотя бы 3 ресурса с количеством в хранилище хотя бы 100.";
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -167,6 +150,25 @@ namespace MainForm
             currentTab = tabControl.SelectedIndex;
         }
 
+        private void PoorRes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!tabControl.Contains(tpPoorRes))
+                tabControl.Controls.Add(tpPoorRes);
+
+            _dGVPoorResourcesHandle.Initialize();
+
+            tabControl.SelectedTab = tpPoorRes;
+        }
+        private void CoolOutpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!tabControl.Contains(tpRichOutposts))
+                tabControl.Controls.Add(tpRichOutposts);
+
+            _dGVRichOutpostsHandle.Initialize();
+
+            tabControl.SelectedTab = tpRichOutposts;
+        }
+
         private void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridView dgv = sender as DataGridView;
@@ -196,26 +198,7 @@ namespace MainForm
             }
         }
 
-        private void PoorRes_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!tabControl.Contains(tpPoorRes))
-                tabControl.Controls.Add(tpPoorRes);
-
-            _dGVPoorResourcesHandle.Initialize();
-
-            tabControl.SelectedTab = tpPoorRes;
-        }
-        //this.tabControl.Controls.Add(this.tpPoorRes);
-        //this.tabControl.Controls.Add(this.tpRichOutposts);
-        private void CoolOutpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!tabControl.Contains(tpRichOutposts))
-                tabControl.Controls.Add(tpRichOutposts);
-
-            _dGVRichOutpostsHandle.Initialize();
-
-            tabControl.SelectedTab = tpRichOutposts;
-        }
+        
 
         private void DataError(object sender, DataGridViewDataErrorEventArgs e)
         {

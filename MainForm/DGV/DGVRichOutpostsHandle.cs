@@ -20,6 +20,7 @@ namespace MainForm.DGV
         public DGVRichOutpostsHandle(DataGridView dgv) : base(dgv)
         {
             _dgv.ReadOnly = true;
+            _dgv.AllowUserToAddRows = false;
         }
 
         public override void Initialize()

@@ -11,24 +11,6 @@ namespace MainForm.DGV
 {
     class DGVStorageResourcesHandle : DGVHandle
     {
-        //public DataGridViewComboBoxColumn cbcOutpost = new DataGridViewComboBoxColumn()
-        //{
-        //    Name = "outpost_id",
-        //    HeaderText = "Форпост",
-        //    DisplayMember = "outpost_name",
-        //    ValueMember = "outpost_id",
-        //    DataPropertyName = "outpost_id",
-        //    FlatStyle = FlatStyle.Flat
-        //};
-        //public DataGridViewComboBoxColumn cbcResorces = new DataGridViewComboBoxColumn()
-        //{
-        //    Name = "resources_id",
-        //    HeaderText = "Ресурс",
-        //    DisplayMember = "resources_name",
-        //    ValueMember = "resources_id",
-        //    DataPropertyName = "resources_id",
-        //    FlatStyle = FlatStyle.Flat
-        //};
         private DataGridViewComboBoxColumnResources _cbcResources;
         private DataGridViewComboBoxColumnOutpost _cbcOutposts;
 

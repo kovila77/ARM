@@ -72,7 +72,7 @@ namespace MainForm.DGV
             {
                 using (var ctx = new OutpostDataContext())
                 {
-                    string new_resources_name = (string)row.Cells[MyHelper.strResourceName].Value;
+                    string new_resources_name = ((string)row.Cells[MyHelper.strResourceName].Value).RmvExtrSpaces();
 
                     if (ctx.resources.AsEnumerable().FirstOrDefault(res => res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
                     {
@@ -106,7 +106,7 @@ namespace MainForm.DGV
                 {
                     var new_res = ctx.resources.Find((int)row.Cells[MyHelper.strResourceId].Value);
 
-                    string new_resources_name = (string)row.Cells[MyHelper.strResourceName].Value;
+                    string new_resources_name = ((string)row.Cells[MyHelper.strResourceName].Value).RmvExtrSpaces();
 
                     if (ctx.resources.AsEnumerable().FirstOrDefault(res => res.resources_id != new_res.resources_id && res.resources_name.ToLower() == new_resources_name.ToLower()) != null)
                     {

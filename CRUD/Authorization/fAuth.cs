@@ -50,8 +50,10 @@ namespace Authentication
         private void btAuthentication_Click(object sender, EventArgs e)
         {
             btAuthentication.Enabled = false;
-            if (!checkBox.Checked)
-                _role = _dbConrol.Authentication(tbLogin.Text, tbPassword.Text);
+            if (!checkBox.Checked) {
+                int uid;
+                _role = _dbConrol.Authentication(tbLogin.Text, tbPassword.Text, out uid);
+            }
             else
                 _role = "Guest";
             if (_role != null)

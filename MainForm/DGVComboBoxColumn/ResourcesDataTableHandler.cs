@@ -34,7 +34,6 @@ namespace MainForm
 
         public void Add(int resource_id, string resource_name)
         {
-            //_dtOutposts.Rows.Add(outpost_id, outpost_name, outpost_coordinate_x, outpost_coordinate_y, outpost_coordinate_z);
             _dtResources.Rows.Add(resource_id, resource_name);
         }
 

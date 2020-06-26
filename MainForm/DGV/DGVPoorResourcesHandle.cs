@@ -19,6 +19,7 @@ namespace MainForm.DGV
         public DGVPoorResourcesHandle(DataGridView dgv) : base(dgv)
         {
             _dgv.ReadOnly = true;
+            _dgv.AllowUserToAddRows = false;
         }
 
         public override void Initialize()

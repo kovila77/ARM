@@ -10,7 +10,7 @@ namespace MainForm
 {
     class DataGridViewComboBoxColumnBuildings : DataGridViewComboBoxColumn
     {
-        private DataTable _dtBuildings = null;
+        //private DataTable _dtBuildings = null;
 
         public DataGridViewComboBoxColumnBuildings(BuildingsDataTableHandler buildingsDataTableHandler) : base()
         {

@@ -15,6 +15,7 @@ namespace Registration
         private byte[] userSalt = null;
         private byte[] userPassword = null;
         private string role = "user";
+        private string oldRole = "user";
         private DateTime dateReg;
 
         private FormType frmType;
@@ -102,6 +103,10 @@ namespace Registration
                 tbLogin.Tag = true;
                 tbPassword.Tag = true;
             }
+            cbRole.Tag = true;
+            oldRole = role;
+            //cbRole.SelectedIndex = (role == "user" ? 0 : 1);
+            cbRole.SelectedItem = role;
         }
 
         public fReg(FormType frmType)
@@ -111,6 +116,9 @@ namespace Registration
             this.frmType = frmType;
             tbLogin.Tag = false;
             tbPassword.Tag = false;
+            cbRole.Tag = false;
+
+            cbRole.DataSource = new string[] { "user", "admin" };
 
             switch (frmType)
             {
@@ -119,6 +127,8 @@ namespace Registration
                     this.Text = "Регистрация";
                     dtpDate.Value = DateTime.Today;
                     dtpDate.Enabled = false;
+
+                    cbRole.Enabled = false;
                     break;
                 case FormType.Insert:
 
@@ -271,7 +281,8 @@ namespace Registration
             //{
             //    btRegister.Enabled = false;
             //}
-            btRegister.Enabled = (bool)tbPassword.Tag && (bool)tbLogin.Tag && !(frmType == FormType.Update && !(epMain.GetError(dtpDate) != "" || epMain.GetError(tbLogin) != "" || epMain.GetError(tbPassword) != ""));
+            btRegister.Enabled = (bool)cbRole.Tag && (bool)tbPassword.Tag && (bool)tbLogin.Tag
+                && !(frmType == FormType.Update && !(epMain.GetError(dtpDate) != "" || epMain.GetError(tbLogin) != "" || epMain.GetError(tbPassword) != "" || epMain.GetError(cbRole) != ""));
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -285,6 +296,22 @@ namespace Registration
             {
                 epMain.SetError(dtpDate, "Дата будет измененна!");
             }
+            RefreshBtReg();
+        }
+
+        private void cbRole_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            role = cbRole.SelectedItem.ToString();
+
+            if (oldRole == role)
+            {
+                epMain.SetError(cbRole, "");
+            }
+            else
+            {
+                epMain.SetError(cbRole, "Роль будет изменена!");
+            }
+
             RefreshBtReg();
         }
     }

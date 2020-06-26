@@ -120,7 +120,7 @@ namespace MainForm
             {
                 using (var ctx = new OutpostDataContext())
                 {
-                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString();
+                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString().RmvExtrSpaces();
                     int new_outpost_economic_value = (int)row.Cells[MyHelper.strOutpostEconomicValue].Value;
                     int new_outpost_coordinate_x = (int)row.Cells[MyHelper.strOutpostCoordinateX].Value;
                     int new_outpost_coordinate_y = (int)row.Cells[MyHelper.strOutpostCoordinateY].Value;
@@ -166,7 +166,7 @@ namespace MainForm
                 {
                     outpost o = ctx.outposts.Find((int)row.Cells[MyHelper.strOutpostId].Value);
 
-                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString();
+                    string new_outpost_name = row.Cells[MyHelper.strOutpostName].Value.ToString().RmvExtrSpaces();
                     int new_outpost_economic_value = (int)row.Cells[MyHelper.strOutpostEconomicValue].Value;
                     int new_outpost_coordinate_x = (int)row.Cells[MyHelper.strOutpostCoordinateX].Value;
                     int new_outpost_coordinate_y = (int)row.Cells[MyHelper.strOutpostCoordinateY].Value;

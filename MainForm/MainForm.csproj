@@ -104,7 +104,6 @@
     <Compile Include="DGV\DGVPoorResourcesHandle.cs" />
     <Compile Include="DGV\DGVRichOutpostsHandle.cs" />
     <Compile Include="EntityFileObjects\building.cs" />
-    <Compile Include="EntityFileObjects\buildings_resources.cs" />
     <Compile Include="EntityFileObjects\buildings_resources_consume.cs" />
     <Compile Include="EntityFileObjects\buildings_resources_produce.cs" />
     <Compile Include="DGV\DGVBuildingsHandle.cs" />

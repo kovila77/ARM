@@ -77,16 +77,7 @@ namespace MainForm.DGV
                 MessageBox.Show(err.Message);
             }
         }
-
-        //protected void HideColumns()
-        //{
-        //    MakeThisColumnVisible(new string[] {
-        //            "building_id",
-        //            "resources_id",
-        //            "produce_speed"
-        //        });
-        //}
-
+        
         protected override bool ChekRowAndSayReady(DataGridViewRow row)
         {
             var cellsWithPotentialErrors = new List<DataGridViewCell> {

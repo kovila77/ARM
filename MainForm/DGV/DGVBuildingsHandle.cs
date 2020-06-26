@@ -107,7 +107,7 @@ namespace MainForm.DGV
             {
                 using (var ctx = new OutpostDataContext())
                 {
-                    string new_building_name = (string)row.Cells[MyHelper.strBuildingName].Value;
+                    string new_building_name = ((string)row.Cells[MyHelper.strBuildingName].Value).RmvExtrSpaces();
                     var new_outpost_id = row.Cells[MyHelper.strOutpostId].Value;
 
                     if (ctx.buildings.AsEnumerable().FirstOrDefault(b => b.building_name.ToLower() == new_building_name.ToLower()) != null)
@@ -144,7 +144,7 @@ namespace MainForm.DGV
                 {
                     var new_building = ctx.buildings.Find((int)row.Cells[MyHelper.strBuildingId].Value);
 
-                    string new_building_name = (string)row.Cells[MyHelper.strBuildingName].Value;
+                    string new_building_name = ((string)row.Cells[MyHelper.strBuildingName].Value).RmvExtrSpaces();
                     var new_outpost_id = row.Cells[MyHelper.strOutpostId].Value;
 
                     if (ctx.buildings.AsEnumerable().FirstOrDefault(b => b.building_id != new_building.building_id && b.building_name.ToLower() == new_building_name.ToLower()) != null)

@@ -12,15 +12,11 @@ namespace MainForm.DGV
     abstract class DGVHandle : IDisposable
     {
         protected DataGridView _dgv;
-        protected bool isCurrentRowDirty;
-        //public DataTable dataTable;
+        //protected bool isCurrentRowDirty;
 
         public DGVHandle(DataGridView dgv)
         {
-            //dataTable = new DataTable();
             _dgv = dgv;
-            //if (_dgv.Rows.Count > 0)
-            //_dgv.Rows.Clear();
 
             _dgv.DefaultCellStyle.NullValue = null;
             _dgv.CellValidating += CellValidating;
@@ -36,49 +32,6 @@ namespace MainForm.DGV
         protected abstract void Insert(DataGridViewRow row);
 
         protected abstract void Update(DataGridViewRow row);
-
-        //public void MakeThisColumnVisible(string[] columnNames)
-        //{
-        //    List<DataGridViewColumn> columnsToSee = new List<DataGridViewColumn>();
-        //    foreach (var cn in columnNames)
-        //        columnsToSee.Add(_dgv.Columns[cn]);
-        //    foreach (DataGridViewColumn c in _dgv.Columns)
-        //        c.Visible = columnsToSee.Contains(c);
-        //    foreach (var column in columnsToSee)
-        //    {
-        //        switch (column.Name)
-        //        {
-        //            case "outpost_id":
-        //                column.HeaderText = "Форпост"; break;
-        //            case "building_id":
-        //                column.HeaderText = "Здание"; break;
-        //            case "resources_id":
-        //                column.HeaderText = "Ресурс"; break;
-        //            case "produce_speed":
-        //                column.HeaderText = "Скорость производства"; break;
-        //            case "consume_speed":
-        //                column.HeaderText = "Скорость потребления"; break;
-        //            case "count":
-        //                column.HeaderText = "Количество"; break;
-        //            case "resources_name":
-        //                column.HeaderText = "Ресурс"; break;
-        //            case "building_name":
-        //                column.HeaderText = "Здание"; break;
-        //            case "outpost_name":
-        //                column.HeaderText = "Форпост"; break;
-        //            case "outpost_economic_value":
-        //                column.HeaderText = "Экономическая ценность"; break;
-        //            case "outpost_coordinate_x":
-        //                column.HeaderText = "Координата x"; break;
-        //            case "outpost_coordinate_y":
-        //                column.HeaderText = "Координата y"; break;
-        //            case "outpost_coordinate_z":
-        //                column.HeaderText = "Координата z"; break;
-        //            case "accumulation_speed":
-        //                column.HeaderText = "Скорость накопления"; break;
-        //        }
-        //    }
-        //}
 
         public void CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
@@ -156,6 +109,14 @@ namespace MainForm.DGV
             _dgv.CancelEdit();
         }
 
+        public virtual void Dispose()
+        {
+            _dgv.CellValidating -= CellValidating;
+            _dgv.CellEndEdit -= CellEndEdit;
+            _dgv.UserDeletingRow -= UserDeletingRow;
+            _dgv.RowValidating -= _dgv_RowValidating;
+        }
+
         public void ClearChanges()
         {
             foreach (DataGridViewRow row in _dgv.Rows)
@@ -180,17 +141,5 @@ namespace MainForm.DGV
             }
         }
 
-        //public bool RowHaveSource(DataGridViewRow row)
-        //{
-        //    return !(row.Cells["Source"].Value == null || row.Cells["Source"].Value == DBNull.Value);
-        //}
-
-        public virtual void Dispose()
-        {
-            _dgv.CellValidating -= CellValidating;
-            _dgv.CellEndEdit -= CellEndEdit;
-            _dgv.UserDeletingRow -= UserDeletingRow;
-            _dgv.RowValidating -= _dgv_RowValidating;
-        }
     }
 }

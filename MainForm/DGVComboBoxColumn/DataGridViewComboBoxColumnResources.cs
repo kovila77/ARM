@@ -10,9 +10,6 @@ namespace MainForm
 {
     class DataGridViewComboBoxColumnResources : DataGridViewComboBoxColumn
     {
-
-        private DataTable _dtResources = null;
-
         public DataGridViewComboBoxColumnResources(ResourcesDataTableHandler resourcesDataTableHandler) : base()
         {
             this.Name = MyHelper.strResourceId;

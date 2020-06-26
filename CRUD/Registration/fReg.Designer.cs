@@ -40,6 +40,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbRole = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.pnLogin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epMain)).BeginInit();
             this.pnPassword.SuspendLayout();
@@ -80,7 +82,7 @@
             // 
             this.btRegister.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btRegister.Enabled = false;
-            this.btRegister.Location = new System.Drawing.Point(0, 167);
+            this.btRegister.Location = new System.Drawing.Point(0, 181);
             this.btRegister.Name = "btRegister";
             this.btRegister.Size = new System.Drawing.Size(414, 23);
             this.btRegister.TabIndex = 1;
@@ -125,44 +127,64 @@
             // 
             // label1
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(30, 10);
+            this.label1.Location = new System.Drawing.Point(12, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(354, 19);
+            this.label1.Size = new System.Drawing.Size(101, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "Дата регистрации";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // dtpDate
             // 
-            this.dtpDate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dtpDate.Location = new System.Drawing.Point(30, 29);
+            this.dtpDate.Location = new System.Drawing.Point(138, 13);
             this.dtpDate.Name = "dtpDate";
-            this.dtpDate.Size = new System.Drawing.Size(354, 20);
+            this.dtpDate.Size = new System.Drawing.Size(246, 20);
             this.dtpDate.TabIndex = 2;
             this.dtpDate.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.cbRole);
             this.panel1.Controls.Add(this.dtpDate);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 94);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(30, 10, 30, 10);
-            this.panel1.Size = new System.Drawing.Size(414, 96);
+            this.panel1.Size = new System.Drawing.Size(414, 110);
             this.panel1.TabIndex = 3;
+            // 
+            // cbRole
+            // 
+            this.cbRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbRole.FormattingEnabled = true;
+            this.cbRole.Location = new System.Drawing.Point(138, 51);
+            this.cbRole.Name = "cbRole";
+            this.cbRole.Size = new System.Drawing.Size(246, 21);
+            this.cbRole.TabIndex = 4;
+            this.cbRole.SelectedIndexChanged += new System.EventHandler(this.cbRole_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 54);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Роль";
             // 
             // fReg
             // 
             this.AcceptButton = this.btRegister;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414, 190);
+            this.ClientSize = new System.Drawing.Size(414, 204);
             this.Controls.Add(this.btRegister);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnPassword);
             this.Controls.Add(this.pnLogin);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(300, 150);
             this.Name = "fReg";
             this.Text = "Регистрация нового пользователя";
@@ -173,6 +195,7 @@
             this.pnPassword.ResumeLayout(false);
             this.pnPassword.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -190,6 +213,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker dtpDate;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbRole;
     }
 }
 

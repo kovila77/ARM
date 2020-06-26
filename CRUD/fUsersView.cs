@@ -179,5 +179,5 @@ namespace CRUD
             изменитьToolStripMenuItem.Enabled =
                                 удалитьToolStripMenuItem.Enabled = lvUsers.SelectedItems.Count > 0;
         }
-            }
+    }
 }
