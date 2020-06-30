@@ -52,7 +52,10 @@ namespace MainForm.DGV
                     e.Cancel = true;
                 return;
             }
-            else if (cell.OwningColumn.Name == MyHelper.strConsumeSpeed && t < 0)
+            else if ((cell.OwningColumn.Name == MyHelper.strConsumeSpeed
+               || cell.OwningColumn.Name == MyHelper.strProduceSpeed
+               || cell.OwningColumn.Name == MyHelper.strCount)
+                && t < 0)
             {
                 if (MessageBox.Show(MyHelper.strUncorrectIntValueZeroCell + $"\n\"{cellFormatedValue}\"\nОтменить изменения?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     _dgv.CancelEdit();

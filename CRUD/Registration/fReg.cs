@@ -106,6 +106,7 @@ namespace Registration
                 tbLogin.Tag = true;
                 tbPassword.Tag = true;
             }
+            dtpDate.MaxDate = DateTime.Now;
             cbRole.Tag = true;
             oldRole = role;
             //cbRole.SelectedIndex = (role == "user" ? 0 : 1);
@@ -306,22 +307,25 @@ namespace Registration
         {
             role = cbRole.SelectedItem.ToString();
 
-            if (oldRole == role)
+            if (FrmType == FormType.Update)
             {
-                epMain.SetError(cbRole, "");
-                cbRole.Tag = true;
-            }
-            else
-            {
-                if (UserEditingUserId == UserId && role != oldRole)
+                if (oldRole == role)
                 {
-                    epMain.SetError(cbRole, "Вы не можете изменять свою роль! Сделайте это с другой записи администратора!");
-                    cbRole.Tag = false;
+                    epMain.SetError(cbRole, "");
+                    cbRole.Tag = true;
                 }
                 else
                 {
-                    epMain.SetError(cbRole, "Роль будет изменена!");
-                    cbRole.Tag = true;
+                    if (UserEditingUserId == UserId && role != oldRole)
+                    {
+                        epMain.SetError(cbRole, "Вы не можете изменять свою роль! Сделайте это с другой записи администратора!");
+                        cbRole.Tag = false;
+                    }
+                    else
+                    {
+                        epMain.SetError(cbRole, "Роль будет изменена!");
+                        cbRole.Tag = true;
+                    }
                 }
             }
 

@@ -36,7 +36,7 @@
             this.tmiTools = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеПользователямиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.запросыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ДифицитныеРесурсыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ДефицитныеРесурсыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RichOutpostsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tbBR = new System.Windows.Forms.TabPage();
@@ -135,18 +135,18 @@
             // запросыToolStripMenuItem
             // 
             this.запросыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ДифицитныеРесурсыToolStripMenuItem,
+            this.ДефицитныеРесурсыToolStripMenuItem,
             this.RichOutpostsToolStripMenuItem});
             this.запросыToolStripMenuItem.Name = "запросыToolStripMenuItem";
             this.запросыToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.запросыToolStripMenuItem.Text = "Запросы";
             // 
-            // ДифицитныеРесурсыToolStripMenuItem
+            // ДефицитныеРесурсыToolStripMenuItem
             // 
-            this.ДифицитныеРесурсыToolStripMenuItem.Name = "ДифицитныеРесурсыToolStripMenuItem";
-            this.ДифицитныеРесурсыToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.ДифицитныеРесурсыToolStripMenuItem.Text = "Дифицитные ресурсы";
-            this.ДифицитныеРесурсыToolStripMenuItem.Click += new System.EventHandler(this.PoorRes_ToolStripMenuItem_Click);
+            this.ДефицитныеРесурсыToolStripMenuItem.Name = "ДефицитныеРесурсыToolStripMenuItem";
+            this.ДефицитныеРесурсыToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.ДефицитныеРесурсыToolStripMenuItem.Text = "Дефицитные ресурсы";
+            this.ДефицитныеРесурсыToolStripMenuItem.Click += new System.EventHandler(this.PoorRes_ToolStripMenuItem_Click);
             // 
             // RichOutpostsToolStripMenuItem
             // 
@@ -336,7 +336,7 @@
             this.tpPoorRes.Name = "tpPoorRes";
             this.tpPoorRes.Size = new System.Drawing.Size(792, 400);
             this.tpPoorRes.TabIndex = 7;
-            this.tpPoorRes.Text = "Дифицитные ресурсы";
+            this.tpPoorRes.Text = "Дефицитные ресурсы";
             this.tpPoorRes.UseVisualStyleBackColor = true;
             // 
             // dgvPoorRes
@@ -443,7 +443,7 @@
         private System.Windows.Forms.ToolStripMenuItem управлениеПользователямиToolStripMenuItem;
         private System.Windows.Forms.ErrorProvider epMain;
         private System.Windows.Forms.ToolStripMenuItem убратьЗначениеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ДифицитныеРесурсыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ДефицитныеРесурсыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem RichOutpostsToolStripMenuItem;
         private System.Windows.Forms.TabPage tpPoorRes;
         private System.Windows.Forms.DataGridView dgvPoorRes;

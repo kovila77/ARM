@@ -12,7 +12,7 @@ namespace MainForm
     {
         public static readonly string strEmptyCell = "Вы ввели пустое значение!";
         public static readonly string strUncorrectIntValueCell = "Вы ввели некорректное число!";
-        public static readonly string strUncorrectIntValueZeroCell = "Данная ячейка не моежт быть меньше нуля!";
+        public static readonly string strUncorrectIntValueZeroCell = "Данное значение не может быть меньше нуля!";
         public static readonly string strBadRow = "Плохая строка!";
         public static readonly string strError = "Ошибка! ";
 
